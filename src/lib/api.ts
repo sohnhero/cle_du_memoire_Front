@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cle-du-memoire-back.vercel.app/api';
 
 class ApiClient {
     private token: string | null = null;
