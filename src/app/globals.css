@@ -38,6 +38,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    zoom: 90%;
   }
 
   body {

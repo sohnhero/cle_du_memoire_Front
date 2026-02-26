@@ -386,21 +386,23 @@ function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
-              className={`group relative bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${service.span}`}
+              className={`group relative opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${service.span}`}
             >
-              <div className="flex items-start justify-between mb-8">
-                <div className="w-11 h-11 rounded-xl bg-primary/[0.04] flex items-center justify-center group-hover:bg-accent/10 transition-colors duration-300">
-                  <service.icon className="w-5 h-5 text-primary/60 group-hover:text-accent transition-colors duration-300" />
+              <div className="h-full bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <div className="flex items-start justify-between mb-8">
+                  <div className="w-11 h-11 rounded-xl bg-primary/[0.04] flex items-center justify-center group-hover:bg-accent/10 transition-colors duration-300">
+                    <service.icon className="w-5 h-5 text-primary/60 group-hover:text-accent transition-colors duration-300" />
+                  </div>
+                  <span className="text-xs text-text-muted font-mono">{service.num}</span>
                 </div>
-                <span className="text-xs text-text-muted font-mono">{service.num}</span>
-              </div>
 
-              <h3 className="text-lg font-semibold text-primary mb-2">
-                {service.title}
-              </h3>
-              <p className="text-text-secondary text-sm leading-relaxed">
-                {service.description}
-              </p>
+                <h3 className="text-lg font-semibold text-primary mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -503,64 +505,66 @@ function PacksSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
-              className={`relative rounded-2xl p-8 flex flex-col transition-all duration-300 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${pack.dark
-                ? 'bg-primary text-white border border-white/10 shadow-2xl shadow-primary/20 lg:scale-105 lg:-my-4 lg:py-12'
-                : 'bg-white border border-border hover:border-border/80 hover:shadow-lg'
-                }`}
+              className={`relative opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${pack.dark ? 'lg:scale-105 lg:-my-4 lg:py-12' : ''}`}
             >
-              {pack.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-accent text-primary text-xs font-semibold px-4 py-1 rounded-full">
-                    Populaire
-                  </span>
-                </div>
-              )}
-
-              <div className="mb-6">
-                <h3 className={`text-lg font-semibold mb-1 ${pack.dark ? 'text-white' : 'text-primary'}`}>
-                  Pack {pack.name}
-                </h3>
-                <p className={`text-sm ${pack.dark ? 'text-white/50' : 'text-text-secondary'}`}>
-                  {pack.description}
-                </p>
-              </div>
-
-              <div className="mb-8">
-                <div className="flex items-baseline gap-1">
-                  <span className={`text-4xl font-bold tracking-tight ${pack.dark ? 'text-white' : 'text-primary'}`}>
-                    {pack.price}
-                  </span>
-                  <span className={`text-sm ${pack.dark ? 'text-white/40' : 'text-text-muted'}`}>
-                    {pack.period}
-                  </span>
-                </div>
-                {pack.installments && (
-                  <p className={`text-xs mt-2 ${pack.dark ? 'text-white/30' : 'text-text-muted'}`}>
-                    ou en 2 tranches : {pack.installments}
-                  </p>
-                )}
-              </div>
-
-              <ul className="space-y-3 mb-8 flex-1">
-                {pack.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5 text-sm">
-                    <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${pack.dark ? 'text-accent' : 'text-success'}`} />
-                    <span className={pack.dark ? 'text-white/70' : 'text-text-secondary'}>
-                      {feature}
+              <div className={`h-full rounded-2xl p-8 flex flex-col transition-all duration-300 ${pack.dark
+                ? 'bg-primary text-white border border-white/10 shadow-2xl shadow-primary/20'
+                : 'bg-white border border-border hover:border-border/80 hover:shadow-lg'
+                }`}>
+                {pack.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-accent text-primary text-xs font-semibold px-4 py-1 rounded-full">
+                      Populaire
                     </span>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                )}
 
-              <Link
-                href="/register"
-                className={`block w-full text-center py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${pack.dark
-                  ? 'bg-accent text-primary hover:bg-accent-dark'
-                  : 'bg-primary text-white hover:bg-primary-light'
-                  }`}
-              >
-                Choisir ce pack
-              </Link>
+                <div className="mb-6">
+                  <h3 className={`text-lg font-semibold mb-1 ${pack.dark ? 'text-white' : 'text-primary'}`}>
+                    Pack {pack.name}
+                  </h3>
+                  <p className={`text-sm ${pack.dark ? 'text-white/50' : 'text-text-secondary'}`}>
+                    {pack.description}
+                  </p>
+                </div>
+
+                <div className="mb-8">
+                  <div className="flex items-baseline gap-1">
+                    <span className={`text-4xl font-bold tracking-tight ${pack.dark ? 'text-white' : 'text-primary'}`}>
+                      {pack.price}
+                    </span>
+                    <span className={`text-sm ${pack.dark ? 'text-white/40' : 'text-text-muted'}`}>
+                      {pack.period}
+                    </span>
+                  </div>
+                  {pack.installments && (
+                    <p className={`text-xs mt-2 ${pack.dark ? 'text-white/30' : 'text-text-muted'}`}>
+                      ou en 2 tranches : {pack.installments}
+                    </p>
+                  )}
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {pack.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5 text-sm">
+                      <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${pack.dark ? 'text-accent' : 'text-success'}`} />
+                      <span className={pack.dark ? 'text-white/70' : 'text-text-secondary'}>
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/register"
+                  className={`block w-full text-center py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${pack.dark
+                    ? 'bg-accent text-primary hover:bg-accent-dark'
+                    : 'bg-primary text-white hover:bg-primary-light'
+                    }`}
+                >
+                  Choisir ce pack
+                </Link>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -883,18 +887,19 @@ function Contact() {
               ].map((item, idx) => (
                 <motion.div
                   key={item.label}
-                  initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.1 }}
                   transition={{ delay: 0.1 + idx * 0.05 }}
-                  className="flex items-center gap-5 p-4 rounded-2xl hover:bg-white transition-all duration-300 border border-transparent hover:border-border hover:shadow-xl hover:shadow-black/[0.02] group cursor-pointer opacity-0 transform-gpu backface-hidden will-change-[opacity]"
+                  className="group cursor-pointer opacity-0 translate-y-2 transform-gpu backface-hidden will-change-[opacity,transform]"
                 >
-                  <div className={`w-14 h-14 rounded-2xl ${item.bg} border border-border/50 flex items-center justify-center transform group-hover:scale-105 group-hover:bg-accent/10 group-hover:border-accent/20 transition-all duration-300`}>
-                    <item.icon className={`w-6 h-6 ${item.text} group-hover:text-accent transition-colors`} />
-                  </div>
-                  <div>
-                    <div className="text-base font-bold text-primary mb-1 group-hover:text-accent transition-colors">{item.label}</div>
-                    <div className="text-sm text-text-muted font-medium">{item.sub}</div>
+                  <div className="flex items-center gap-5 p-4 rounded-2xl hover:bg-white transition-all duration-300 border border-transparent hover:border-border hover:shadow-xl hover:shadow-black/[0.02]">
+                    <div className={`w-14 h-14 rounded-2xl ${item.bg} border border-border/50 flex items-center justify-center transform group-hover:scale-105 group-hover:bg-accent/10 group-hover:border-accent/20 transition-all duration-300`}>
+                      <item.icon className={`w-6 h-6 ${item.text} group-hover:text-accent transition-colors`} />
+                    </div>
+                    <div>
+                      <div className="text-base font-bold text-primary mb-1 group-hover:text-accent transition-colors">{item.label}</div>
+                      <div className="text-sm text-text-muted font-medium">{item.sub}</div>
+                    </div>
                   </div>
                 </motion.div>
               ))}
