@@ -113,7 +113,7 @@ export default function RegisterPage() {
                         animate={{ opacity: 1, x: 0 }}
                         className="w-full opacity-0 translate-x-4 transform-gpu backface-hidden will-change-[opacity,transform]"
                     >
-                        <div className={`w-full transition-all duration-500 ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}>
+                        <div className={`w-full mx-auto transition-all duration-500 ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}>
                             <div className="lg:hidden flex justify-center mb-8">
                                 <Logo className="w-48 h-auto" monochrome={false} />
                             </div>

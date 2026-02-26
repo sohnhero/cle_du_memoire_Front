@@ -505,10 +505,10 @@ function PacksSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
-              className={`relative opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${pack.dark ? 'lg:scale-105 lg:-my-4 lg:py-12' : ''}`}
+              className={`relative opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${pack.dark ? 'lg:scale-105 lg:-my-4' : ''}`}
             >
-              <div className={`h-full rounded-2xl p-8 flex flex-col transition-all duration-300 ${pack.dark
-                ? 'bg-primary text-white border border-white/10 shadow-2xl shadow-primary/20'
+              <div className={`relative h-full rounded-2xl p-8 lg:px-8 flex flex-col transition-all duration-300 ${pack.dark
+                ? 'bg-primary text-white border border-white/10 shadow-2xl shadow-primary/20 lg:py-12'
                 : 'bg-white border border-border hover:border-border/80 hover:shadow-lg'
                 }`}>
                 {pack.popular && (

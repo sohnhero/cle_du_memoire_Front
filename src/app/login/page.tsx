@@ -81,7 +81,7 @@ export default function LoginPage() {
                 <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
                     <motion.div
                         animate={{ opacity: 1, x: 0 }}
-                        className="w-full max-w-md opacity-0 translate-x-4 transform-gpu backface-hidden will-change-[opacity,transform]"
+                        className="w-full max-w-md mx-auto opacity-0 translate-x-4 transform-gpu backface-hidden will-change-[opacity,transform]"
                     >
                         {/* Mobile Logo */}
                         <div className="lg:hidden flex justify-center mb-8">
