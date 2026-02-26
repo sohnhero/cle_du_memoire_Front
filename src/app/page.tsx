@@ -363,7 +363,7 @@ function Services() {
   ];
 
   return (
-    <section id="services" className="py-20 lg:py-32 bg-bg-light">
+    <section id="services" className="py-20 lg:py-32 bg-bg-light isolate perspective-[1000px]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -482,7 +482,7 @@ function PacksSection() {
   ];
 
   return (
-    <section id="packs" className="py-20 lg:py-32 bg-white relative overflow-hidden">
+    <section id="packs" className="py-20 lg:py-32 bg-white relative overflow-hidden isolate perspective-[1000px]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -603,7 +603,7 @@ function HowItWorks() {
   ];
 
   return (
-    <section className="py-20 lg:py-32 bg-white overflow-hidden relative" id="processus">
+    <section className="py-20 lg:py-32 bg-white overflow-hidden relative isolate perspective-[1000px]" id="processus">
       {/* Background decorations */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-bg-light/50 to-transparent" />
       <div className="absolute -left-40 top-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
@@ -757,7 +757,7 @@ function Testimonials() {
   );
 
   return (
-    <section id="testimonials" className="section bg-white relative overflow-hidden">
+    <section id="testimonials" className="section bg-white relative overflow-hidden isolate perspective-[1000px]">
       <div className="max-w-6xl mx-auto px-6 mb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -800,7 +800,7 @@ function Testimonials() {
 // ==================== CTA ====================
 function CTASection() {
   return (
-    <section className="py-32 bg-primary relative overflow-hidden border-t border-white/5">
+    <section className="py-32 bg-primary relative overflow-hidden border-t border-white/5 isolate perspective-[1000px]">
       {/* Background patterns */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: `radial-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)`,
@@ -861,7 +861,7 @@ function CTASection() {
 
 function Contact() {
   return (
-    <section id="contact" className="section relative bg-white overflow-hidden text-primary border-t border-border-light">
+    <section id="contact" className="section relative bg-white overflow-hidden text-primary border-t border-border-light isolate perspective-[1000px]">
       {/* Background Glows */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/[0.02] to-transparent pointer-events-none" />
       <div className="absolute -left-64 bottom-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
