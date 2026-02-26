@@ -245,9 +245,9 @@ function Hero() {
 
       <div className="relative max-w-6xl mx-auto px-6 py-20 lg:py-32 w-full z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="max-w-xl"
         >
           {/* Badge */}
@@ -368,8 +368,8 @@ function Services() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          className="max-w-2xl mb-16"
+          viewport={{ once: true, amount: 0.1 }}
+          className="max-w-2xl mb-16 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -386,9 +386,9 @@ function Services() {
               key={service.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.05 }}
-              className={`group relative bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${service.span}`}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: index * 0.05, duration: 0.4 }}
+              className={`group relative bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] opacity-0 transform-gpu backface-hidden will-change-[opacity,transform] ${service.span}`}
             >
               <div className="flex items-start justify-between mb-8">
                 <div className="w-11 h-11 rounded-xl bg-primary/[0.04] flex items-center justify-center group-hover:bg-accent/10 transition-colors duration-300">
@@ -487,8 +487,8 @@ function PacksSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          viewport={{ once: true, amount: 0.1 }}
+          className="text-center max-w-2xl mx-auto mb-16 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Tarifs</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -505,9 +505,9 @@ function PacksSection() {
               key={pack.name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.1 }}
-              className={`relative rounded-2xl p-8 flex flex-col transition-all duration-300 ${pack.dark
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: index * 0.05, duration: 0.4 }}
+              className={`relative rounded-2xl p-8 flex flex-col transition-all duration-300 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform] ${pack.dark
                 ? 'bg-primary text-white border border-white/10 shadow-2xl shadow-primary/20 lg:scale-105 lg:-my-4 lg:py-12'
                 : 'bg-white border border-border hover:border-border/80 hover:shadow-lg'
                 }`}
@@ -614,8 +614,8 @@ function HowItWorks() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center justify-center lg:justify-start gap-4 mb-4"
+              viewport={{ once: true, amount: 0.2 }}
+              className="flex items-center justify-center lg:justify-start gap-4 mb-4 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               <div className="w-12 h-px bg-accent"></div>
               <p className="text-accent text-sm font-bold tracking-widest uppercase">Processus</p>
@@ -623,18 +623,18 @@ function HowItWorks() {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-primary mb-6 leading-tight"
+              className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-primary mb-6 leading-tight opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               L&apos;excellence en <span className="text-accent">4 étapes</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: 0.2 }}
-              className="text-text-secondary text-lg sm:text-xl lg:max-w-xl mx-auto lg:mx-0"
+              className="text-text-secondary text-lg sm:text-xl lg:max-w-xl mx-auto lg:mx-0 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               Un parcours soigneusement conçu pour vous mener de l&apos;idée initiale à la soutenance finale avec assurance et brio.
             </motion.p>
@@ -648,11 +648,11 @@ function HowItWorks() {
           {steps.map((step, index) => (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ delay: index * 0.1, duration: 0.5, type: "tween" }}
-              className={`relative group h-full ${index % 2 !== 0 ? 'lg:mt-16' : ''}`}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: index * 0.05, duration: 0.4 }}
+              className={`relative group h-full opacity-0 transform-gpu backface-hidden will-change-[opacity,transform] ${index % 2 !== 0 ? 'lg:mt-16' : ''}`}
             >
               <div className="bg-white rounded-[2rem] p-8 border border-border shadow-lg shadow-black/[0.03] hover:shadow-2xl hover:shadow-accent/10 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col relative overflow-hidden min-h-[320px]">
                 {/* Large Background Number - More subtle */}
@@ -762,8 +762,8 @@ function Testimonials() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center max-w-2xl mx-auto"
+          viewport={{ once: true, amount: 0.1 }}
+          className="text-center max-w-2xl mx-auto opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Témoignages</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -812,50 +812,49 @@ function CTASection() {
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-info/5 rounded-full blur-[100px] pointer-events-none" />
       </div>
 
-      <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Social Proof Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-accent text-xs font-bold mb-8 tracking-widest uppercase">
-            <Sparkles className="w-3 h-3" />
-            VOTRE RÉUSSITE COMMENCE ICI
-          </div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.8 }}
+        className="relative max-w-4xl mx-auto px-6 text-center opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+      >
+        {/* Social Proof Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-accent text-xs font-bold mb-8 tracking-widest uppercase">
+          <Sparkles className="w-3 h-3" />
+          VOTRE RÉUSSITE COMMENCE ICI
+        </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-            Transformez votre <span className="text-accent underline decoration-accent/30 underline-offset-8">ambition</span>
-            <br />
-            en diplôme d&apos;excellence.
-          </h2>
+        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-8 leading-[1.1] tracking-tight">
+          Transformez votre <span className="text-accent underline decoration-accent/30 underline-offset-8">ambition</span>
+          <br />
+          en diplôme d&apos;excellence.
+        </h2>
 
-          <p className="text-white/50 text-lg sm:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-            Ne laissez pas le stress de la rédaction freiner votre carrière.
-            Profitez dès aujourd&apos;hui de l&apos;expertise premium de nos accompagnateurs dédiés.
-          </p>
+        <p className="text-white/50 text-lg sm:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+          Ne laissez pas le stress de la rédaction freiner votre carrière.
+          Profitez dès aujourd&apos;hui de l&apos;expertise premium de nos accompagnateurs dédiés.
+        </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/register" className="btn-primary py-4 px-12 text-sm font-bold shadow-2xl shadow-accent/20 hover:scale-105 transition-transform">
-              S&apos;inscrire maintenant
-              <ArrowRight className="w-5 h-5 ml-1" />
-            </Link>
-            <a href="#contact" className="text-white/60 hover:text-white text-sm font-semibold transition-colors px-8 py-4">
-              Parler à un conseiller
-            </a>
-          </div>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link href="/register" className="btn-primary py-4 px-12 text-sm font-bold shadow-2xl shadow-accent/20 hover:scale-105 transition-transform">
+            S&apos;inscrire maintenant
+            <ArrowRight className="w-5 h-5 ml-1" />
+          </Link>
+          <a href="#contact" className="text-white/60 hover:text-white text-sm font-semibold transition-colors px-8 py-4">
+            Parler à un conseiller
+          </a>
+        </div>
 
-          {/* Trust indicators */}
-          <div className="mt-16 pt-16 border-t border-white/5 flex flex-wrap justify-center gap-10 opacity-40 grayscale pointer-events-none">
-            <div className="text-sm font-bold tracking-tighter text-white">UCAD</div>
-            <div className="text-sm font-bold tracking-tighter text-white">ESP DAKAR</div>
-            <div className="text-sm font-bold tracking-tighter text-white">UGB ST-LOUIS</div>
-            <div className="text-sm font-bold tracking-tighter text-white">ISM GROUP</div>
-            <div className="text-sm font-bold tracking-tighter text-white">BEM SÉNÉGAL</div>
-          </div>
-        </motion.div>
-      </div>
+        {/* Trust indicators */}
+        <div className="mt-16 pt-16 border-t border-white/5 flex flex-wrap justify-center gap-10 opacity-40 grayscale pointer-events-none">
+          <div className="text-sm font-bold tracking-tighter text-white">UCAD</div>
+          <div className="text-sm font-bold tracking-tighter text-white">ESP DAKAR</div>
+          <div className="text-sm font-bold tracking-tighter text-white">UGB ST-LOUIS</div>
+          <div className="text-sm font-bold tracking-tighter text-white">ISM GROUP</div>
+          <div className="text-sm font-bold tracking-tighter text-white">BEM SÉNÉGAL</div>
+        </div>
+      </motion.div>
     </section>
   );
 }
@@ -872,8 +871,9 @@ function Contact() {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6 }}
+            className="opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
           >
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-px bg-accent"></div>
@@ -896,9 +896,9 @@ function Contact() {
                   key={item.label}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + idx * 0.1 }}
-                  className="flex items-center gap-5 p-4 rounded-2xl hover:bg-white transition-all duration-300 border border-transparent hover:border-border hover:shadow-xl hover:shadow-black/[0.02] group cursor-pointer"
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ delay: 0.1 + idx * 0.05 }}
+                  className="flex items-center gap-5 p-4 rounded-2xl hover:bg-white transition-all duration-300 border border-transparent hover:border-border hover:shadow-xl hover:shadow-black/[0.02] group cursor-pointer opacity-0 transform-gpu backface-hidden will-change-[opacity]"
                 >
                   <div className={`w-14 h-14 rounded-2xl ${item.bg} border border-border/50 flex items-center justify-center transform group-hover:scale-105 group-hover:bg-accent/10 group-hover:border-accent/20 transition-all duration-300`}>
                     <item.icon className={`w-6 h-6 ${item.text} group-hover:text-accent transition-colors`} />
@@ -915,9 +915,9 @@ function Contact() {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6 }}
-            className="relative"
+            className="relative opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
           >
             {/* Form decorative background */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 rounded-[2.5rem] transform translate-x-4 translate-y-4 -z-10" />
