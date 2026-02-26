@@ -770,23 +770,38 @@ function Testimonials() {
         </motion.div>
       </div>
 
-      <div className="relative flex flex-col gap-4 group [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] py-2 overflow-hidden">
-        <div className="flex w-max animate-[marquee_60s_linear_infinite] group-hover:[animation-play-state:paused]">
-          <div className="flex w-max shrink-0">
-            {row1.map((t, index) => <TestimonialCard key={`r1-a-${index}`} t={t} />)}
+      <div className="relative flex flex-col gap-4 py-2 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: -1000, right: 1000 }}
+          whileTap={{ cursor: "grabbing" }}
+          className="flex w-max cursor-grab active:cursor-grabbing group hover:[animation-play-state:paused]"
+        >
+          <div className="flex w-max animate-[marquee_60s_linear_infinite] group-hover:[animation-play-state:paused] peer">
+            <div className="flex w-max shrink-0">
+              {row1.map((t, index) => <TestimonialCard key={`r1-a-${index}`} t={t} />)}
+            </div>
+            <div className="flex w-max shrink-0">
+              {row1.map((t, index) => <TestimonialCard key={`r1-b-${index}`} t={t} />)}
+            </div>
           </div>
-          <div className="flex w-max shrink-0">
-            {row1.map((t, index) => <TestimonialCard key={`r1-b-${index}`} t={t} />)}
+        </motion.div>
+
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: -1000, right: 1000 }}
+          whileTap={{ cursor: "grabbing" }}
+          className="flex w-max cursor-grab active:cursor-grabbing group hover:[animation-play-state:paused]"
+        >
+          <div className="flex w-max animate-[marquee-reverse_60s_linear_infinite] group-hover:[animation-play-state:paused] peer">
+            <div className="flex w-max shrink-0">
+              {row2.map((t, index) => <TestimonialCard key={`r2-a-${index}`} t={t} />)}
+            </div>
+            <div className="flex w-max shrink-0">
+              {row2.map((t, index) => <TestimonialCard key={`r2-b-${index}`} t={t} />)}
+            </div>
           </div>
-        </div>
-        <div className="flex w-max animate-[marquee-reverse_60s_linear_infinite] group-hover:[animation-play-state:paused]">
-          <div className="flex w-max shrink-0">
-            {row2.map((t, index) => <TestimonialCard key={`r2-a-${index}`} t={t} />)}
-          </div>
-          <div className="flex w-max shrink-0">
-            {row2.map((t, index) => <TestimonialCard key={`r2-b-${index}`} t={t} />)}
-          </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
