@@ -2,7 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, CheckCircle, Clock, Target, TrendingUp, AlertCircle, MessageCircle, X } from 'lucide-react';
+import {
+    BookOpen, CheckCircle, Clock, Target, TrendUp as TrendingUp, WarningCircle as AlertCircle, ChatCircle as MessageCircle, X
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import { AnimatePresence } from 'framer-motion';
@@ -46,7 +49,7 @@ export default function MemoirePage() {
     if (!memoire) {
         return (
             <div className="card-premium p-12 text-center text-text-secondary">
-                <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <BrandIcon icon={BookOpen} size={64} className="mx-auto mb-4 opacity-30 grayscale" />
                 <h3 className="text-xl font-bold text-primary mb-2">Aucun mémoire en cours</h3>
                 <p>Veuillez contacter votre accompagnateur ou administrateur.</p>
             </div>
@@ -92,9 +95,7 @@ export default function MemoirePage() {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                                <BookOpen className="w-6 h-6 text-accent" />
-                            </div>
+                            <BrandIcon icon={BookOpen} size={48} className="shadow-sm" />
                             <div>
                                 <h2 className="text-lg font-bold text-primary">{memoire.title}</h2>
                                 <p className="text-sm text-text-secondary">{user?.field || 'Filière non renseignée'} — {user?.university || 'Université non renseignée'}</p>

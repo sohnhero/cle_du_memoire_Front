@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import {
-    Bell, CheckCheck, MessageCircle, Package, FileText, AlertCircle,
-    Info, Loader2, Inbox
-} from 'lucide-react';
+    Bell, Checks as CheckCheck, ChatCircle as MessageCircle, Package, FileText, WarningCircle as AlertCircle, Info, CircleNotch as Loader2, Tray as Inbox
+} from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 
 const TYPE_CONFIG: Record<string, { icon: React.ComponentType<any>; color: string }> = {

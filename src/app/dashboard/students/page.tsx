@@ -2,7 +2,10 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Search, Filter, Eye, MessageCircle, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react';
+import {
+    Users, MagnifyingGlass as Search, Faders as Filter, Eye, ChatCircle as MessageCircle, TrendUp as TrendingUp, Warning as AlertTriangle, CheckCircle
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 
 const students = [
     { id: '1', name: 'Moussa Diop', email: 'moussa@test.sn', field: 'Master Informatique', university: 'UCAD', progress: 55, phase: 'Chapitre 2', pack: 'Pack Complet', status: 'active', lastActivity: 'Il y a 2h' },
@@ -31,9 +34,7 @@ export default function StudentsPage() {
                     { label: 'Terminés', value: 0, icon: CheckCircle, color: 'text-info bg-info/10' },
                 ].map((stat) => (
                     <div key={stat.label} className="card-premium p-4 flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl ${stat.color} flex items-center justify-center`}>
-                            <stat.icon className="w-5 h-5" />
-                        </div>
+                        <BrandIcon icon={stat.icon} size={40} />
                         <div>
                             <div className="text-xl font-bold text-primary">{stat.value}</div>
                             <div className="text-xs text-text-muted">{stat.label}</div>

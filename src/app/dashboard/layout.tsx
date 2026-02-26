@@ -6,10 +6,11 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import {
-    LayoutDashboard, BookOpen, FileText, MessageCircle, User, Settings,
-    Users, BarChart3, Shield, LogOut, ChevronLeft, Bell, Search,
-    Menu, X, GraduationCap, Package, Activity, ChevronDown, CalendarDays
-} from 'lucide-react';
+    SquaresFour as LayoutDashboard, BookOpen, FileText, ChatCircle as MessageCircle, User, Gear as Settings,
+    Users, ChartBar as BarChart3, ShieldCheck as Shield, SignOut as LogOut, CaretLeft as ChevronLeft, Bell, MagnifyingGlass as Search,
+    List as Menu, X, GraduationCap, Package, Pulse as Activity, CaretDown as ChevronDown, CalendarBlank as CalendarDays
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 import Logo from '@/components/Logo';
 import Loader from '@/components/Loader';
 import PaymentGate from '@/components/PaymentGate';
@@ -129,11 +130,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 key={item.href}
                                 href={item.href}
                                 title={!sidebarOpen ? item.label : undefined}
-                                className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-colors duration-200 group ${isActive
-                                    ? 'bg-accent/15 text-accent'
+                                className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group relative overflow-hidden ${isActive
+                                    ? 'bg-accent/10 text-white'
                                     : 'text-white/60 hover:text-white hover:bg-white/5'
                                     } ${sidebarOpen ? 'gap-3' : 'justify-center'}`}
                             >
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="sidebar-active-indicator"
+                                        className="absolute left-0 top-0 bottom-0 w-1 bg-accent"
+                                    />
+                                )}
                                 <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors ${isActive ? 'text-accent' : 'group-hover:text-white'}`} />
                                 <AnimatePresence>
                                     {sidebarOpen && (
@@ -234,8 +241,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                     return (
                                         <Link key={item.href} href={item.href}
                                             onClick={() => setMobileSidebarOpen(false)}
-                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive ? 'bg-accent/15 text-accent' : 'text-white/60 hover:text-white hover:bg-white/5'
+                                            className={`relative overflow-hidden flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive ? 'bg-accent/10 text-white' : 'text-white/60 hover:text-white hover:bg-white/5'
                                                 }`}>
+                                            {isActive && (
+                                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent" />
+                                            )}
                                             <item.icon className="w-5 h-5" />
                                             <span>{item.label}</span>
                                         </Link>
@@ -262,13 +272,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-[80px]'}`}
             >
                 {/* Top Header */}
-                <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-border-light">
-                    <div className="flex items-center justify-between px-4 sm:px-8 h-16">
+                <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl border-b border-black/[0.04]">
+                    <div className="flex items-center justify-between px-4 sm:px-8 h-20">
                         <div className="flex items-center gap-4">
                             <button onClick={() => setMobileSidebarOpen(true)} className="lg:hidden text-primary p-2">
                                 <Menu className="w-6 h-6" />
                             </button>
-                            <div className="hidden sm:flex items-center gap-3 bg-bg-light rounded-xl px-4 py-2.5 w-64">
+                            <Logo className="w-32 h-auto lg:hidden" monochrome={false} variant="full" />
+                            <div className="hidden sm:flex items-center gap-3 bg-bg-light/80 rounded-2xl px-4 py-3 w-72 border border-border/50 focus-within:border-accent/40 focus-within:bg-white focus-within:ring-4 focus-within:ring-accent/10 transition-all shadow-sm">
                                 <Search className="w-4 h-4 text-text-muted" />
                                 <input type="text" placeholder="Rechercher..." className="bg-transparent text-sm outline-none flex-1 text-text-primary placeholder:text-text-muted" />
                             </div>
@@ -285,7 +296,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <div className="relative">
                                 <button
                                     onClick={() => setShowUserMenu(!showUserMenu)}
-                                    className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-bg-light transition-colors"
+                                    className="flex items-center gap-3 pl-3 pr-4 py-2.5 rounded-2xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 group"
                                 >
                                     {user.avatar ? (
                                         <img src={user.avatar} alt="Avatar" className="w-9 h-9 rounded-xl object-cover shadow-sm" />

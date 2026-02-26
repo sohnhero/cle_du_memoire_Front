@@ -6,14 +6,15 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
 import {
-    Package, BookOpen, FileText, MessageCircle, TrendingUp, Users,
-    Clock, AlertTriangle, CheckCircle, BarChart3, Activity, Shield,
-    Eye, ArrowUpRight, Calendar
-} from 'lucide-react';
+    Package, BookOpen, FileText, ChatCircle as MessageCircle, TrendUp as TrendingUp, Users,
+    Clock, Warning as AlertTriangle, CheckCircle, ChartBar as BarChart3, Pulse as Activity, ShieldCheck as Shield,
+    Eye, ArrowUpRight, CalendarBlank as Calendar, CaretRight as ChevronRight
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 
 // ==================== STATS CARD ====================
 function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
-    icon: React.ComponentType<any>; label: string; value: string | number;
+    icon: any; label: string; value: string | number;
     change?: string; color: string; delay?: number;
 }) {
     const colorMap: Record<string, string> = {
@@ -42,9 +43,7 @@ function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
                         </p>
                     )}
                 </div>
-                <div className={`w-12 h-12 rounded-xl ${colorMap[color]} flex items-center justify-center`}>
-                    <Icon className="w-6 h-6" />
-                </div>
+                <BrandIcon icon={Icon} size={48} className={`shadow-sm ${colorMap[color].split(' ')[0].replace('bg-', 'shadow-').replace('/10', '/20')}`} />
             </div>
         </motion.div>
     );
@@ -450,31 +449,36 @@ function AdminDashboard() {
                         <Activity className="w-5 h-5 text-accent" />
                         Activité Récente
                     </h3>
-                    <div className="space-y-3">
-                        {[
-                            { action: 'Moussa Diop a soumis un document', time: 'Il y a 5 min', type: 'document', badge: 'Étudiant' },
-                            { action: 'Fatou Ndiaye a validé un chapitre', time: 'Il y a 30 min', type: 'validation', badge: 'Accompagnateur' },
-                            { action: 'Nouvel abonnement Pack Complet', time: 'Il y a 1h', type: 'subscription', badge: 'Paiement' },
-                            { action: 'Aïssatou Ba s\'est inscrite', time: 'Il y a 2h', type: 'register', badge: 'Inscription' },
-                            { action: 'Omar Seck a terminé son mémoire', time: 'Il y a 3h', type: 'completion', badge: 'Succès' },
-                        ].map((item, i) => (
-                            <div key={i} className="flex items-center gap-4 p-3 rounded-xl hover:bg-bg-light transition-colors">
-                                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${item.type === 'document' ? 'bg-info' :
-                                    item.type === 'validation' ? 'bg-success' :
-                                        item.type === 'subscription' ? 'bg-accent' :
-                                            item.type === 'completion' ? 'bg-green-500' : 'bg-primary'
-                                    }`} />
-                                <div className="flex-1 min-w-0">
-                                    <span className="text-sm text-text-primary">{item.action}</span>
-                                    <div className="text-xs text-text-muted mt-0.5 flex items-center gap-2">
-                                        <Clock className="w-3 h-3" /> {item.time}
+                    <div className="mt-8 relative pt-2">
+                        <div className="absolute left-[27px] top-6 bottom-4 w-px bg-border-light z-0" />
+                        <div className="space-y-6 relative z-10">
+                            {[
+                                { action: 'Moussa Diop a soumis un document', time: 'Il y a 5 min', type: 'document', badge: 'Étudiant', icon: FileText, color: 'text-info', bg: 'bg-info/10' },
+                                { action: 'Fatou Ndiaye a validé un chapitre', time: 'Il y a 30 min', type: 'validation', badge: 'Accompagnateur', icon: CheckCircle, color: 'text-success', bg: 'bg-success/10' },
+                                { action: 'Nouvel abonnement Pack Complet', time: 'Il y a 1h', type: 'subscription', badge: 'Paiement', icon: Package, color: 'text-accent', bg: 'bg-accent/10' },
+                                { action: "Aïssatou Ba s'est inscrite", time: 'Il y a 2h', type: 'register', badge: 'Inscription', icon: Users, color: 'text-primary', bg: 'bg-primary/10' },
+                                { action: 'Omar Seck a terminé son mémoire', time: 'Il y a 3h', type: 'completion', badge: 'Succès', icon: TrendingUp, color: 'text-success', bg: 'bg-success/10' },
+                            ].map((item, i) => (
+                                <div key={i} className="flex gap-4 group/activity">
+                                    <div className="relative flex flex-col items-center">
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border border-white shadow-sm transition-all duration-300 ${item.bg} group-hover/activity:scale-[-1.05] group-hover/activity:rotate-3`}>
+                                            <item.icon className={`w-6 h-6 ${item.color}`} />
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 pb-2 flex items-center justify-between">
+                                        <div>
+                                            <div className="text-sm font-semibold text-primary mb-1 tracking-tight">{item.action}</div>
+                                            <div className="text-xs font-medium text-text-muted flex items-center gap-1.5">
+                                                <Clock className="w-3.5 h-3.5" /> {item.time}
+                                            </div>
+                                        </div>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider bg-bg-light px-3 py-1.5 rounded-md text-text-secondary border border-border/50">
+                                            {item.badge}
+                                        </span>
                                     </div>
                                 </div>
-                                <span className="text-xs bg-bg-light px-2.5 py-1 rounded-full text-text-secondary font-medium flex-shrink-0">
-                                    {item.badge}
-                                </span>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </motion.div>
 

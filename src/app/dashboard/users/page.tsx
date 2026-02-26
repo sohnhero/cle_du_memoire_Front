@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Search, Filter, Edit, Shield, UserCheck, UserX, Plus, RefreshCw, X } from 'lucide-react';
+import {
+    Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X
+} from '@phosphor-icons/react';
 import { api } from '@/lib/api';
 
 const roleBadge: Record<string, string> = {

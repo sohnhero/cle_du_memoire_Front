@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Clock, User, LogIn, FileText, AlertTriangle, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+    ShieldCheck as Shield, Clock, User, SignIn as LogIn, FileText, Warning as AlertTriangle, MagnifyingGlass as Search, Faders as Filter, CaretLeft as ChevronLeft, CaretRight as ChevronRight
+} from '@phosphor-icons/react';
 
 const logs = [
     { id: '1', action: 'LOGIN', user: 'Moussa Diop', role: 'Étudiant', details: 'Connexion réussie', ip: '196.1.2.34', time: 'Il y a 5 min' },

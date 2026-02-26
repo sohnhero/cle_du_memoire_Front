@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, CheckCircle, Clock, CreditCard, ArrowRight, Star, AlertCircle, Loader2, X } from 'lucide-react';
+import {
+    Package, CheckCircle, Clock, CreditCard, ArrowRight, Star, WarningCircle as AlertCircle, CircleNotch as Loader2, X
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 
 export default function PacksPage() {
@@ -107,9 +110,7 @@ export default function PacksPage() {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-primary to-primary-light rounded-2xl p-6 text-white">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center">
-                                <Package className="w-7 h-7 text-accent" />
-                            </div>
+                            <BrandIcon icon={Package} size={56} className="ring-2 ring-white/20 shadow-xl" />
                             <div>
                                 <div className="text-xl font-bold">{activeSub.pack?.name || 'Pack'}</div>
                                 <div className="text-white/60 text-sm">
@@ -163,9 +164,7 @@ export default function PacksPage() {
                                 </div>
                             )}
 
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center mb-4">
-                                <Package className="w-6 h-6 text-white" />
-                            </div>
+                            <BrandIcon icon={Package} size={48} className="mb-4 shadow-md" />
 
                             <h3 className="text-lg font-bold text-primary">{pack.name}</h3>
                             <p className="text-sm text-text-secondary mt-1 mb-3">{pack.description}</p>
@@ -251,7 +250,7 @@ export default function PacksPage() {
 
             {packs.length === 0 && (
                 <div className="text-center py-12 text-text-secondary">
-                    <Package className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                    <BrandIcon icon={Package} size={64} className="mx-auto mb-4 opacity-30 grayscale" />
                     <p>Aucun pack disponible pour le moment.</p>
                 </div>
             )}

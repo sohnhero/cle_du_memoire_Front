@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import {
-    Calendar as CalendarIcon, Clock, Plus, Trash2, CalendarDays,
-    AlertTriangle, Video, X, ChevronLeft, ChevronRight, CheckCircle2, Circle
-} from 'lucide-react';
+    CalendarBlank as CalendarIcon, Clock, Plus, Trash as Trash2, CalendarBlank as CalendarDays, Warning as AlertTriangle, Video, X, CaretLeft as ChevronLeft, CaretRight as ChevronRight, CheckCircle as CheckCircle2, Circle
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 import { useAuth } from '@/context/AuthContext';
 
 export default function CalendarPage() {
@@ -210,9 +210,7 @@ export default function CalendarPage() {
                     {/* Upcoming */}
                     <section>
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 bg-accent/10 rounded-lg">
-                                <Clock className="w-5 h-5 text-accent" />
-                            </div>
+                            <BrandIcon icon={Clock} size={32} className="shadow-sm" />
                             <h2 className="text-xl font-bold text-primary">Prochaines échéances</h2>
                             <span className="px-2 py-0.5 rounded-full bg-bg-light border border-border text-xs font-bold text-text-secondary">
                                 {upcomingEvents.length}
@@ -221,7 +219,7 @@ export default function CalendarPage() {
 
                         {upcomingEvents.length === 0 ? (
                             <div className="card-premium p-12 text-center border-dashed border-2 bg-transparent">
-                                <Plus className="w-10 h-10 text-text-muted/30 mx-auto mb-3" />
+                                <BrandIcon icon={Plus} size={56} className="mx-auto mb-3 opacity-30 grayscale" />
                                 <p className="text-text-secondary">Aucune tâche prévue. Profitez-en pour avancer !</p>
                             </div>
                         ) : (
@@ -271,9 +269,7 @@ export default function CalendarPage() {
                     {completedEvents.length > 0 && (
                         <section>
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-success/10 rounded-lg">
-                                    <CheckCircle2 className="w-5 h-5 text-success" />
-                                </div>
+                                <BrandIcon icon={CheckCircle2} size={32} className="shadow-sm grayscale opacity-80" />
                                 <h2 className="text-xl font-bold text-primary">Terminées</h2>
                                 <span className="px-2 py-0.5 rounded-full bg-bg-light border border-border text-xs font-bold text-text-secondary">
                                     {completedEvents.length}

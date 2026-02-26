@@ -3,7 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
-import { FileText, Download, Link as LinkIcon, Plus, Trash2, Search, BookOpen, ExternalLink, X, Upload } from 'lucide-react';
+import {
+    FileText, Download, Link as LinkIcon, Plus, Trash as Trash2, MagnifyingGlass as Search, BookOpen, ArrowSquareOut as ExternalLink, X, Upload
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 import { useAuth } from '@/context/AuthContext';
 
 export default function ResourcesPage() {
@@ -50,12 +53,8 @@ export default function ResourcesPage() {
     };
 
     const getIcon = (type: string) => {
-        switch (type) {
-            case 'PFD': case 'PDF': return <FileText className="w-6 h-6 text-error" />;
-            case 'DOCX': return <FileText className="w-6 h-6 text-info" />;
-            case 'LINK': return <LinkIcon className="w-6 h-6 text-accent" />;
-            default: return <FileText className="w-6 h-6 text-text-muted" />;
-        }
+        const icon = type === 'LINK' ? LinkIcon : FileText;
+        return <BrandIcon icon={icon} size={48} className="shadow-sm" />;
     };
 
     const handlePreview = (url: string) => {
@@ -120,7 +119,7 @@ export default function ResourcesPage() {
                 <div className="p-12 flex justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>
             ) : filteredResources.length === 0 ? (
                 <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-border-light">
-                    <BookOpen className="w-12 h-12 text-text-muted/30 mx-auto mb-3" />
+                    <BrandIcon icon={BookOpen} size={64} className="mx-auto mb-3 opacity-30 grayscale" />
                     <p className="text-text-secondary font-medium">Aucune ressource trouvée</p>
                 </div>
             ) : (
@@ -128,7 +127,7 @@ export default function ResourcesPage() {
                     {filteredResources.map(resource => (
                         <div key={resource.id} className="card-premium p-5 flex flex-col group">
                             <div className="flex justify-between items-start mb-4">
-                                <div className="p-3 bg-bg-light rounded-xl group-hover:scale-105 transition-transform">
+                                <div className="group-hover:scale-105 transition-transform">
                                     {getIcon(resource.fileType)}
                                 </div>
                                 {user?.role === 'ADMIN' && (

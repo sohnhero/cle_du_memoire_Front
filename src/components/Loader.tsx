@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Logo from './Logo';
 
 interface LoaderProps {
     fullScreen?: boolean;
@@ -126,7 +125,7 @@ function LoaderContent() {
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         className="relative z-10"
                     >
-                        <Logo className="w-28 h-auto drop-shadow-2xl" variant="icon" showGlow={false} />
+                        <img src="/logo.png" alt="Loading..." className="w-28 h-auto drop-shadow-2xl object-contain" />
                     </motion.div>
                 </div>
             </div>

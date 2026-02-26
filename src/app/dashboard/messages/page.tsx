@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
 import {
-    MessageCircle, Send, Search, MoreVertical, Phone, Video,
-    Paperclip, Smile, Check, CheckCheck, ChevronLeft, FileText, X,
-    Plus, UserPlus, Info
-} from 'lucide-react';
+    ChatCircle as MessageCircle, PaperPlaneRight as Send, MagnifyingGlass as Search, DotsThreeVertical as MoreVertical, Phone, Video, Paperclip, Smiley as Smile, Check, Checks as CheckCheck, CaretLeft as ChevronLeft, FileText, X, Plus, UserPlus, Info
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 
 export default function MessagesPage() {
     const { user } = useAuth();
@@ -310,9 +309,7 @@ export default function MessagesPage() {
                                     </div>
                                 ) : messages.length === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center p-8">
-                                        <div className="w-16 h-16 rounded-3xl bg-accent/10 flex items-center justify-center mb-4">
-                                            <MessageCircle className="w-8 h-8 text-accent" />
-                                        </div>
+                                        <BrandIcon icon={MessageCircle} size={64} className="mb-4 shadow-md ring-4 ring-accent/10" />
                                         <h4 className="font-bold text-primary mb-1">Démarrer la discussion</h4>
                                         <p className="text-xs text-text-secondary max-w-[200px]">Envoyez votre premier message pour lancer la conversation avec {activeParticipant.firstName}.</p>
                                     </div>
@@ -412,9 +409,7 @@ export default function MessagesPage() {
                     ) : (
                         <div className="flex-1 flex items-center justify-center text-center bg-bg-light/30">
                             <div className="bg-white p-8 rounded-2xl shadow-sm border border-border-light flex flex-col items-center">
-                                <div className="w-20 h-20 rounded-full bg-bg-light flex items-center justify-center mb-6">
-                                    <MessageCircle className="w-10 h-10 text-text-muted/30" />
-                                </div>
+                                <BrandIcon icon={MessageCircle} size={80} className="mb-6 opacity-40 grayscale" />
                                 <h3 className="text-xl font-bold text-primary mb-2">Vos Conversations</h3>
                                 <p className="text-sm text-text-secondary mb-6 max-w-xs">Sélectionnez un contact pour démarrer une discussion sécurisée avec votre accompagnateur ou l'administration.</p>
                                 <button

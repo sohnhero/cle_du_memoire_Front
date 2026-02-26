@@ -3,7 +3,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
-import { FileDown, BookOpen, AlertCircle, FileText } from 'lucide-react';
+import {
+    DownloadSimple as FileDown, BookOpen, WarningCircle as AlertCircle, FileText
+} from '@phosphor-icons/react';
 
 export default function ExportPage() {
     const { user } = useAuth();

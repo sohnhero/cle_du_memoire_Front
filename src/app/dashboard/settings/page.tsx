@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, Globe, Bell, Shield, Database, Palette, Save, ToggleLeft, ToggleRight, ChevronRight } from 'lucide-react';
+import {
+    Gear as Settings, Globe, Bell, ShieldCheck as Shield, Database, Palette, FloppyDisk as Save, ToggleLeft, ToggleRight, CaretRight as ChevronRight
+} from '@phosphor-icons/react';
 
 export default function SettingsPage() {
     const [notifications, setNotifications] = useState({ email: true, push: true, sms: false });

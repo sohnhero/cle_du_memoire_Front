@@ -4,7 +4,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
-import { User, Mail, Phone, Building, BookOpen, Shield, Camera, Save, Lock, Loader2, CheckCircle } from 'lucide-react';
+import {
+    User, EnvelopeSimple as Mail, Phone, Buildings as Building, BookOpen, ShieldCheck as Shield, Camera, FloppyDisk as Save, Lock, CircleNotch as Loader2, CheckCircle
+} from '@phosphor-icons/react';
 
 export default function ProfilePage() {
     const { user, login } = useAuth();

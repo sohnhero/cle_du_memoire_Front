@@ -3,10 +3,8 @@
 import React, { useEffect, useState, use } from 'react';
 import { motion } from 'framer-motion';
 import {
-    BookOpen, CheckCircle, Clock, Target, TrendingUp,
-    MessageCircle, ArrowLeft, Save, User as UserIcon,
-    FileText, Calendar as CalendarIcon
-} from 'lucide-react';
+    BookOpen, CheckCircle, Clock, Target, TrendUp as TrendingUp, ChatCircle as MessageCircle, ArrowLeft, FloppyDisk as Save, User as UserIcon, FileText, CalendarBlank as CalendarIcon
+} from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';

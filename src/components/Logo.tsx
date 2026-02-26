@@ -17,7 +17,7 @@ export default function Logo({ className = "h-12", variant = 'full', showGlow = 
 
             {/* The actual logo image */}
             <img
-                src={monochrome ? "/logo-monochrome.png" : "/logo.png"}
+                src={monochrome ? "/logo-monochrome.png" : "/logo-new.png"}
                 alt="Clé du Mémoire Logo"
                 className="relative z-10 w-full h-full object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300"
             />

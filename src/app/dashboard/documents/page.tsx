@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    FileText, Upload, Download, Eye, Clock, CheckCircle, AlertTriangle,
-    Search, Filter, MoreVertical, X, ClipboardCheck, Sparkles, Wand2, MessageCircle
-} from 'lucide-react';
+    FileText, Upload, Download, Eye, Clock, CheckCircle, Warning as AlertTriangle, MagnifyingGlass as Search, Faders as Filter, DotsThreeVertical as MoreVertical, X, ClipboardText as ClipboardCheck, Sparkle as Sparkles, MagicWand as Wand2, ChatCircle as MessageCircle
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 
@@ -40,9 +40,7 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
             className={`card-premium transition-all ${isLatest ? 'p-5 shadow-sm border-l-4 border-l-primary' : 'p-4 bg-bg-light/40 border-dashed opacity-80 hover:opacity-100 hover:bg-white'}`}
         >
             <div className="flex items-start gap-4">
-                <div className={`rounded-xl flex items-center justify-center flex-shrink-0 ${isLatest ? 'w-12 h-12' : 'w-10 h-10'} ${isPdf ? 'bg-error/10 text-error' : 'bg-info/10 text-info'}`}>
-                    <FileText className={isLatest ? "w-6 h-6" : "w-5 h-5"} />
-                </div>
+                <BrandIcon icon={FileText} size={isLatest ? 48 : 40} className="shadow-sm" />
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                         <div>
@@ -233,7 +231,7 @@ export default function DocumentsPage() {
                 </div>
             ) : Object.keys(groupedDocs).length === 0 ? (
                 <div className="card-premium p-12 text-center text-text-secondary">
-                    <FileText className="w-12 h-12 mx-auto mb-4 opacity-30 text-text-muted" />
+                    <BrandIcon icon={FileText} size={64} className="mx-auto mb-4 opacity-30 grayscale" />
                     <h3 className="text-xl font-bold text-primary mb-2">Aucun document trouvé</h3>
                     <p>{user?.role === 'STUDENT' ? 'Commencez par envoyer votre premier chapitre ou plan.' : 'Aucun document n\'a été soumis par vos étudiants.'}</p>
                 </div>
@@ -430,9 +428,7 @@ function UploadModal({ onClose, onUploadSuccess }: { onClose: () => void, onUplo
 
                     <div className="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-border-light rounded-2xl p-8 bg-primary/[0.01] hover:bg-accent/[0.02] hover:border-accent/30 transition-all group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                         <input type="file" className="hidden" ref={fileInputRef} onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                        <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <Upload className="w-8 h-8 text-accent" />
-                        </div>
+                        <BrandIcon icon={Upload} size={64} className="mb-4 group-hover:scale-110 shadow-md ring-4 ring-accent/10" />
                         {file ? (
                             <div className="text-center">
                                 <p className="font-bold text-primary text-sm">{file.name}</p>

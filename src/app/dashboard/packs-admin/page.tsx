@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, CheckCircle, Search, Filter, Plus, Shield, User, CreditCard, X, AlertCircle, Loader2 } from 'lucide-react';
+import {
+    Package, CheckCircle, MagnifyingGlass as Search, Faders as Filter, Plus, ShieldCheck as Shield, User, CreditCard, X, WarningCircle as AlertCircle, CircleNotch as Loader2
+} from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 
 const statusBadge: Record<string, string> = {
@@ -205,9 +208,7 @@ export default function AdminPacksPage() {
                             transition={{ delay: idx * 0.05 }}
                             className="card-premium p-6"
                         >
-                            <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4 text-accent">
-                                <Package className="w-6 h-6" />
-                            </div>
+                            <BrandIcon icon={Package} size={48} className="mb-4 shadow-sm" />
                             <h3 className="text-lg font-bold text-primary">{pack.name}</h3>
                             <p className="text-sm text-text-secondary mt-1 mb-3 line-clamp-2">{pack.description}</p>
                             <div className="text-2xl font-extrabold text-primary mb-2">{pack.price} FCFA</div>
