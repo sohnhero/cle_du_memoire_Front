@@ -616,7 +616,6 @@ function HowItWorks() {
               viewport={{ once: true, amount: 0.1 }}
               className="flex items-center justify-center lg:justify-start gap-4 mb-4 opacity-0 -translate-x-4 lg:-translate-x-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
-              <div className="w-12 h-px bg-accent"></div>
               <p className="text-accent text-sm font-bold tracking-widest uppercase">Processus</p>
             </motion.div>
             <motion.h2
@@ -639,9 +638,6 @@ function HowItWorks() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 relative">
-          {/* Glowing connecting line */}
-          <div className="hidden lg:block absolute top-[4.5rem] left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-transparent via-border/60 to-transparent" />
-
           {steps.map((step, index) => (
             <motion.div
               key={step.number}
@@ -816,7 +812,6 @@ function CTASection() {
       }} />
 
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-info/5 rounded-full blur-[100px] pointer-events-none" />
       </div>
 
@@ -833,7 +828,7 @@ function CTASection() {
         </div>
 
         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-          Transformez votre <span className="text-accent underline decoration-accent/30 underline-offset-8">ambition</span>
+          Transformez votre <span className="text-accent  decoration-accent/30 underline-offset-8">ambition</span>
           <br />
           en diplôme d&apos;excellence.
         </h2>
