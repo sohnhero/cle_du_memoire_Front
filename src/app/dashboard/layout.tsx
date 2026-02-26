@@ -99,7 +99,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {/* Logo */}
                 <div className={`flex items-center justify-center h-20 border-b border-white/10 shrink-0`}>
                     <Link href="/dashboard" className="flex items-center justify-center w-full overflow-hidden px-4">
-                        <Logo className={`h-auto transition-all duration-300 ${sidebarOpen ? 'w-14' : 'w-10'}`} variant="icon" monochrome />
+                        <Logo className={`h-auto transition-all duration-300 ${sidebarOpen ? 'w-20' : 'w-12'}`} variant="icon" monochrome />
                     </Link>
                 </div>
 
@@ -215,7 +215,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         >
                             <div className="flex items-center justify-between px-6 h-20 border-b border-white/10">
                                 <div className="flex items-center justify-center w-full">
-                                    <Logo className="w-14 h-auto" variant="icon" monochrome />
+                                    <Logo className="w-20 h-auto" variant="icon" monochrome />
                                 </div>
                                 <button onClick={() => setMobileSidebarOpen(false)} className="text-white/50 hover:text-white">
                                     <X className="w-6 h-6" />
