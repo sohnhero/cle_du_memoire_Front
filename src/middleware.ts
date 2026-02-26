@@ -1,0 +1,46 @@
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export function middleware(req: NextRequest) {
+    const user = "user";
+    const password = "12345";
+
+    // If the credentials are not set in the environment variables, we don't protect the site.
+    // This ensures that local development continues to work seamlessly without forcing auth
+    // if you haven't set the variables locally.
+    if (!user || !password) {
+        return NextResponse.next();
+    }
+
+    const basicAuth = req.headers.get('authorization');
+
+    if (basicAuth) {
+        const authValue = basicAuth.split(' ')[1];
+        const [providedUser, providedPassword] = atob(authValue).split(':');
+
+        if (providedUser === user && providedPassword === password) {
+            return NextResponse.next();
+        }
+    }
+
+    return new NextResponse('Auth required', {
+        status: 401,
+        headers: {
+            'WWW-Authenticate': 'Basic realm="Secure Area"',
+        },
+    });
+}
+
+// See "Matching Paths" below to learn more
+export const config = {
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
+};
