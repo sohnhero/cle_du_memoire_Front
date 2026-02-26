@@ -35,7 +35,7 @@ export default function LoginPage() {
     return (
         <>
             <Loader fullScreen show={loading} text="Connexion en cours..." />
-            <div className="min-h-screen flex">
+            <div className="min-h-screen flex isolate perspective-[1000px]">
                 {/* Left Panel - Decorative */}
                 <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary-light to-primary-dark relative overflow-hidden">
                     <div className="absolute inset-0 opacity-10">
@@ -49,10 +49,9 @@ export default function LoginPage() {
 
                     <div className="relative flex flex-col justify-center items-center w-full p-16">
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-center"
+                            className="text-center opacity-0 translate-y-4 transform-gpu backface-hidden will-change-[opacity,transform]"
                         >
                             <div className="mx-auto mb-8 flex justify-center">
                                 <Logo className="w-48 h-auto" monochrome />
@@ -81,9 +80,8 @@ export default function LoginPage() {
                 {/* Right Panel - Form */}
                 <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
                     <motion.div
-                        initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="w-full max-w-md"
+                        className="w-full max-w-md opacity-0 translate-x-4 transform-gpu backface-hidden will-change-[opacity,transform]"
                     >
                         {/* Mobile Logo */}
                         <div className="lg:hidden flex justify-center mb-8">
@@ -104,9 +102,8 @@ export default function LoginPage() {
 
                         {error && (
                             <motion.div
-                                initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-error/10 text-error px-4 py-3 rounded-xl text-sm mb-6 border border-error/20"
+                                className="bg-error/10 text-error px-4 py-3 rounded-xl text-sm mb-6 border border-error/20 opacity-0 -translate-y-2 transform-gpu backface-hidden will-change-[opacity,transform]"
                             >
                                 {error}
                             </motion.div>
