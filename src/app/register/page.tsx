@@ -115,7 +115,7 @@ export default function RegisterPage() {
                         className={`w-full transition-all duration-500 ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}
                     >
                         <div className="lg:hidden flex justify-center mb-8">
-                            <Logo className="w-48 h-auto" monochrome />
+                            <Logo className="w-48 h-auto" monochrome={false} />
                         </div>
 
                         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-primary transition-colors mb-6">

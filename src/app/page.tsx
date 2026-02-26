@@ -243,7 +243,7 @@ function Hero() {
         ))}
       </motion.div>
 
-      <div className="relative max-w-6xl mx-auto px-6 py-32 w-full z-10">
+      <div className="relative max-w-6xl mx-auto px-6 py-20 lg:py-32 w-full z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -261,7 +261,7 @@ function Hero() {
             Plateforme N°1 au Sénégal
           </motion.div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-[3.8rem] font-extrabold text-white leading-[1.05] tracking-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-[3.8rem] font-extrabold text-white leading-[1.1] sm:leading-[1.05] tracking-tight mb-6">
             Réussissez votre
             <br />
             <span className="text-accent">mémoire</span> avec
@@ -363,12 +363,12 @@ function Services() {
   ];
 
   return (
-    <section id="services" className="section bg-bg-light">
+    <section id="services" className="py-20 lg:py-32 bg-bg-light">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
           className="max-w-2xl mb-16"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
@@ -386,7 +386,7 @@ function Services() {
               key={service.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: index * 0.05 }}
               className={`group relative bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${service.span}`}
             >
@@ -482,12 +482,12 @@ function PacksSection() {
   ];
 
   return (
-    <section id="packs" className="section bg-white relative overflow-hidden">
+    <section id="packs" className="py-20 lg:py-32 bg-white relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Tarifs</p>
@@ -505,7 +505,7 @@ function PacksSection() {
               key={pack.name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: index * 0.1 }}
               className={`relative rounded-2xl p-8 flex flex-col transition-all duration-300 ${pack.dark
                 ? 'bg-primary text-white border border-white/10 shadow-2xl shadow-primary/20 lg:scale-105 lg:-my-4 lg:py-12'
@@ -603,7 +603,7 @@ function HowItWorks() {
   ];
 
   return (
-    <section className="section bg-white overflow-hidden relative" id="processus">
+    <section className="py-20 lg:py-32 bg-white overflow-hidden relative" id="processus">
       {/* Background decorations */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-bg-light/50 to-transparent" />
       <div className="absolute -left-40 top-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
@@ -650,8 +650,8 @@ function HowItWorks() {
               key={step.number}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: index * 0.15, duration: 0.7, type: "spring", bounce: 0.3 }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ delay: index * 0.1, duration: 0.5, type: "tween" }}
               className={`relative group h-full ${index % 2 !== 0 ? 'lg:mt-16' : ''}`}
             >
               <div className="bg-white rounded-[2rem] p-8 border border-border shadow-lg shadow-black/[0.03] hover:shadow-2xl hover:shadow-accent/10 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col relative overflow-hidden min-h-[320px]">
