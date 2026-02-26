@@ -366,10 +366,9 @@ function Services() {
     <section id="services" className="py-20 lg:py-32 bg-bg-light isolate perspective-[1000px]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="max-w-2xl mb-16 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="max-w-2xl mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -384,11 +383,10 @@ function Services() {
           {services.map((service, index) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
-              className={`group relative bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] opacity-0 transform-gpu backface-hidden will-change-[opacity,transform] ${service.span}`}
+              className={`group relative bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${service.span}`}
             >
               <div className="flex items-start justify-between mb-8">
                 <div className="w-11 h-11 rounded-xl bg-primary/[0.04] flex items-center justify-center group-hover:bg-accent/10 transition-colors duration-300">
@@ -485,10 +483,9 @@ function PacksSection() {
     <section id="packs" className="py-20 lg:py-32 bg-white relative overflow-hidden isolate perspective-[1000px]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="text-center max-w-2xl mx-auto mb-16 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="text-center max-w-2xl mx-auto mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Tarifs</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -503,11 +500,10 @@ function PacksSection() {
           {packs.map((pack, index) => (
             <motion.div
               key={pack.name}
-              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
-              className={`relative rounded-2xl p-8 flex flex-col transition-all duration-300 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform] ${pack.dark
+              className={`relative rounded-2xl p-8 flex flex-col transition-all duration-300 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${pack.dark
                 ? 'bg-primary text-white border border-white/10 shadow-2xl shadow-primary/20 lg:scale-105 lg:-my-4 lg:py-12'
                 : 'bg-white border border-border hover:border-border/80 hover:shadow-lg'
                 }`}
@@ -612,29 +608,26 @@ function HowItWorks() {
         <div className="mb-20 text-center lg:text-left flex flex-col lg:flex-row gap-8 lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="flex items-center justify-center lg:justify-start gap-4 mb-4 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+              viewport={{ once: true, amount: 0.1 }}
+              className="flex items-center justify-center lg:justify-start gap-4 mb-4 opacity-0 -translate-x-4 lg:-translate-x-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               <div className="w-12 h-px bg-accent"></div>
               <p className="text-accent text-sm font-bold tracking-widest uppercase">Processus</p>
             </motion.div>
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-primary mb-6 leading-tight opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+              className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-primary mb-6 leading-tight opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               L&apos;excellence en <span className="text-accent">4 étapes</span>
             </motion.h2>
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: 0.2 }}
-              className="text-text-secondary text-lg sm:text-xl lg:max-w-xl mx-auto lg:mx-0 opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+              className="text-text-secondary text-lg sm:text-xl lg:max-w-xl mx-auto lg:mx-0 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               Un parcours soigneusement conçu pour vous mener de l&apos;idée initiale à la soutenance finale avec assurance et brio.
             </motion.p>
@@ -648,11 +641,10 @@ function HowItWorks() {
           {steps.map((step, index) => (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
-              className={`relative group h-full opacity-0 transform-gpu backface-hidden will-change-[opacity,transform] ${index % 2 !== 0 ? 'lg:mt-16' : ''}`}
+              className={`relative group h-full opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${index % 2 !== 0 ? 'lg:mt-16' : ''}`}
             >
               <div className="bg-white rounded-[2rem] p-8 border border-border shadow-lg shadow-black/[0.03] hover:shadow-2xl hover:shadow-accent/10 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col relative overflow-hidden min-h-[320px]">
                 {/* Large Background Number - More subtle */}
@@ -760,10 +752,9 @@ function Testimonials() {
     <section id="testimonials" className="section bg-white relative overflow-hidden isolate perspective-[1000px]">
       <div className="max-w-6xl mx-auto px-6 mb-16">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="text-center max-w-2xl mx-auto opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="text-center max-w-2xl mx-auto opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Témoignages</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -813,11 +804,10 @@ function CTASection() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.8 }}
-        className="relative max-w-4xl mx-auto px-6 text-center opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+        className="relative max-w-4xl mx-auto px-6 text-center opacity-0 translate-y-6 lg:translate-y-8 transform-gpu backface-hidden will-change-[opacity,transform]"
       >
         {/* Social Proof Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-accent text-xs font-bold mb-8 tracking-widest uppercase">
@@ -869,11 +859,10 @@ function Contact() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6 }}
-            className="opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+            className="opacity-0 -translate-x-6 lg:-translate-x-8 transform-gpu backface-hidden will-change-[opacity,transform]"
           >
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-px bg-accent"></div>
@@ -913,11 +902,10 @@ function Contact() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6 }}
-            className="relative opacity-0 transform-gpu backface-hidden will-change-[opacity,transform]"
+            className="relative opacity-0 translate-x-6 lg:translate-x-8 transform-gpu backface-hidden will-change-[opacity,transform]"
           >
             {/* Form decorative background */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 rounded-[2.5rem] transform translate-x-4 translate-y-4 -z-10" />
