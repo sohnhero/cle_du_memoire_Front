@@ -207,7 +207,7 @@ function Hero() {
           <img
             src="/hero-graduate.png"
             alt="Étudiante diplômée"
-            className="absolute bottom-0 right-[20%] h-[90%] w-auto object-contain object-bottom opacity-90 hover:opacity-100 transition-all duration-500"
+            className="absolute bottom-0 right-[22%] h-[90%] w-auto object-contain object-bottom opacity-90 hover:opacity-100 scale-[1.2] transition-all duration-500"
           />
         </div>
 
