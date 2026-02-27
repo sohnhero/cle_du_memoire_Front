@@ -12,6 +12,19 @@ import {
 import Logo from '@/components/Logo';
 import { BrandIcon } from '@/components/BrandIcon';
 
+const CustomFacebookIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 320 512" fill="currentColor" className={`w-5 h-5 origin-center ${className || ''}`} style={{ transform: 'scale(1.3) translateY(18%)' }}>
+    <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
+  </svg>
+);
+
+const CustomLinkedinIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 448 512" fill="currentColor" className={`w-5 h-5 origin-center ${className || ''}`} style={{ transform: 'scale(1.15)' }}>
+    <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
+  </svg>
+);
+
+
 // ==================== NAVBAR ====================
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -611,13 +624,13 @@ function HowItWorks() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="mb-20 text-center lg:text-left flex flex-col lg:flex-row gap-8 lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <motion.div
-              whileInView={{ opacity: 1, x: 0 }}
+            <motion.p
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
-              className="flex items-center justify-center lg:justify-start gap-4 mb-4 opacity-0 -translate-x-4 lg:-translate-x-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+              className="text-accent text-sm font-bold tracking-widest uppercase mb-4 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] block text-center lg:text-left"
             >
-              <p className="text-accent text-sm font-bold tracking-widest uppercase">Processus</p>
-            </motion.div>
+              Processus
+            </motion.p>
             <motion.h2
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
@@ -727,7 +740,7 @@ function Testimonials() {
       <div>
         <div className="flex gap-0.5 mb-4">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} className="w-3.5 h-3.5 fill-accent text-accent" />
+            <Star key={i} weight="fill" className="w-3.5 h-3.5 text-accent" />
           ))}
         </div>
         <p className="text-text-primary text-sm leading-relaxed mb-6">
@@ -996,11 +1009,11 @@ function Contact() {
               <div className="text-sm font-bold text-white mb-6">Connectez-vous avec nous</div>
               <div className="flex items-center gap-4">
                 {[
-                  { Icon: FacebookLogo, href: "#" },
+                  { Icon: CustomFacebookIcon, href: "#" },
                   { Icon: InstagramLogo, href: "#" },
                   { Icon: XLogo, href: "#" },
                   { Icon: TikTokLogo, href: "#" },
-                  { Icon: LinkedinLogo, href: "#" },
+                  { Icon: CustomLinkedinIcon, href: "#" },
                   { Icon: YoutubeLogo, href: "#" },
                 ].map(({ Icon, href }, idx) => (
                   <a key={idx} href={href} className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary relative overflow-hidden group hover:scale-105 transition-transform duration-300">
