@@ -321,7 +321,7 @@ function Hero() {
       </div>
 
       {/* Wave separator */}
-      <div className="absolute bottom-0 left-0 right-0 z-20">
+      <div className="absolute -bottom-[2px] left-0 right-0 z-20">
         <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full" preserveAspectRatio="none">
           <path d="M0 100L48 90C96 80 192 60 288 50C384 40 480 40 576 45C672 50 768 60 864 65C960 70 1056 70 1152 62.5C1248 55 1344 40 1392 32.5L1440 25V100H0Z" fill="#FAFBFC" />
         </svg>
