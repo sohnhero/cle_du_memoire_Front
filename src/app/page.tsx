@@ -206,8 +206,8 @@ function Hero() {
         >
           <img
             src="/hero-graduate.png"
-            alt="Étudiant diplômé sénégalais"
-            className="absolute bottom-0 right-[5%] h-[90%] w-auto object-contain object-bottom opacity-90 hover:opacity-100 transition-all duration-500"
+            alt="Étudiante diplômée"
+            className="absolute bottom-0 right-[20%] h-[90%] w-auto object-contain object-bottom opacity-90 hover:opacity-100 transition-all duration-500"
           />
         </div>
 
@@ -383,7 +383,7 @@ function Services() {
         <motion.div
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="max-w-2xl mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="max-w-2xl mx-auto text-center mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -622,12 +622,12 @@ function HowItWorks() {
       <div className="absolute -left-40 top-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="mb-20 text-center lg:text-left flex flex-col lg:flex-row gap-8 lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
+        <div className="mb-20 flex flex-col items-center justify-center gap-8 text-center">
+          <div className="max-w-2xl mx-auto">
             <motion.p
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
-              className="text-accent text-sm font-bold tracking-widest uppercase mb-4 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] block text-center lg:text-left"
+              className="text-accent text-sm font-semibold tracking-wide uppercase mb-4 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               Processus
             </motion.p>
@@ -635,7 +635,7 @@ function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-primary mb-6 leading-tight opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               L&apos;excellence en <span className="text-accent">4 étapes</span>
             </motion.h2>
@@ -643,7 +643,7 @@ function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ delay: 0.2 }}
-              className="text-text-secondary text-lg sm:text-xl lg:max-w-xl mx-auto lg:mx-0 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+              className="text-text-secondary text-lg leading-relaxed opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               Un parcours soigneusement conçu pour vous mener de l&apos;idée initiale à la soutenance finale avec assurance et brio.
             </motion.p>
