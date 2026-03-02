@@ -99,6 +99,18 @@ export default function MemoirePage() {
                             <div>
                                 <h2 className="text-lg font-bold text-primary">{memoire.title}</h2>
                                 <p className="text-sm text-text-secondary">{user?.field || 'Filière non renseignée'} — {user?.university || 'Université non renseignée'}</p>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                    {user?.studyLevel && (
+                                        <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
+                                            Niveau: {user.studyLevel}
+                                        </span>
+                                    )}
+                                    {user?.targetDefenseDate && (
+                                        <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
+                                            Soutenance prévue: {new Date(user.targetDefenseDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                         <div className="grid grid-cols-3 gap-4 mt-6">

@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cle-du-memoire-back.vercel.app/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 
 class ApiClient {
     private token: string | null = null;
@@ -201,7 +201,7 @@ class ApiClient {
     }
 
     // Profile
-    async updateProfile(data: { firstName?: string; lastName?: string; phone?: string; university?: string; field?: string }) {
+    async updateProfile(data: { firstName?: string; lastName?: string; phone?: string; university?: string; field?: string; studyLevel?: string; targetDefenseDate?: string }) {
         return this.request<{ user: any }>('/users/me/profile', {
             method: 'PATCH',
             body: JSON.stringify(data),

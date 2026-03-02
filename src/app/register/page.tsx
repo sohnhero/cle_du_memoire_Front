@@ -13,7 +13,7 @@ import { api } from '@/lib/api';
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
         firstName: '', lastName: '', email: '', password: '', confirmPassword: '',
-        phone: '', role: 'STUDENT', university: '', field: '', packId: '',
+        phone: '', role: 'STUDENT', university: '', field: '', studyLevel: '', targetDefenseDate: '', packId: '',
     });
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -236,10 +236,34 @@ export default function RegisterPage() {
                                         <label className="block text-sm font-medium text-primary mb-2">Filière / Spécialité</label>
                                         <div className="relative">
                                             <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-                                            <input type="text" value={formData.field} onChange={(e) => updateField('field', e.target.value)} placeholder="Ex: Master Informatique, Marketing..."
+                                            <input type="text" value={formData.field} onChange={(e) => updateField('field', e.target.value)} placeholder="Ex: Informatique, Marketing..."
                                                 className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm" />
                                         </div>
                                     </div>
+
+                                    {formData.role === 'STUDENT' && (
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-primary mb-2">Niveau d'étude</label>
+                                                <div className="relative">
+                                                    <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+                                                    <select value={formData.studyLevel} onChange={(e) => updateField('studyLevel', e.target.value)} required
+                                                        className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm appearance-none">
+                                                        <option value="" disabled>Sélectionner...</option>
+                                                        <option value="Licence 3">Licence 3</option>
+                                                        <option value="Master 1">Master 1</option>
+                                                        <option value="Master 2">Master 2</option>
+                                                        <option value="Autre">Autre</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-primary mb-2">Date de soutenance prévue</label>
+                                                <input type="date" value={formData.targetDefenseDate} onChange={(e) => updateField('targetDefenseDate', e.target.value)} required
+                                                    className="w-full px-4 py-3.5 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm" />
+                                            </div>
+                                        </div>
+                                    )}
 
                                     <div className="flex gap-3">
                                         <button type="button" onClick={() => setStep(1)} className="flex-1 py-4 rounded-xl border-2 border-border text-text-secondary font-semibold hover:bg-bg-light transition-all">
@@ -249,6 +273,11 @@ export default function RegisterPage() {
                                             if (formData.role === 'ACCOMPAGNATEUR') {
                                                 handleSubmit({ preventDefault: () => { } } as any);
                                             } else {
+                                                if (!formData.studyLevel || !formData.targetDefenseDate) {
+                                                    setError("Veuillez renseigner votre niveau d'étude et la date de soutenance prévue");
+                                                    return;
+                                                }
+                                                setError('');
                                                 setStep(3);
                                             }
                                         }} className="btn-primary flex-1 justify-center py-4">

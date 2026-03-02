@@ -109,7 +109,9 @@ function StudentDashboard() {
         <div className="space-y-8">
             <div>
                 <h1 className="text-2xl font-bold text-primary">Mon Tableau de Bord</h1>
-                <p className="text-text-secondary mt-1">Bienvenue, {user?.firstName} 👋</p>
+                <p className="text-text-secondary mt-1">
+                    Bienvenue, {user?.firstName} 👋 {user?.studyLevel && <span className="inline-flex items-center mx-2 text-xs font-bold px-2 py-0.5 rounded-full bg-accent/10 text-accent">{user.studyLevel}</span>}
+                </p>
             </div>
 
             {/* Stats */}
@@ -130,10 +132,20 @@ function StudentDashboard() {
                     className="lg:col-span-2 card-premium p-6 cursor-pointer hover:border-accent/30 transition-colors"
                     onClick={() => router.push('/dashboard/memoire')}
                 >
-                    <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
-                        <BrandIcon icon={BookOpen} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
-                        Progression du Mémoire
-                    </h3>
+                    <div className="flex justify-between items-start mb-6">
+                        <h3 className="text-lg font-bold text-primary flex items-center gap-3">
+                            <BrandIcon icon={BookOpen} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
+                            Progression du Mémoire
+                        </h3>
+                        {user?.targetDefenseDate && (
+                            <div className="text-right">
+                                <span className="block text-xs text-text-muted">Soutenance prévue</span>
+                                <span className="block text-sm font-bold text-accent">
+                                    {Math.ceil((new Date(user.targetDefenseDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} jours restants
+                                </span>
+                            </div>
+                        )}
+                    </div>
 
                     {memoire ? (
                         <>

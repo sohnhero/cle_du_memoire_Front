@@ -10,6 +10,8 @@ export interface User {
     role: Role;
     university?: string;
     field?: string;
+    studyLevel?: string;
+    targetDefenseDate?: string;
     avatar?: string;
     isActive: boolean;
     createdAt: string;

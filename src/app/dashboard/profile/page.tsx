@@ -22,6 +22,8 @@ export default function ProfilePage() {
     const [phone, setPhone] = useState(user?.phone || '');
     const [university, setUniversity] = useState(user?.university || '');
     const [field, setField] = useState(user?.field || '');
+    const [studyLevel, setStudyLevel] = useState(user?.studyLevel || '');
+    const [targetDefenseDate, setTargetDefenseDate] = useState(user?.targetDefenseDate ? new Date(user.targetDefenseDate).toISOString().split('T')[0] : '');
 
     // Password form
     const [currentPassword, setCurrentPassword] = useState('');
@@ -42,11 +44,12 @@ export default function ProfilePage() {
     async function handleSave() {
         setSaving(true);
         try {
-            await api.updateProfile({ firstName, lastName, phone, university, field });
+            await api.updateProfile({ firstName, lastName, phone, university, field, studyLevel, targetDefenseDate });
             // Refresh user data
             const { user: updated } = await api.getMe();
-            // Force re-render by reloading
-            window.location.reload();
+            // Show toast instead of reloading
+            showToast('Profil mis à jour ! Veuillez rafraîchir la page si nécessaire.', 'success');
+            setEditing(false);
         } catch (err: any) {
             showToast(err.message || 'Erreur lors de la sauvegarde', 'error');
         } finally {
@@ -174,28 +177,47 @@ export default function ProfilePage() {
                 <h3 className="text-lg font-bold text-primary mb-6">Informations Personnelles</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
                     {[
-                        { label: 'Prénom', value: firstName, setter: setFirstName, icon: User },
-                        { label: 'Nom', value: lastName, setter: setLastName, icon: User },
-                        { label: 'Email', value: user.email, setter: null, icon: Mail },
-                        { label: 'Téléphone', value: phone, setter: setPhone, icon: Phone },
-                        { label: 'Université', value: university, setter: setUniversity, icon: Building },
-                        { label: 'Filière', value: field, setter: setField, icon: BookOpen },
+                        { label: 'Prénom', value: firstName, setter: setFirstName, icon: User, type: 'text' },
+                        { label: 'Nom', value: lastName, setter: setLastName, icon: User, type: 'text' },
+                        { label: 'Email', value: user.email, setter: null, icon: Mail, type: 'text' },
+                        { label: 'Téléphone', value: phone, setter: setPhone, icon: Phone, type: 'text' },
+                        { label: 'Université', value: university, setter: setUniversity, icon: Building, type: 'text' },
+                        { label: 'Filière', value: field, setter: setField, icon: BookOpen, type: 'text' },
+                        ...(user.role === 'STUDENT' ? [
+                            { label: 'Niveau d\'étude', value: studyLevel, setter: setStudyLevel, icon: BookOpen, type: 'select', options: ['Licence 3', 'Master 1', 'Master 2', 'Autre'] },
+                            { label: 'Date de soutenance prévue', value: targetDefenseDate, setter: setTargetDefenseDate, icon: BookOpen, type: 'date' }
+                        ] : []),
                     ].map((f) => (
                         <div key={f.label}>
                             <label className="block text-sm font-medium text-text-secondary mb-2">{f.label}</label>
                             <div className="relative">
                                 <f.icon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-                                <input
-                                    type="text"
-                                    value={f.value || ''}
-                                    onChange={(e) => f.setter?.(e.target.value)}
-                                    disabled={!editing || !f.setter}
-                                    placeholder={`Votre ${f.label.toLowerCase()}`}
-                                    className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm transition-all ${editing && f.setter
-                                        ? 'border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent'
-                                        : 'border-border-light bg-bg-light text-text-primary cursor-default'
-                                        } outline-none`}
-                                />
+                                {f.type === 'select' ? (
+                                    <select
+                                        value={f.value || ''}
+                                        onChange={(e) => f.setter?.(e.target.value)}
+                                        disabled={!editing || !f.setter}
+                                        className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm transition-all appearance-none ${editing && f.setter
+                                            ? 'border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent'
+                                            : 'border-border-light bg-bg-light text-text-primary cursor-default'
+                                            } outline-none`}
+                                    >
+                                        <option value="" disabled>Sélectionner...</option>
+                                        {f.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                    </select>
+                                ) : (
+                                    <input
+                                        type={f.type || 'text'}
+                                        value={f.value || ''}
+                                        onChange={(e) => f.setter?.(e.target.value)}
+                                        disabled={!editing || !f.setter}
+                                        placeholder={`Votre ${f.label.toLowerCase()}`}
+                                        className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm transition-all ${editing && f.setter
+                                            ? 'border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent'
+                                            : 'border-border-light bg-bg-light text-text-primary cursor-default'
+                                            } outline-none`}
+                                    />
+                                )}
                             </div>
                         </div>
                     ))}
