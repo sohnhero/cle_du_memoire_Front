@@ -24,6 +24,7 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
     const router = useRouter();
     const { user } = useAuth();
     const [memoire, setMemoire] = useState<any>(null);
+    const [documents, setDocuments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
@@ -33,21 +34,25 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
     const [notes, setNotes] = useState('');
 
     useEffect(() => {
-        // We reuse getMyMemoire but on backend we need to make sure we can fetch specific one if id provided
-        // For now, let's assume we fetch all and find the one. 
-        // Better: Backend should have GET /memoires/:id
         loadData();
     }, [params.id]);
 
     const loadData = async () => {
         try {
-            const res = await api.getMyMemoire();
+            const [res, docsRes] = await Promise.all([
+                api.getMyMemoire().catch(() => ({ memoires: [] })),
+                api.getDocuments().catch(() => ({ documents: [] }))
+            ]);
+
             const found = res.memoires?.find((m: any) => m.id === params.id);
             if (found) {
                 setMemoire(found);
                 setProgress(found.progressPercent);
                 setPhase(found.phase);
                 setNotes(found.notes || '');
+
+                const studentDocs = docsRes.documents?.filter((d: any) => d.memoireId === params.id) || [];
+                setDocuments(studentDocs);
             }
         } catch (error) {
             console.error(error);
@@ -183,7 +188,7 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
                                 </div>
                                 <div>
                                     <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Documents</div>
-                                    <div className="text-sm font-bold text-primary">0 fichiers partagés</div>
+                                    <div className="text-sm font-bold text-primary">{documents.length} fichiers partagés</div>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4 p-3 rounded-xl bg-bg-light">

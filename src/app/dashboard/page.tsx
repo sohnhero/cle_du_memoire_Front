@@ -346,20 +346,28 @@ function AccompagnateurDashboard() {
     const { user } = useAuth();
     const router = useRouter();
     const [memoires, setMemoires] = useState<any[]>([]);
+    const [documents, setDocuments] = useState<any[]>([]);
+    const [conversations, setConversations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // As a COACH, this endpoint returns { memoires: [...] }
-        api.getMyMemoire()
-            .then(res => {
-                setMemoires(res.memoires || []);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Failed to fetch students data", err);
-                setLoading(false);
-            });
+        Promise.all([
+            api.getMyMemoire().catch(() => ({ memoires: [] })),
+            api.getDocuments().catch(() => ({ documents: [] })),
+            api.getConversations().catch(() => ({ conversations: [] }))
+        ]).then(([memRes, docRes, convRes]) => {
+            setMemoires(memRes.memoires || []);
+            setDocuments(docRes.documents || []);
+            setConversations(convRes.conversations || []);
+            setLoading(false);
+        }).catch(err => {
+            console.error("Failed to fetch dashboard data", err);
+            setLoading(false);
+        });
     }, []);
+
+    const pendingDocuments = documents.filter(d => d.status === 'UPLOADED' || d.status === 'UNDER_REVIEW');
+    const totalUnreadMessages = conversations.reduce((acc, conv) => acc + (conv.unreadCount || 0), 0);
 
     const phasesList = [
         { id: 'TOPIC', label: 'Choix du sujet' },
@@ -385,8 +393,8 @@ function AccompagnateurDashboard() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatsCard icon={Users} label="Étudiants Suivis" value={memoires.length} color="primary" delay={0.1} />
-                <StatsCard icon={FileText} label="Documents en attente" value={0} color="warning" delay={0.2} />
-                <StatsCard icon={MessageCircle} label="Messages non lus" value={0} color="error" delay={0.3} />
+                <StatsCard icon={FileText} label="Documents en attente" value={pendingDocuments.length} color="warning" delay={0.2} />
+                <StatsCard icon={MessageCircle} label="Messages non lus" value={totalUnreadMessages} color="error" delay={0.3} />
                 <StatsCard icon={TrendingUp} label="Progression Moyenne" value={`${memoires.length > 0 ? Math.round(memoires.reduce((acc, m) => acc + m.progressPercent, 0) / memoires.length) : 0}%`} color="success" delay={0.4} />
             </div>
 
@@ -447,25 +455,48 @@ function AccompagnateurDashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="card-premium p-6"
+                    className="card-premium p-6 flex flex-col h-full"
                 >
                     <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
                         <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
                         Actions Requises
                     </h3>
-                    <div className="space-y-3">
-                        {[
-                            { text: 'Relire le Chapitre 2', time: 'Il y a 2h', type: 'document' },
-                            { text: 'Valider un plan', time: 'Il y a 5h', type: 'validation' },
-                            { text: 'Nouveau message', time: 'Hier', type: 'message' },
-                        ].map((action, i) => (
-                            <div key={i} className="p-3 rounded-xl bg-bg-light hover:bg-accent/5 transition-colors cursor-pointer">
-                                <div className="text-sm font-medium text-text-primary">{action.text}</div>
-                                <div className="text-xs text-text-muted mt-1 flex items-center gap-1">
-                                    <Clock className="w-3 h-3" /> {action.time}
-                                </div>
+                    <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                        {pendingDocuments.length === 0 && totalUnreadMessages === 0 ? (
+                            <div className="text-center py-6 text-text-secondary">
+                                Tout est à jour ! Aucune action requise.
                             </div>
-                        ))}
+                        ) : (
+                            <>
+                                {pendingDocuments.slice(0, 3).map((doc, i) => (
+                                    <div key={`doc-${doc.id}`} onClick={() => router.push('/dashboard/documents')} className="p-3 rounded-xl bg-bg-light hover:bg-warning/5 transition-colors cursor-pointer group">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="text-sm font-semibold text-primary truncate group-hover:text-warning transition-colors">Évaluer : {doc.filename}</div>
+                                                <div className="text-xs text-text-muted mt-0.5 truncate">
+                                                    De {doc.uploader?.firstName} {doc.uploader?.lastName}
+                                                </div>
+                                            </div>
+                                            <div className="flex-shrink-0 text-[10px] font-bold text-warning bg-warning/10 px-2 py-0.5 rounded">Doc</div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {conversations.filter(c => c.unreadCount > 0).slice(0, 2).map((conv, i) => {
+                                    const otherUser = conv.participant1Id === user?.id ? conv.participant2 : conv.participant1;
+                                    return (
+                                        <div key={`conv-${conv.id}`} onClick={() => router.push('/dashboard/messages')} className="p-3 rounded-xl bg-bg-light hover:bg-error/5 transition-colors cursor-pointer group">
+                                            <div className="flex items-start justify-between gap-2">
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="text-sm font-semibold text-primary truncate group-hover:text-error transition-colors">Nouveau(x) message(s)</div>
+                                                    <div className="text-xs text-text-muted mt-0.5 truncate">De {otherUser?.firstName} ({conv.unreadCount} non lu)</div>
+                                                </div>
+                                                <div className="flex-shrink-0 text-[10px] font-bold text-error bg-error/10 px-2 py-0.5 rounded">Chat</div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </>
+                        )}
                     </div>
                 </motion.div>
             </div>
