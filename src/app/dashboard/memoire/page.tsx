@@ -56,8 +56,10 @@ export default function MemoirePage() {
         );
     }
 
-    const currentPhaseIndex = phasesList.findIndex(p => p.id === memoire.phase) || 0;
-    const progress = memoire.progressPercent || 0;
+    const currentPhaseIndex = Math.max(0, phasesList.findIndex(p => p.id === memoire.phase));
+    const progress = memoire?.progressPercent > 0
+        ? memoire.progressPercent
+        : Math.round((currentPhaseIndex / Math.max(1, phasesList.length - 1)) * 100);
 
     // Calculate dates (mocked for past phases based on creation for demo purposes, but real app might store phase transition dates)
     const phases = phasesList.map((p, index) => {
@@ -91,7 +93,7 @@ export default function MemoirePage() {
             </div>
 
             {/* Header Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-8 bg-gradient-to-br from-primary/[0.02] to-accent/[0.02]">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-8 bg-primary/5">
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-4">

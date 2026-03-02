@@ -214,7 +214,7 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
                         </button>
                     </motion.div>
 
-                    <div className="p-6 rounded-3xl bg-gradient-to-br from-primary to-primary-light text-white shadow-xl relative overflow-hidden group">
+                    <div className="p-6 rounded-3xl bg-primary text-white shadow-xl relative overflow-hidden group">
                         <div className="relative z-10">
                             <h4 className="font-bold mb-2">Conseil Expert</h4>
                             <p className="text-xs text-white/80 leading-relaxed italic">

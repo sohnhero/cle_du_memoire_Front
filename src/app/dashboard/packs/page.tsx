@@ -107,7 +107,7 @@ export default function PacksPage() {
 
             {/* Active Subscription Banner */}
             {activeSub && (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-primary to-primary-light rounded-2xl p-6 text-white">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-primary rounded-2xl p-6 text-white">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <BrandIcon icon={Package} size={56} className="ring-2 ring-white/20 shadow-xl" />

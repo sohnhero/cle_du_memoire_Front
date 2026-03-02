@@ -37,7 +37,7 @@ export default function LoginPage() {
             <Loader fullScreen show={loading} text="Connexion en cours..." />
             <div className="min-h-screen flex">
                 {/* Left Panel - Decorative */}
-                <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary-light to-primary-dark relative overflow-hidden">
+                <div className="hidden lg:flex lg:w-1/2 bg-primary relative overflow-hidden">
                     <div className="absolute inset-0 opacity-10">
                         <div className="absolute top-20 left-10 w-72 h-72 bg-accent rounded-full blur-[100px]" />
                         <div className="absolute bottom-20 right-10 w-96 h-96 bg-info rounded-full blur-[120px]" />

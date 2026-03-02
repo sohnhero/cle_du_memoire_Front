@@ -65,7 +65,7 @@ export default function StudentsPage() {
                         className="card-premium p-5 hover:shadow-lg transition-all"
                     >
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                                 {student.name.split(' ').map(n => n[0]).join('')}
                             </div>
                             <div className="flex-1 min-w-0">
@@ -84,7 +84,7 @@ export default function StudentsPage() {
                                 <div className="text-right">
                                     <div className="text-lg font-bold text-primary">{student.progress}%</div>
                                     <div className="w-20 h-2 bg-bg-light rounded-full overflow-hidden mt-1">
-                                        <div className="h-full bg-gradient-to-r from-accent to-info rounded-full transition-all" style={{ width: `${student.progress}%` }} />
+                                        <div className="h-full bg-accent rounded-full transition-all" style={{ width: `${student.progress}%` }} />
                                     </div>
                                 </div>
                                 <div className="flex gap-1">

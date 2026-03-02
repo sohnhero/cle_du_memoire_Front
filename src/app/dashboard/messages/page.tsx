@@ -213,7 +213,7 @@ export default function MessagesPage() {
                                         className="w-full flex items-start gap-3 p-4 bg-accent/5 border-l-2 border-l-accent border-b border-border-light/50 text-left"
                                     >
                                         <div className="relative flex-shrink-0">
-                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white font-bold text-sm">
+                                            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm">
                                                 {tentativePartner.firstName[0]}{tentativePartner.lastName[0]}
                                             </div>
                                             <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-warning rounded-full border-2 border-white" />
@@ -241,7 +241,7 @@ export default function MessagesPage() {
                                                 }`}
                                         >
                                             <div className="relative flex-shrink-0">
-                                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white font-bold text-sm">
+                                                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm">
                                                     {other.firstName[0]}{other.lastName[0]}
                                                 </div>
                                                 <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-white" />
@@ -284,7 +284,7 @@ export default function MessagesPage() {
                                         <ChevronLeft className="w-5 h-5" />
                                     </button>
                                     <div className="relative">
-                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white font-bold text-sm">
+                                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm">
                                             {activeParticipant.firstName[0]}{activeParticipant.lastName[0]}
                                         </div>
                                         <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border-2 border-white" />
@@ -494,7 +494,7 @@ function NewChatModal({ onClose, onSelectPartner }: { onClose: () => void, onSel
                                 onClick={() => onSelectPartner(p)}
                                 className="w-full flex items-center gap-3 p-3 hover:bg-bg-light rounded-xl transition-colors text-left group"
                             >
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
+                                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
                                     {p.firstName[0]}{p.lastName[0]}
                                 </div>
                                 <div className="flex-1 min-w-0">

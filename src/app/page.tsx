@@ -618,7 +618,7 @@ function HowItWorks() {
   return (
     <section className="py-20 lg:py-32 bg-white overflow-hidden relative isolate perspective-[1000px]" id="processus">
       {/* Background decorations */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-bg-light/50 to-transparent" />
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-transparent" />
       <div className="absolute -left-40 top-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

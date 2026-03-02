@@ -301,7 +301,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                     {user.avatar ? (
                                         <img src={user.avatar} alt="Avatar" className="w-9 h-9 rounded-xl object-cover shadow-sm" />
                                     ) : (
-                                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white text-sm font-bold shadow-sm">
+                                        <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold shadow-sm">
                                             {user.firstName[0]}{user.lastName[0]}
                                         </div>
                                     )}

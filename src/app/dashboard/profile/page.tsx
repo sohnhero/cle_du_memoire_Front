@@ -134,7 +134,7 @@ export default function ProfilePage() {
                         {user.avatar ? (
                             <img src={user.avatar} alt="Avatar" className="w-24 h-24 rounded-2xl object-cover shadow-lg" />
                         ) : (
-                            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                            <div className="w-24 h-24 rounded-2xl bg-primary flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                                 {user.firstName[0]}{user.lastName[0]}
                             </div>
                         )}

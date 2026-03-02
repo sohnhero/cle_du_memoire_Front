@@ -103,7 +103,9 @@ function StudentDashboard() {
     ];
 
     const currentPhaseIndex = memoire ? Math.max(0, phasesList.findIndex(p => p.id === memoire.phase)) : 0;
-    const progress = memoire?.progressPercent || 0;
+    const progress = memoire?.progressPercent > 0
+        ? memoire.progressPercent
+        : Math.round((currentPhaseIndex / Math.max(1, phasesList.length - 1)) * 100);
 
     return (
         <div className="space-y-8">
@@ -168,14 +170,14 @@ function StudentDashboard() {
                                             initial={{ width: 0 }}
                                             animate={{ width: `${progress}%` }}
                                             transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-                                            className="absolute top-0 left-0 h-full bg-gradient-to-r from-accent via-info to-accent bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] rounded-full"
+                                            className="absolute top-0 left-0 h-full bg-accent rounded-full"
                                         />
                                         {/* Shimmer effect inside the progress bar */}
                                         <motion.div
                                             initial={{ x: '-100%' }}
                                             animate={{ x: '100vw' }}
                                             transition={{ repeat: Infinity, duration: 2.5, ease: "linear", delay: 1 }}
-                                            className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent z-10"
+                                            className="absolute top-0 left-0 w-1/3 h-full hidden z-10"
                                         />
                                     </div>
 
@@ -191,8 +193,8 @@ function StudentDashboard() {
                                                         animate={{ scale: isCurrent ? 1.3 : 1 }}
                                                         transition={{ delay: 0.5 + (index * 0.1), type: 'spring' }}
                                                         className={`w-2.5 h-2.5 rounded-full transition-colors duration-500 ${isPast ? 'bg-success' :
-                                                                isCurrent ? 'bg-accent shadow-[0_0_8px_rgba(255,107,107,0.6)] ring-2 ring-accent/30' :
-                                                                    'bg-border'
+                                                            isCurrent ? 'bg-accent shadow-[0_0_8px_rgba(255,107,107,0.6)] ring-2 ring-accent/30' :
+                                                                'bg-border'
                                                             }`}
                                                     />
                                                     {/* Tooltip on hover */}
@@ -285,7 +287,7 @@ function StudentDashboard() {
                                 {memoire.accompagnateur.avatar ? (
                                     <img src={memoire.accompagnateur.avatar} alt="Avatar" className="w-12 h-12 rounded-xl object-cover shadow-sm" />
                                 ) : (
-                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white font-bold">
+                                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold">
                                         {memoire.accompagnateur.firstName[0]}{memoire.accompagnateur.lastName[0]}
                                     </div>
                                 )}
@@ -415,7 +417,7 @@ function AccompagnateurDashboard() {
                                 const studentName = `${memoire.student.firstName} ${memoire.student.lastName}`;
                                 return (
                                     <div key={memoire.id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-bg-light transition-colors cursor-pointer group" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
-                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
+                                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
                                             {memoire.student.firstName[0]}{memoire.student.lastName[0]}
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -425,7 +427,7 @@ function AccompagnateurDashboard() {
                                             </div>
                                             <div className="text-xs text-text-muted truncate mt-0.5">{memoire.student.field || 'Filière inconnue'} — {getPhaseLabel(memoire.phase)}</div>
                                             <div className="mt-2 h-1.5 bg-border rounded-full overflow-hidden max-w-[200px]">
-                                                <div className="h-full bg-gradient-to-r from-accent to-info rounded-full" style={{ width: `${memoire.progressPercent}%` }} />
+                                                <div className="h-full bg-accent rounded-full" style={{ width: `${memoire.progressPercent}%` }} />
                                             </div>
                                         </div>
                                         <div className="text-right flex-shrink-0">
