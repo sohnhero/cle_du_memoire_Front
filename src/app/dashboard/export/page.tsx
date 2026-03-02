@@ -1,117 +1,76 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { api } from '@/lib/api';
-import {
-    DownloadSimple as FileDown, BookOpen, WarningCircle as AlertCircle, FileText
-} from '@phosphor-icons/react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FilePdf, ArrowRight, Sparkle } from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
+import { useRouter } from 'next/navigation';
 
-export default function ExportPage() {
-    const { user } = useAuth();
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [isExporting, setIsExporting] = useState(false);
-    const [success, setSuccess] = useState(false);
-
-    const handleExport = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!title.trim() || !content.trim()) return;
-
-        setIsExporting(true);
-        setSuccess(false);
-
-        try {
-            const blob = await api.exportPdf(title, content);
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Memoire_${user?.lastName?.replace(/\s+/g, '_') || 'Final'}.pdf`;
-            a.target = '_blank';
-            a.click();
-            window.URL.revokeObjectURL(url);
-            setSuccess(true);
-        } catch (error) {
-            console.error('Export error:', error);
-            alert("Erreur lors de la génération du PDF.");
-        } finally {
-            setIsExporting(false);
-        }
-    };
+export default function ExportComingSoonPage() {
+    const router = useRouter();
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6">
-            <div>
-                <h1 className="text-2xl font-bold text-primary flex items-center gap-2">
-                    <FileDown className="w-6 h-6 text-accent" /> Export PDF
-                </h1>
-                <p className="text-text-secondary mt-1">Compilez votre mémoire complet avec mise en page automatique.</p>
-            </div>
+        <div className="max-w-4xl mx-auto min-h-[75vh] flex flex-col items-center justify-center p-6 lg:p-12">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
+                className="w-full max-w-2xl bg-white rounded-[2rem] p-10 md:p-14 shadow-2xl border border-border-light text-center relative overflow-hidden group"
+            >
+                {/* Decorative Background Elements */}
+                <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-700 ease-in-out" />
+                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-accent/10 rounded-full blur-3xl group-hover:bg-accent/20 transition-colors duration-700 ease-in-out" />
 
-            <div className="card-premium p-6">
-                <div className="flex items-start gap-4 p-4 rounded-xl bg-accent/5 border border-accent/20 mb-6 flex-shrink-0">
-                    <AlertCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                    <div>
-                        <h3 className="font-semibold text-accent mb-1">Comment ça marche ?</h3>
-                        <p className="text-sm text-primary leading-relaxed">
-                            Cet outil génère un document PDF aux normes académiques. Remplissez le titre final de votre mémoire et collez le contenu textuel complet de votre travail. Le système se chargera de créer la page de garde et de formater le texte avec une justification et une pagination appropriées.
-                        </p>
-                    </div>
-                </div>
-
-                <form onSubmit={handleExport} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-semibold text-primary mb-2">Titre du mémoire</label>
-                        <div className="relative">
-                            <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Ex: L'impact de l'IA sur..."
-                                className="w-full pl-11 pr-4 py-3 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-primary mb-2 flex justify-between items-center">
-                            <span>Contenu intégral</span>
-                            <span className="text-xs text-text-muted font-normal">Sera formaté automatiquement</span>
-                        </label>
-                        <div className="relative">
-                            <FileText className="absolute left-4 top-4 w-5 h-5 text-text-muted" />
-                            <textarea
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                placeholder="Collez le texte complet de votre mémoire ici..."
-                                className="w-full pl-11 pr-4 py-3 min-h-[400px] rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm resize-y leading-relaxed"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    <div className="pt-4 flex items-center justify-between border-t border-border-light">
-                        {success ? (
-                            <p className="text-sm text-success font-medium flex-1">✨ Document généré avec succès !</p>
-                        ) : (
-                            <p className="text-xs text-text-muted flex-1 hidden sm:block">Un format A4 justifié avec numérotation.</p>
-                        )}
-                        <button
-                            type="submit"
-                            disabled={isExporting || !title.trim() || !content.trim()}
-                            className="btn-primary py-3 px-8 text-sm flex items-center gap-2 w-full sm:w-auto justify-center"
+                <div className="relative z-10 flex flex-col items-center">
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="mb-8 relative"
+                    >
+                        <BrandIcon icon={FilePdf} size={100} className="shadow-xl mx-auto ring-8 ring-accent/10" iconClassName="text-white" />
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.8, type: 'spring', bounce: 0.6 }}
+                            className="absolute -top-2 -right-2 bg-white rounded-full p-1"
                         >
-                            {isExporting ? (
-                                <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Génération...</>
-                            ) : (
-                                <><FileDown className="w-4 h-4" /> Générer le Document</>
-                            )}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                            <Sparkle weight="fill" className="w-8 h-8 text-accent animate-pulse" />
+                        </motion.div>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="max-w-lg mx-auto"
+                    >
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 text-accent font-bold text-xs uppercase tracking-widest mb-6 border border-accent/20">
+                            En Développement
+                        </div>
+
+                        <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-6 leading-tight">
+                            Génération Automatique <br />
+                            <span className="text-transparent bg-clip-text bg-primary">de votre Mémoire</span>
+                        </h1>
+                        <p className="text-text-secondary leading-relaxed mb-10 text-lg">
+                            Nous préparons un outil exceptionnel qui mettra en page votre mémoire selon les normes académiques strictes (page de garde, pagination, justification) en un seul clic.
+                            <br className="hidden sm:block mt-2" />
+                            <strong>Revenez très bientôt !</strong>
+                        </p>
+                    </motion.div>
+
+                    <motion.button
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                        onClick={() => router.push('/dashboard')}
+                        className="btn-primary py-4 px-8 text-base font-bold flex items-center gap-3 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+                    >
+                        Retourner au tableau de bord <ArrowRight weight="bold" className="w-5 h-5" />
+                    </motion.button>
+                </div>
+            </motion.div>
         </div>
     );
 }
