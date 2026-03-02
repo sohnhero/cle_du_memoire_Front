@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    FileText, Upload, Download, Eye, Clock, CheckCircle, Warning as AlertTriangle, MagnifyingGlass as Search, Faders as Filter, DotsThreeVertical as MoreVertical, X, ClipboardText as ClipboardCheck, Sparkle as Sparkles, MagicWand as Wand2, ChatCircle as MessageCircle
+    FileText, Upload, Download, Eye, Clock, CheckCircle, Warning as AlertTriangle, MagnifyingGlass as Search, Faders as Filter, DotsThreeVertical as MoreVertical, X, ClipboardText as ClipboardCheck, Sparkle as Sparkles, MagicWand as Wand2, ChatCircle as MessageCircle, CaretDown, CaretUp
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
@@ -46,7 +46,7 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
                         <div>
                             <div className="flex items-center gap-2">
                                 <h4 className={`font-semibold text-primary line-clamp-1 ${isLatest ? 'text-sm' : 'text-xs'}`}>{doc.filename}</h4>
-                                <span className={`flex-shrink-0 px-2 py-0.5 rounded text-[10px] font-bold ${isLatest ? 'bg-primary text-white' : 'bg-text-muted/10 text-text-muted'}`}>
+                                <span className={`flex-shrink-0 px-2 py-0.5 rounded text-[10px] font-bold ${isLatest ? 'bg-primary/10 text-primary' : 'bg-bg-light text-text-muted border border-border/50'}`}>
                                     v{doc.version}
                                 </span>
                             </div>
@@ -109,6 +109,11 @@ export default function DocumentsPage() {
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const [reviewingDoc, setReviewingDoc] = useState<any>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [expandedHistory, setExpandedHistory] = useState<Record<string, boolean>>({});
+
+    const toggleHistory = (catId: string) => {
+        setExpandedHistory(prev => ({ ...prev, [catId]: !prev[catId] }));
+    };
 
     useEffect(() => {
         loadDocuments();
@@ -243,38 +248,64 @@ export default function DocumentsPage() {
                         const history = docs.slice(1);
 
                         return (
-                            <div key={catId} className="space-y-4">
-                                <div className="flex items-center gap-3 px-2">
-                                    <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center text-primary">
-                                        <category.icon className="w-4 h-4" />
+                            <div key={catId} className="bg-white rounded-2xl border border-border shadow-sm p-4 transition-all hover:border-border-hover">
+                                <div className="flex items-center justify-between mb-5 pb-3 border-b border-border/50">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary shadow-inner">
+                                            <category.icon className="w-5 h-5" weight="duotone" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-primary text-base">{category.label}</h3>
+                                            <div className="text-xs font-medium text-text-muted mt-0.5">{docs.length} document{docs.length > 1 ? 's' : ''} versionné{docs.length > 1 ? 's' : ''}</div>
+                                        </div>
                                     </div>
-                                    <h3 className="font-bold text-primary">{category.label}</h3>
-                                    <span className="text-xs text-text-muted bg-bg-light px-2 py-0.5 rounded-full">{docs.length} version{docs.length > 1 ? 's' : ''}</span>
                                 </div>
 
-                                <DocumentCard
-                                    doc={latestDoc}
-                                    isLatest={true}
-                                    userRole={user?.role}
-                                    onPreview={handlePreview}
-                                    onReview={() => setReviewingDoc(latestDoc)}
-                                    getFileUrl={getFileUrl}
-                                />
+                                <div className="px-1">
+                                    <DocumentCard
+                                        doc={latestDoc}
+                                        isLatest={true}
+                                        userRole={user?.role}
+                                        onPreview={handlePreview}
+                                        onReview={() => setReviewingDoc(latestDoc)}
+                                        getFileUrl={getFileUrl}
+                                    />
+                                </div>
 
                                 {history.length > 0 && (
-                                    <div className="ml-8 space-y-3 pt-2 border-l-2 border-border/40 pl-6">
-                                        <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2">Historique des versions</div>
-                                        {history.map((doc: any) => (
-                                            <DocumentCard
-                                                key={doc.id}
-                                                doc={doc}
-                                                isLatest={false}
-                                                userRole={user?.role}
-                                                onPreview={handlePreview}
-                                                onReview={() => setReviewingDoc(doc)}
-                                                getFileUrl={getFileUrl}
-                                            />
-                                        ))}
+                                    <div className="mt-4 px-1">
+                                        <button
+                                            onClick={() => toggleHistory(catId)}
+                                            className="ml-6 py-1.5 px-3 rounded-lg text-xs font-bold text-text-secondary hover:text-primary hover:bg-bg-light flex items-center gap-2 transition-colors border border-transparent hover:border-border"
+                                        >
+                                            {expandedHistory[catId] ? <CaretUp className="w-4 h-4" /> : <CaretDown className="w-4 h-4" />}
+                                            {expandedHistory[catId] ? 'Masquer l\'historique des versions' : `Voir les anciennes versions (${history.length})`}
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {expandedHistory[catId] && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="ml-7 space-y-3 pt-4 border-l-2 border-border/50 pl-5 mt-2 pb-2">
+                                                        {history.map((doc: any) => (
+                                                            <DocumentCard
+                                                                key={doc.id}
+                                                                doc={doc}
+                                                                isLatest={false}
+                                                                userRole={user?.role}
+                                                                onPreview={handlePreview}
+                                                                onReview={() => setReviewingDoc(doc)}
+                                                                getFileUrl={getFileUrl}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
                                 )}
                             </div>
