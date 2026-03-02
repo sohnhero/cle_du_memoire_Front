@@ -73,6 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -182,7 +183,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </AnimatePresence>
                     </button>
                     <button
-                        onClick={logout}
+                        onClick={() => setShowLogoutConfirm(true)}
                         title={!sidebarOpen ? 'Déconnexion' : undefined}
                         className={`flex items-center px-4 py-3 rounded-xl text-red-400/70 hover:text-red-400 hover:bg-red-400/10 w-full text-sm transition-colors mt-1 ${sidebarOpen ? 'gap-3' : 'justify-center'}`}
                     >
@@ -254,7 +255,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             </nav>
 
                             <div className="p-4 border-t border-white/10">
-                                <button onClick={logout} className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/70 hover:text-red-400 hover:bg-red-400/10 w-full text-sm">
+                                <button onClick={() => { setMobileSidebarOpen(false); setShowLogoutConfirm(true); }} className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/70 hover:text-red-400 hover:bg-red-400/10 w-full text-sm">
                                     <LogOut className="w-5 h-5" />
                                     <span>Déconnexion</span>
                                 </button>
@@ -327,7 +328,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                                 <Settings className="w-4 h-4" /> Paramètres
                                             </Link>
                                             <hr className="my-2 border-border-light" />
-                                            <button onClick={logout} className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-red-500 hover:bg-red-50 w-full">
+                                            <button onClick={() => { setShowUserMenu(false); setShowLogoutConfirm(true); }} className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-red-500 hover:bg-red-50 w-full">
                                                 <LogOut className="w-4 h-4" /> Déconnexion
                                             </button>
                                         </motion.div>
@@ -345,6 +346,48 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </PaymentGate>
                 </main>
             </motion.div>
+
+            {/* Logout Confirmation Modal */}
+            <AnimatePresence>
+                {showLogoutConfirm && (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-primary/50 backdrop-blur-sm"
+                            onClick={() => setShowLogoutConfirm(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 text-center"
+                        >
+                            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-50 flex items-center justify-center">
+                                <LogOut className="w-6 h-6 text-red-500" />
+                            </div>
+                            <h3 className="text-base font-bold text-primary mb-1">Se déconnecter ?</h3>
+                            <p className="text-xs text-text-secondary mb-5">Vous devrez vous reconnecter pour accéder à votre espace.</p>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setShowLogoutConfirm(false)}
+                                    className="flex-1 py-2.5 rounded-xl bg-bg-light text-primary font-bold text-sm hover:bg-border/30 transition-colors"
+                                >
+                                    Annuler
+                                </button>
+                                <button
+                                    onClick={logout}
+                                    className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition-colors"
+                                >
+                                    Déconnexion
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div >
     );
 }

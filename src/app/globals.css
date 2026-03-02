@@ -1,6 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+/* Global: pointer cursor on all interactive elements */
+a,
+button,
+[role="button"],
+select,
+label[for],
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="range"],
+summary {
+  cursor: pointer !important;
+}
+
 @theme inline {
   /* ── Brand ── */
   --color-primary: #0f1729;
