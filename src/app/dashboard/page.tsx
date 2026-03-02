@@ -150,18 +150,58 @@ function StudentDashboard() {
 
                         {memoire ? (
                             <>
-                                <div className="mb-4">
+                                <div className="mb-6">
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="text-sm font-medium text-text-primary">{memoire.title}</span>
-                                        <span className="text-sm font-bold text-accent">{progress}%</span>
+                                        <span className="text-sm font-medium text-text-primary line-clamp-1 flex-1 mr-4">{memoire.title}</span>
+                                        <motion.span
+                                            initial={{ opacity: 0, scale: 0.5 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ delay: 1.5, type: 'spring' }}
+                                            className="text-sm font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-md"
+                                        >
+                                            {progress}%
+                                        </motion.span>
                                     </div>
-                                    <div className="h-3 bg-bg-light rounded-full overflow-hidden">
+
+                                    <div className="h-3 bg-bg-light rounded-full overflow-hidden relative shadow-inner mb-3">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{ width: `${progress}%` }}
-                                            transition={{ duration: 1, delay: 0.8 }}
-                                            className="h-full bg-gradient-to-r from-accent to-info rounded-full"
+                                            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
+                                            className="absolute top-0 left-0 h-full bg-gradient-to-r from-accent via-info to-accent bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] rounded-full"
                                         />
+                                        {/* Shimmer effect inside the progress bar */}
+                                        <motion.div
+                                            initial={{ x: '-100%' }}
+                                            animate={{ x: '100vw' }}
+                                            transition={{ repeat: Infinity, duration: 2.5, ease: "linear", delay: 1 }}
+                                            className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent z-10"
+                                        />
+                                    </div>
+
+                                    {/* Mini Stepper Dots */}
+                                    <div className="flex justify-between items-center px-1">
+                                        {phasesList.map((item, index) => {
+                                            const isPast = index < currentPhaseIndex;
+                                            const isCurrent = index === currentPhaseIndex;
+                                            return (
+                                                <div key={item.id} className="relative group cursor-help">
+                                                    <motion.div
+                                                        initial={{ scale: 0 }}
+                                                        animate={{ scale: isCurrent ? 1.3 : 1 }}
+                                                        transition={{ delay: 0.5 + (index * 0.1), type: 'spring' }}
+                                                        className={`w-2.5 h-2.5 rounded-full transition-colors duration-500 ${isPast ? 'bg-success' :
+                                                                isCurrent ? 'bg-accent shadow-[0_0_8px_rgba(255,107,107,0.6)] ring-2 ring-accent/30' :
+                                                                    'bg-border'
+                                                            }`}
+                                                    />
+                                                    {/* Tooltip on hover */}
+                                                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-text-primary text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-20">
+                                                        {item.label}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
                                     </div>
                                 </div>
 
