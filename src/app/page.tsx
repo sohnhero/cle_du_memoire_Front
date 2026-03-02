@@ -991,9 +991,9 @@ function Contact() {
 
             <div className="flex-1 space-y-4">
               {[
-                { icon: Phone, label: 'Hotline:', value: '+221 77 000 00 00' },
-                { icon: MessageCircle, label: 'SMS / WhatsApp:', value: '+221 77 000 00 00' },
-                { icon: Mail, label: 'Email:', value: 'contact@cledumemoire.sn' },
+                { icon: Phone, label: 'Hotline:', value: '+221 77 470 74 13' },
+                { icon: MessageCircle, label: 'SMS / WhatsApp:', value: '+221 77 470 74 13' },
+                { icon: Mail, label: 'Email:', value: 'cledumemoire.sn@gmail.com' },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-5 bg-white/10 border border-white/5 rounded-[1.25rem] p-5">
                   <item.icon className="w-6 h-6 text-white/70 shrink-0" strokeWidth={1.5} />
@@ -1009,14 +1009,14 @@ function Contact() {
               <div className="text-sm font-bold text-white mb-6">Connectez-vous avec nous</div>
               <div className="flex items-center gap-4">
                 {[
-                  { Icon: CustomFacebookIcon, href: "#" },
-                  { Icon: InstagramLogo, href: "#" },
-                  { Icon: XLogo, href: "#" },
-                  { Icon: TikTokLogo, href: "#" },
-                  { Icon: CustomLinkedinIcon, href: "#" },
-                  { Icon: YoutubeLogo, href: "#" },
+                  { Icon: CustomFacebookIcon, href: "https://www.facebook.com/share/18QJwVU1eM/?mibextid=wwXIfr" },
+                  { Icon: InstagramLogo, href: "https://www.instagram.com/cle_du_memoire/" },
+                  { Icon: XLogo, href: "https://x.com/cledumemoire?s=11" },
+                  { Icon: TikTokLogo, href: "https://www.tiktok.com/@cledumemoire?_r=1&_t=ZS-94ItV1lkp2W" },
+                  { Icon: CustomLinkedinIcon, href: "https://www.linkedin.com/company/cledumemoire/posts/?feedView=all" },
+                  { Icon: YoutubeLogo, href: "https://youtube.com/@cledumemoire?si=v_Q-wtgq2gWtZR9-" },
                 ].map(({ Icon, href }, idx) => (
-                  <a key={idx} href={href} className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                  <a key={idx} href={href} target="_blank" className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary relative overflow-hidden group hover:scale-105 transition-transform duration-300">
                     <div className="absolute inset-0 bg-accent transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
                     <Icon weight="fill" className="w-5 h-5 relative z-10" />
                   </a>
@@ -1073,8 +1073,8 @@ function Footer() {
           <div>
             <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-4">Contact</h4>
             <ul className="space-y-2.5 text-sm text-white/40">
-              <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5" /> contact@cledumemoire.sn</li>
-              <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> +221 77 000 00 00</li>
+              <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5" /> cledumemoire.sn@gmail.com</li>
+              <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> +221 77 470 74 13</li>
               <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5" /> Dakar, Sénégal</li>
             </ul>
           </div>

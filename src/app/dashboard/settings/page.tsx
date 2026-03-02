@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import {
     Gear as Settings, Globe, Bell, ShieldCheck as Shield, Database, Palette, FloppyDisk as Save, ToggleLeft, ToggleRight, CaretRight as ChevronRight
 } from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 
 export default function SettingsPage() {
     const [notifications, setNotifications] = useState({ email: true, push: true, sms: false });
@@ -19,8 +20,8 @@ export default function SettingsPage() {
 
             {/* General */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-6">
-                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-accent" /> Général
+                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
+                    <BrandIcon icon={Globe} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" /> Général
                 </h3>
                 <div className="space-y-5">
                     {[
@@ -42,8 +43,8 @@ export default function SettingsPage() {
 
             {/* Notifications */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card-premium p-6">
-                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-2">
-                    <Bell className="w-5 h-5 text-accent" /> Notifications
+                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
+                    <BrandIcon icon={Bell} size={36} className="!bg-info/10 shadow-sm" iconClassName="!text-info" /> Notifications
                 </h3>
                 <div className="space-y-4">
                     {[
@@ -71,8 +72,8 @@ export default function SettingsPage() {
 
             {/* Maintenance */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-6">
-                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-accent" /> Sécurité & Maintenance
+                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
+                    <BrandIcon icon={Shield} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" /> Sécurité & Maintenance
                 </h3>
                 <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 rounded-xl bg-error/5 border border-error/10">

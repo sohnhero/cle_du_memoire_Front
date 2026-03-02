@@ -153,8 +153,8 @@ export default function MemoirePage() {
 
             {/* Timeline */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-8">
-                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-accent" />
+                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
+                    <BrandIcon icon={TrendingUp} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
                     Progression Détaillée
                 </h3>
                 <div className="relative">
@@ -206,8 +206,8 @@ export default function MemoirePage() {
             {/* Accompagnateur Notes */}
             {memoire.notes && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="card-premium p-6">
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                        <MessageCircle className="w-5 h-5 text-info" />
+                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                        <BrandIcon icon={MessageCircle} size={36} className="!bg-info/10 shadow-sm" iconClassName="!text-info" />
                         Notes de l'Accompagnateur
                     </h3>
                     <div className="p-4 rounded-xl bg-info/5 border border-info/10">

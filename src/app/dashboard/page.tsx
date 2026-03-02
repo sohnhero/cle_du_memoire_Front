@@ -31,19 +31,19 @@ function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className="card-premium p-6 hover:shadow-xl transition-all duration-300"
+            className={`card-premium p-5 sm:p-6 hover:shadow-xl transition-all duration-300 aspect-[4/3] flex flex-col justify-between`}
         >
-            <div className="flex items-start justify-between">
-                <div>
-                    <p className="text-sm text-text-secondary mb-1">{label}</p>
-                    <p className="text-2xl font-bold text-primary">{value}</p>
-                    {change && (
-                        <p className="text-xs text-success mt-1 flex items-center gap-1">
-                            <ArrowUpRight className="w-3 h-3" /> {change}
-                        </p>
-                    )}
-                </div>
+            <div className="flex items-start justify-between w-full">
                 <BrandIcon icon={Icon} size={48} className={`shadow-sm ${colorMap[color].split(' ')[0].replace('bg-', 'shadow-').replace('/10', '/20')}`} />
+                {change && (
+                    <p className="text-[10px] sm:text-xs font-bold text-success flex items-center gap-1 bg-success/10 px-2.5 py-1 rounded-full whitespace-nowrap">
+                        <ArrowUpRight className="w-3 h-3" /> {change}
+                    </p>
+                )}
+            </div>
+            <div>
+                <p className="text-3xl font-extrabold text-primary mb-1">{value}</p>
+                <p className="text-sm font-medium text-text-secondary">{label}</p>
             </div>
         </motion.div>
     );
@@ -130,8 +130,8 @@ function StudentDashboard() {
                     className="lg:col-span-2 card-premium p-6 cursor-pointer hover:border-accent/30 transition-colors"
                     onClick={() => router.push('/dashboard/memoire')}
                 >
-                    <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-2">
-                        <BookOpen className="w-5 h-5 text-accent" />
+                    <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
+                        <BrandIcon icon={BookOpen} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
                         Progression du Mémoire
                     </h3>
 
@@ -193,10 +193,10 @@ function StudentDashboard() {
                         onClick={() => router.push('/dashboard/calendar')}
                     >
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-sm font-bold text-primary uppercase tracking-wider">Prochaine Échéance</h3>
-                            <div className={`p-2 rounded-lg ${nextEvent?.type === 'DEADLINE' ? 'bg-error/10 text-error' : 'bg-accent/10 text-accent'}`}>
-                                <Clock className="w-4 h-4" />
-                            </div>
+                            <h3 className="text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-3">
+                                Prochaine Échéance
+                            </h3>
+                            <BrandIcon icon={Clock} size={36} className={`shadow-sm ${nextEvent?.type === 'DEADLINE' ? '!bg-error/10' : '!bg-accent/10'}`} iconClassName={nextEvent?.type === 'DEADLINE' ? '!text-error' : '!text-accent'} />
                         </div>
 
                         {nextEvent ? (
@@ -230,7 +230,10 @@ function StudentDashboard() {
                         transition={{ delay: 0.6 }}
                         className="card-premium p-6"
                     >
-                        <h3 className="text-lg font-bold text-primary mb-4">Actions Rapides</h3>
+                        <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                            <BrandIcon icon={Activity} size={36} className="!bg-primary/10 shadow-sm" iconClassName="!text-primary" />
+                            Actions Rapides
+                        </h3>
                         <div className="space-y-3">
                             {[
                                 { label: 'Envoyer un document', icon: FileText, color: 'bg-accent', href: '/dashboard/documents' },
@@ -255,7 +258,10 @@ function StudentDashboard() {
                             transition={{ delay: 0.7 }}
                             className="card-premium p-6"
                         >
-                            <h3 className="text-lg font-bold text-primary mb-4">Accompagnateur</h3>
+                            <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                                <BrandIcon icon={Users} size={36} className="!bg-info/10 shadow-sm" iconClassName="!text-info" />
+                                Accompagnateur
+                            </h3>
                             <div className="flex items-center gap-3">
                                 {memoire.accompagnateur.avatar ? (
                                     <img src={memoire.accompagnateur.avatar} alt="Avatar" className="w-12 h-12 rounded-xl object-cover shadow-sm" />
@@ -340,8 +346,8 @@ function AccompagnateurDashboard() {
                     transition={{ delay: 0.5 }}
                     className="lg:col-span-2 card-premium p-6"
                 >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                        <Users className="w-5 h-5 text-accent" />
+                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                        <BrandIcon icon={Users} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
                         Mes Étudiants
                     </h3>
 
@@ -391,8 +397,8 @@ function AccompagnateurDashboard() {
                     transition={{ delay: 0.6 }}
                     className="card-premium p-6"
                 >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                        <AlertTriangle className="w-5 h-5 text-warning" />
+                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                        <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
                         Actions Requises
                     </h3>
                     <div className="space-y-3">
@@ -445,8 +451,8 @@ function AdminDashboard() {
                     transition={{ delay: 0.8 }}
                     className="lg:col-span-2 card-premium p-6"
                 >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                        <Activity className="w-5 h-5 text-accent" />
+                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                        <BrandIcon icon={Activity} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
                         Activité Récente
                     </h3>
                     <div className="mt-8 relative pt-2">
@@ -489,8 +495,8 @@ function AdminDashboard() {
                     transition={{ delay: 0.9 }}
                     className="card-premium p-6"
                 >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                        <AlertTriangle className="w-5 h-5 text-warning" />
+                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                        <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
                         Alertes
                     </h3>
                     <div className="space-y-3">

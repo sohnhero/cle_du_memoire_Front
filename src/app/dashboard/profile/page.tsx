@@ -7,6 +7,7 @@ import { api } from '@/lib/api';
 import {
     User, EnvelopeSimple as Mail, Phone, Buildings as Building, BookOpen, ShieldCheck as Shield, Camera, FloppyDisk as Save, Lock, CircleNotch as Loader2, CheckCircle
 } from '@phosphor-icons/react';
+import { BrandIcon } from '@/components/BrandIcon';
 
 export default function ProfilePage() {
     const { user, login } = useAuth();
@@ -204,8 +205,8 @@ export default function ProfilePage() {
             {/* Security */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-8">
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-bold text-primary flex items-center gap-2">
-                        <Shield className="w-5 h-5 text-accent" />
+                    <h3 className="text-lg font-bold text-primary flex items-center gap-3">
+                        <BrandIcon icon={Shield} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
                         Sécurité
                     </h3>
                     <button onClick={() => setShowPasswordForm(!showPasswordForm)} className="text-sm text-accent hover:text-accent-dark font-semibold">

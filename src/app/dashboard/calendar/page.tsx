@@ -305,6 +305,7 @@ export default function CalendarPage() {
 }
 
 function AddEventModal({ onClose, onAdd }: { onClose: () => void, onAdd: () => void }) {
+    const { user } = useAuth();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
@@ -331,7 +332,7 @@ function AddEventModal({ onClose, onAdd }: { onClose: () => void, onAdd: () => v
     return (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-md" onClick={onClose} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-3xl shadow-2xl w-full max-sm overflow-hidden border border-white/20">
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-white/20">
                 <div className="relative p-8">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-2xl font-bold text-primary tracking-tight">Nouvelle tâche</h3>
@@ -348,10 +349,14 @@ function AddEventModal({ onClose, onAdd }: { onClose: () => void, onAdd: () => v
 
                         <div className="space-y-1.5">
                             <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Type d'échéance</label>
-                            <select value={type} onChange={e => setType(e.target.value)} className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm font-semibold appearance-none cursor-pointer">
+                            <select value={type} onChange={e => setType(e.target.value)} disabled={user?.role === 'STUDENT'} className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm font-semibold appearance-none cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed">
                                 <option value="REMINDER">📌 Rappel personnel</option>
-                                <option value="DEADLINE">🚨 Échéance de rendu</option>
-                                <option value="MEETING">👥 Réunion / Point coach</option>
+                                {user?.role !== 'STUDENT' && (
+                                    <>
+                                        <option value="DEADLINE">🚨 Échéance de rendu</option>
+                                        <option value="MEETING">👥 Réunion / Point coach</option>
+                                    </>
+                                )}
                             </select>
                         </div>
 

@@ -482,8 +482,8 @@ function AiAssistantModal({ onClose }: { onClose: () => void }) {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 max-h-[90vh] flex flex-col overflow-hidden">
                 <div className="flex justify-between items-center mb-6 flex-shrink-0">
-                    <h3 className="text-xl font-bold text-primary flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-accent" /> Assistant IA de Correction
+                    <h3 className="text-xl font-bold text-primary flex items-center gap-3">
+                        <BrandIcon icon={Sparkles} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" /> Assistant IA de Correction
                     </h3>
                     <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
                         <X className="w-5 h-5" />
