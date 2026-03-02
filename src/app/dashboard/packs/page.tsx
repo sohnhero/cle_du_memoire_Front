@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Package, CheckCircle, Clock, CreditCard, ArrowRight, Star, WarningCircle as AlertCircle, CircleNotch as Loader2, X
+    Package, CheckCircle, Clock, CreditCard, ArrowRight, Star, WarningCircle as AlertCircle, CircleNotch as Loader2, CircleNotch, X
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
@@ -14,7 +14,7 @@ export default function PacksPage() {
     const [subscriptions, setSubscriptions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [subscribing, setSubscribing] = useState<string | null>(null);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [localToast, setLocalToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [selectedSubForPay, setSelectedSubForPay] = useState<any>(null);
     const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
@@ -64,13 +64,13 @@ export default function PacksPage() {
         setSubscribing(packId);
         try {
             await api.subscribePack(packId);
-            setToast({ message: 'Demande de changement envoyée ! L\'admin l\'activera sous peu.', type: 'success' });
+            setLocalToast({ message: 'Demande de changement envoyée ! L\'admin l\'activera sous peu.', type: 'success' });
             await loadData();
         } catch (err: any) {
-            setToast({ message: err.message || 'Erreur lors de la souscription', type: 'error' });
+            setLocalToast({ message: err.message || 'Erreur lors de la souscription', type: 'error' });
         } finally {
             setSubscribing(null);
-            setTimeout(() => setToast(null), 4000);
+            setTimeout(() => setLocalToast(null), 4000);
         }
     }
 
@@ -94,14 +94,14 @@ export default function PacksPage() {
 
             {/* Toast */}
             <AnimatePresence>
-                {toast && (
+                {localToast && (
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className={`p-4 rounded-xl text-sm font-medium ${toast.type === 'success' ? 'bg-success/10 text-success' : 'bg-error/10 text-error'}`}
+                        className={`p-4 rounded-xl text-sm font-medium ${localToast.type === 'success' ? 'bg-success/10 text-success' : 'bg-error/10 text-error'}`}
                     >
-                        {toast.message}
+                        {localToast.message}
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -242,7 +242,7 @@ export default function PacksPage() {
                         onClose={() => setPaymentModalOpen(false)}
                         onSuccess={() => {
                             setPaymentModalOpen(false);
-                            setToast({ message: 'Paiement notifié avec succès !', type: 'success' });
+                            toast.success('Paiement notifié avec succès ! Rechargez après confirmation admin.');
                             loadData();
                         }}
                     />
@@ -264,66 +264,165 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
     const [reference, setReference] = useState('');
     const [amount, setAmount] = useState<number>(subscription.pack.installment1 || subscription.pack.price);
     const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
             await api.notifyPayment({ method, reference, amount });
-            onSuccess();
+            setSubmitted(true);
         } catch (err) {
             toast.error('Erreur lors de l\'envoi');
-        } finally {
             setLoading(false);
         }
     };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-xl font-bold text-primary">Notifier mon paiement</h3>
-                    <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
-                        <X className="w-5 h-5" />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/50 backdrop-blur-md" onClick={onClose} />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden"
+            >
+                {/* Header */}
+                <div className="bg-primary px-6 py-5 text-white relative">
+                    <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                        <X className="w-4 h-4" />
                     </button>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                            <CreditCard className="w-5 h-5 text-accent" weight="duotone" />
+                        </div>
+                        <div>
+                            <h3 className="text-base font-bold">Notifier mon paiement</h3>
+                            <p className="text-white/60 text-xs">{subscription.pack.name}</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="mb-6 p-4 rounded-xl bg-bg-light border border-border-light text-sm">
-                    <div className="flex justify-between mb-1">
-                        <span className="text-text-secondary">Pack:</span>
-                        <span className="font-bold text-primary">{subscription.pack.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                        <span className="text-text-secondary">Prix:</span>
-                        <span className="font-bold text-accent">{subscription.pack.price.toLocaleString()} FCFA</span>
-                    </div>
-                </div>
+                {!submitted ? (
+                    <div className="p-6">
+                        {/* Pack recap */}
+                        <div className="flex items-center justify-between mb-5 p-3 rounded-xl bg-bg-light">
+                            <span className="text-xs text-text-secondary font-medium">Montant total</span>
+                            <span className="text-base font-extrabold text-primary">{subscription.pack.price.toLocaleString()} FCFA</span>
+                        </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-3">
-                        <button type="button" onClick={() => setMethod('WAVE')} className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${method === 'WAVE' ? 'border-accent bg-accent/5' : 'border-border-light'}`}>
-                            <span className="text-blue-500 font-black text-xs">WAVE</span>
-                        </button>
-                        <button type="button" onClick={() => setMethod('OM')} className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${method === 'OM' ? 'border-orange-500 font-black text-xs' : 'border-border-light'}`}>
-                            <span className="text-orange-500 font-black text-xs">Orange Money</span>
-                        </button>
-                    </div>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            {/* Payment Method */}
+                            <div>
+                                <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">Mode de paiement</label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setMethod('WAVE')}
+                                        className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all text-sm font-bold ${method === 'WAVE'
+                                            ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-sm'
+                                            : 'border-border-light text-text-muted hover:border-border'
+                                            }`}
+                                    >
+                                        <span className="text-blue-500">💙</span> Wave
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMethod('OM')}
+                                        className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all text-sm font-bold ${method === 'OM'
+                                            ? 'border-orange-500 bg-orange-50 text-orange-600 shadow-sm'
+                                            : 'border-border-light text-text-muted hover:border-border'
+                                            }`}
+                                    >
+                                        <span className="text-orange-500">🧡</span> Orange Money
+                                    </button>
+                                </div>
+                            </div>
 
-                    <div>
-                        <label className="block text-sm font-semibold mb-1.5">Référence de transaction</label>
-                        <input type="text" value={reference} onChange={e => setReference(e.target.value)} required placeholder="Saisissez la référence..." className="w-full px-4 py-2.5 rounded-xl border border-border outline-none focus:border-accent" />
-                    </div>
+                            {/* Reference */}
+                            <div>
+                                <label className="block text-xs font-bold text-text-secondary mb-1.5 uppercase tracking-wider">Référence de transaction</label>
+                                <input
+                                    type="text"
+                                    value={reference}
+                                    onChange={e => setReference(e.target.value)}
+                                    required
+                                    placeholder="Ex: TXN-12345678"
+                                    className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/50 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/10 text-primary font-medium placeholder:text-text-muted/50 transition-all"
+                                />
+                            </div>
 
-                    <div>
-                        <label className="block text-sm font-semibold mb-1.5">Montant envoyé (FCFA)</label>
-                        <input type="number" value={amount} onChange={e => setAmount(Number(e.target.value))} required className="w-full px-4 py-2.5 rounded-xl border border-border outline-none focus:border-accent font-bold" />
-                    </div>
+                            {/* Amount */}
+                            <div>
+                                <label className="block text-xs font-bold text-text-secondary mb-1.5 uppercase tracking-wider">Montant envoyé (FCFA)</label>
+                                <input
+                                    type="number"
+                                    value={amount}
+                                    onChange={e => setAmount(Number(e.target.value))}
+                                    required
+                                    className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/50 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/10 text-primary font-bold placeholder:text-text-muted/50 transition-all"
+                                />
+                            </div>
 
-                    <button type="submit" disabled={loading || !reference} className="btn-primary w-full justify-center py-3.5 mt-4 disabled:opacity-50">
-                        {loading ? 'Envoi...' : 'Confirmer le paiement'}
-                    </button>
-                </form>
+                            <button
+                                type="submit"
+                                disabled={loading || !reference}
+                                className="btn-primary w-full justify-center py-3 mt-2 disabled:opacity-40 text-sm"
+                            >
+                                {loading ? (
+                                    <><CircleNotch className="w-4 h-4 animate-spin" weight="bold" /> Envoi en cours...</>
+                                ) : (
+                                    <><CreditCard className="w-4 h-4" weight="bold" /> Confirmer le paiement</>
+                                )}
+                            </button>
+                        </form>
+                    </div>
+                ) : (
+                    /* Success State with reload hint */
+                    <div className="p-6 text-center">
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: 'spring', damping: 15 }}
+                            className="w-16 h-16 mx-auto mb-4 rounded-full bg-success/10 flex items-center justify-center"
+                        >
+                            <CheckCircle className="w-8 h-8 text-success" weight="fill" />
+                        </motion.div>
+                        <h4 className="text-lg font-bold text-primary mb-2">Paiement notifié !</h4>
+                        <p className="text-sm text-text-secondary leading-relaxed mb-5">
+                            Votre notification a été envoyée à l’administrateur.
+                            Il va vérifier et confirmer votre paiement.
+                        </p>
+
+                        <div className="p-3 rounded-xl bg-accent/5 border border-accent/10 mb-5">
+                            <div className="flex items-center gap-2 justify-center">
+                                <div className="relative flex items-center justify-center">
+                                    <span className="animate-ping absolute h-3 w-3 rounded-full bg-accent/40" />
+                                    <Clock className="w-4 h-4 text-accent relative" weight="bold" />
+                                </div>
+                                <p className="text-xs font-bold text-accent">En attente de confirmation admin</p>
+                            </div>
+                            <p className="text-[11px] text-text-muted mt-1">Rechargez la page après confirmation pour voir votre pack activé.</p>
+                        </div>
+
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-bg-light text-primary hover:bg-border/30 transition-colors flex items-center justify-center gap-1.5"
+                            >
+                                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4v6h6" /><path d="M23 20v-6h-6" /><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" /></svg>
+                                Recharger
+                            </button>
+                            <button
+                                onClick={() => { onSuccess(); }}
+                                className="flex-1 btn-primary py-2.5 text-sm justify-center"
+                            >
+                                Fermer
+                            </button>
+                        </div>
+                    </div>
+                )}
             </motion.div>
         </div>
     );

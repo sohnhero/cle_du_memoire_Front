@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, CreditCard, CheckCircle, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+    Lock, CreditCard, CheckCircle, CircleNotch, ArrowRight, Clock, ArrowsClockwise, ShieldCheck, BookOpen, UserCircle
+} from '@phosphor-icons/react';
 import { api } from '@/lib/api';
 import Logo from './Logo';
+import toast from 'react-hot-toast';
 
 interface PaymentGateProps {
     children: React.ReactNode;
@@ -14,7 +17,6 @@ interface PaymentGateProps {
 export default function PaymentGate({ children, user }: PaymentGateProps) {
     const [subscription, setSubscription] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [isPaying, setIsPaying] = useState(false);
     const [method, setMethod] = useState<'WAVE' | 'OM'>('WAVE');
     const [reference, setReference] = useState('');
     const [amount, setAmount] = useState<number>(0);
@@ -52,15 +54,13 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
         try {
             await api.notifyPayment({ method, reference, amount });
             setStatus('SUCCESS');
-            // Re-check after a short delay
-            setTimeout(checkSubscription, 2000);
         } catch (err) {
             setStatus('ERROR');
+            toast.error("Erreur lors de l'envoi. Réessayez.");
         }
     };
 
     if (user?.role !== 'STUDENT') return <>{children}</>;
-
     if (loading) return null;
 
     const isAuthorized = subscription && (
@@ -73,172 +73,209 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
 
     return (
         <div className="fixed inset-0 z-[100] bg-primary flex items-center justify-center p-4 overflow-y-auto">
-            {/* Background elements */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-accent rounded-full blur-[120px]" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-info rounded-full blur-[150px]" />
+            {/* Subtle background glow */}
+            <div className="absolute inset-0 opacity-[0.07] pointer-events-none">
+                <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-accent rounded-full blur-[140px]" />
+                <div className="absolute bottom-1/3 right-1/3 w-60 h-60 bg-info rounded-full blur-[120px]" />
             </div>
 
             <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col md:flex-row overflow-hidden max-h-[90vh]"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="relative w-full max-w-md"
             >
-                {/* Visual Side */}
-                <div className="md:w-5/12 bg-primary p-6 md:p-8 text-white flex flex-col justify-between">
-                    <div>
-                        <div className="mb-8">
-                            <Logo className="w-24 h-auto" monochrome />
-                        </div>
-
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 text-accent text-[10px] font-bold tracking-widest uppercase mb-4">
-                            <Lock className="w-3 h-3" /> Accès Restreint
-                        </div>
-                        <h2 className="text-2xl font-black mb-4 leading-tight">
-                            Commencez votre <span className="text-accent underline decoration-accent/30 underline-offset-8">aventure</span> vers l'excellence.
-                        </h2>
-                        <p className="text-white/60 text-xs leading-relaxed mb-6">
-                            Activez votre pack pour débloquer votre espace de travail personnalisé.
-                        </p>
-
-                        <div className="space-y-3">
-                            {[
-                                "Accès complet au tableau de bord",
-                                "Attribution d'un accompagnateur",
-                                "Outils de rédaction assistée",
-                            ].map((text, i) => (
-                                <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                                    <CheckCircle className="w-3.5 h-3.5 text-accent" />
-                                    <span>{text}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="mt-8 pt-6 border-t border-white/10 hidden md:block">
-                        <p className="text-[10px] text-white/40 italic">
-                            Besoin d'aide ? Contactez notre support via WhatsApp.
-                        </p>
-                    </div>
+                {/* Logo */}
+                <div className="text-center mb-6">
+                    <Logo className="w-16 h-auto mx-auto" monochrome />
                 </div>
 
-                {/* Form Side */}
-                <div className="md:w-7/12 p-6 md:p-10 flex flex-col justify-center overflow-y-auto">
+                {/* Main Card */}
+                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+
                     {status === 'SUCCESS' ? (
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                            <div className="w-20 h-20 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-6">
-                                <CheckCircle className="w-10 h-10" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-primary mb-4">Paiement notifié !</h3>
-                            <p className="text-text-secondary mb-8">
-                                Nous avons bien reçu vos informations. Un administrateur va valider votre accès dans les plus brefs délais (généralement moins d'une heure).
+                        /* ── Success State ── */
+                        <div className="p-8 text-center">
+                            <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ type: 'spring', damping: 12, stiffness: 200 }}
+                                className="w-16 h-16 mx-auto mb-5 rounded-full bg-success/10 flex items-center justify-center"
+                            >
+                                <CheckCircle className="w-8 h-8 text-success" weight="fill" />
+                            </motion.div>
+
+                            <h3 className="text-lg font-bold text-primary mb-2">Paiement notifié avec succès !</h3>
+                            <p className="text-sm text-text-secondary leading-relaxed mb-6">
+                                Votre référence a bien été transmise à notre équipe.
+                                Un administrateur vérifiera et activera votre compte.
                             </p>
-                            <button onClick={() => setStatus('IDLE')} className="btn-primary w-full justify-center py-4">
-                                Envoyer une autre référence
-                            </button>
-                        </motion.div>
-                    ) : (
-                        <>
-                            <div className="mb-8">
-                                <h3 className="text-xl font-bold text-primary mb-2">Activer mon compte</h3>
-                                <p className="text-text-secondary text-sm">
-                                    Effectuez votre paiement via {method} et renseignez la référence.
+
+                            {/* Admin wait indicator */}
+                            <div className="p-4 rounded-2xl bg-accent/5 border border-accent/10 mb-6">
+                                <div className="flex items-center gap-2.5 justify-center mb-1.5">
+                                    <div className="relative flex items-center justify-center">
+                                        <span className="animate-ping absolute h-3 w-3 rounded-full bg-accent/40" />
+                                        <Clock className="w-4 h-4 text-accent relative" weight="bold" />
+                                    </div>
+                                    <span className="text-sm font-bold text-accent">En attente de confirmation</span>
+                                </div>
+                                <p className="text-[11px] text-text-muted leading-relaxed">
+                                    Généralement validé en moins d'une heure.
+                                    <br />
+                                    <strong>Rechargez cette page après la confirmation de l'admin.</strong>
                                 </p>
                             </div>
 
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => window.location.reload()}
+                                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors"
+                                >
+                                    <ArrowsClockwise className="w-4 h-4" weight="bold" />
+                                    Recharger la page
+                                </button>
+                                <button
+                                    onClick={() => setStatus('IDLE')}
+                                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-bg-light text-primary font-bold text-sm hover:bg-border/30 transition-colors"
+                                >
+                                    Autre référence
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        /* ── Payment Form ── */
+                        <>
+                            {/* Header */}
+                            <div className="px-6 pt-6 pb-4">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Lock className="w-4 h-4 text-accent" weight="fill" />
+                                    <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Activation requise</span>
+                                </div>
+                                <h3 className="text-lg font-bold text-primary">Activez votre espace</h3>
+                                <p className="text-xs text-text-secondary mt-0.5">
+                                    Payez via Wave ou Orange Money, puis saisissez la référence de transaction.
+                                </p>
+                            </div>
+
+                            {/* Pack Info */}
                             {subscription && (
-                                <div className="mb-8 p-6 rounded-2xl bg-bg-light border border-border-light">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-xs font-bold text-text-muted uppercase">Pack Sélectionné</span>
-                                        <span className="text-xs font-black text-accent">{subscription.pack?.name}</span>
-                                    </div>
-                                    <div className="text-2xl font-black text-primary mb-1">
-                                        {subscription.pack?.price.toLocaleString()} FCFA
+                                <div className="mx-6 p-4 rounded-2xl bg-primary text-white mb-5">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="text-[10px] font-bold text-white/50 uppercase tracking-wider">Votre pack</div>
+                                            <div className="text-sm font-bold mt-0.5">{subscription.pack?.name}</div>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-xl font-black">{subscription.pack?.price.toLocaleString()}</div>
+                                            <div className="text-[10px] font-bold text-white/50">FCFA</div>
+                                        </div>
                                     </div>
                                     {subscription.pack?.installment1 && (
-                                        <p className="text-xs text-info flex items-center gap-1.5 mt-2">
-                                            <AlertCircle className="w-3.5 h-3.5" />
-                                            Vous pouvez payer par tranches. Minimum à payer : <b>{subscription.pack.installment1.toLocaleString()} FCFA</b>
-                                        </p>
+                                        <div className="mt-3 pt-3 border-t border-white/10 text-[11px] text-white/70">
+                                            💡 Paiement en 2x possible — Minimum : <strong className="text-white">{subscription.pack.installment1.toLocaleString()} FCFA</strong>
+                                        </div>
                                     )}
                                 </div>
                             )}
 
-                            <form onSubmit={handleNotify} className="space-y-6">
+                            <form onSubmit={handleNotify} className="px-6 pb-6 space-y-4">
+                                {/* Payment Method */}
                                 <div>
-                                    <label className="block text-sm font-bold text-primary mb-4">Moyen de paiement</label>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {[
-                                            { id: 'WAVE', label: 'Wave', color: 'bg-[#21b7ff]', logo: 'https://wave.com/static/wave-logo.svg' },
-                                            { id: 'OM', label: 'Orange Money', color: 'bg-[#ff7900]', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg' }
-                                        ].map(m => (
-                                            <button
-                                                key={m.id}
-                                                type="button"
-                                                onClick={() => setMethod(m.id as any)}
-                                                className={`relative p-5 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${method === m.id ? 'border-accent bg-accent/5' : 'border-border-light hover:border-accent/30'}`}
-                                            >
-                                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden`}>
-                                                    <span className={`font-black text-xs ${m.id === 'WAVE' ? 'text-blue-500' : 'text-orange-500'}`}>{m.label}</span>
-                                                </div>
-                                                <span className="text-xs font-bold text-primary">{m.label}</span>
-                                                {method === m.id && (
-                                                    <div className="absolute top-2 right-2">
-                                                        <CheckCircle className="w-4 h-4 text-accent" />
-                                                    </div>
-                                                )}
-                                            </button>
-                                        ))}
+                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2">
+                                        Mode de paiement
+                                    </label>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setMethod('WAVE')}
+                                            className={`relative flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all text-sm font-bold ${method === 'WAVE'
+                                                    ? 'border-blue-400 bg-blue-50 text-blue-600'
+                                                    : 'border-border-light text-text-muted hover:border-blue-200'
+                                                }`}
+                                        >
+                                            💙 Wave
+                                            {method === 'WAVE' && (
+                                                <CheckCircle className="absolute top-1.5 right-1.5 w-3.5 h-3.5 text-blue-500" weight="fill" />
+                                            )}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setMethod('OM')}
+                                            className={`relative flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all text-sm font-bold ${method === 'OM'
+                                                    ? 'border-orange-400 bg-orange-50 text-orange-600'
+                                                    : 'border-border-light text-text-muted hover:border-orange-200'
+                                                }`}
+                                        >
+                                            🧡 Orange Money
+                                            {method === 'OM' && (
+                                                <CheckCircle className="absolute top-1.5 right-1.5 w-3.5 h-3.5 text-orange-500" weight="fill" />
+                                            )}
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-bold text-primary mb-2">Référence de la transaction</label>
-                                        <div className="relative">
-                                            <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-                                            <input
-                                                type="text"
-                                                required
-                                                placeholder="Saisissez la référence du message reçu"
-                                                value={reference}
-                                                onChange={e => setReference(e.target.value)}
-                                                className="w-full pl-12 pr-4 py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm font-medium"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-bold text-primary mb-2">Montant payé (FCFA)</label>
-                                        <input
-                                            type="number"
-                                            required
-                                            value={amount}
-                                            onChange={e => setAmount(Number(e.target.value))}
-                                            className="w-full px-4 py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm font-bold text-primary"
-                                        />
-                                    </div>
+                                {/* Reference */}
+                                <div>
+                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">
+                                        Référence de transaction
+                                    </label>
+                                    <input
+                                        type="text"
+                                        required
+                                        placeholder="Ex: TXN-78451290"
+                                        value={reference}
+                                        onChange={e => setReference(e.target.value)}
+                                        className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/30 focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm font-medium text-primary placeholder:text-text-muted/40"
+                                    />
                                 </div>
 
+                                {/* Amount */}
+                                <div>
+                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">
+                                        Montant payé (FCFA)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        required
+                                        value={amount}
+                                        onChange={e => setAmount(Number(e.target.value))}
+                                        className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/30 focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm font-bold text-primary"
+                                    />
+                                </div>
+
+                                {/* Error */}
+                                {status === 'ERROR' && (
+                                    <p className="text-xs text-error font-medium text-center">
+                                        Une erreur s'est produite. Veuillez réessayer.
+                                    </p>
+                                )}
+
+                                {/* Submit */}
                                 <button
                                     type="submit"
                                     disabled={status === 'SENDING' || !reference}
-                                    className="btn-primary w-full justify-center py-4 shadow-xl shadow-accent/20 disabled:opacity-50"
+                                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-accent text-white font-bold text-sm hover:bg-accent/90 transition-all disabled:opacity-40 shadow-lg shadow-accent/20"
                                 >
                                     {status === 'SENDING' ? (
-                                        <span className="flex items-center gap-2"><Loader2 className="w-5 h-5 animate-spin" /> Envoi en cours...</span>
+                                        <><CircleNotch className="w-4 h-4 animate-spin" weight="bold" /> Envoi en cours...</>
                                     ) : (
-                                        <span className="flex items-center gap-2">Débloquer mon accès <ArrowRight className="w-5 h-5" /></span>
+                                        <>Débloquer mon accès <ArrowRight className="w-4 h-4" weight="bold" /></>
                                     )}
                                 </button>
 
-                                <p className="text-[10px] text-center text-text-muted leading-relaxed max-w-xs mx-auto">
-                                    En cliquant sur "Débloquer", vous confirmez avoir effectué le paiement manuel. Toute fausse déclaration entraînera la suspension définitive du compte.
+                                <p className="text-[10px] text-center text-text-muted leading-relaxed">
+                                    En cliquant, vous confirmez avoir effectué le paiement.
                                 </p>
                             </form>
                         </>
                     )}
                 </div>
+
+                {/* Footer */}
+                <p className="text-center text-[10px] text-white/30 mt-4">
+                    Besoin d'aide ? Contactez-nous via WhatsApp
+                </p>
             </motion.div>
         </div>
     );
