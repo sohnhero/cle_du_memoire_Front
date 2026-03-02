@@ -143,7 +143,7 @@ function StudentDashboard() {
                                 <div className="text-right">
                                     <span className="block text-xs text-text-muted">Soutenance prévue</span>
                                     <span className="block text-sm font-bold text-accent">
-                                        {Math.ceil((new Date(user.targetDefenseDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} jours restants
+                                        JJ -  {Math.ceil((new Date(user.targetDefenseDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}
                                     </span>
                                 </div>
                             )}
