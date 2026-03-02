@@ -42,12 +42,12 @@ export default function PacksPage() {
 
     function getStatusBadge(status: string) {
         const map: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-            ACTIVE: { label: 'Actif', color: 'bg-success/10 text-success', icon: <CheckCircle className="w-3.5 h-3.5" /> },
-            PAID: { label: 'Payé', color: 'bg-success/10 text-success', icon: <CheckCircle className="w-3.5 h-3.5" /> },
-            PENDING: { label: 'En attente', color: 'bg-warning/10 text-warning', icon: <Clock className="w-3.5 h-3.5" /> },
-            PARTIAL: { label: 'Partiel', color: 'bg-info/10 text-info', icon: <CreditCard className="w-3.5 h-3.5" /> },
-            EXPIRED: { label: 'Expiré', color: 'bg-error/10 text-error', icon: <AlertCircle className="w-3.5 h-3.5" /> },
-            DEACTIVATED: { label: 'Inactif', color: 'bg-border-light text-text-muted', icon: <ArrowRight className="w-3.5 h-3.5" /> },
+            ACTIVE: { label: 'Actif', color: 'bg-success text-white shadow-sm', icon: <CheckCircle weight="bold" className="w-3.5 h-3.5" /> },
+            PAID: { label: 'Payé', color: 'bg-success text-white shadow-sm', icon: <CheckCircle weight="bold" className="w-3.5 h-3.5" /> },
+            PENDING: { label: 'En attente', color: 'bg-warning text-white shadow-sm', icon: <Clock weight="bold" className="w-3.5 h-3.5" /> },
+            PARTIAL: { label: 'Partiel', color: 'bg-info text-white shadow-sm', icon: <CreditCard weight="bold" className="w-3.5 h-3.5" /> },
+            EXPIRED: { label: 'Expiré', color: 'bg-error text-white shadow-sm', icon: <AlertCircle weight="bold" className="w-3.5 h-3.5" /> },
+            DEACTIVATED: { label: 'Inactif', color: 'bg-text-secondary text-white shadow-sm', icon: <ArrowRight weight="bold" className="w-3.5 h-3.5" /> },
         };
         return map[status] || map.PENDING;
     }
@@ -118,8 +118,8 @@ export default function PacksPage() {
                                 </div>
                             </div>
                         </div>
-                        <span className="px-3 py-1.5 rounded-full bg-success/20 text-success text-xs font-semibold flex items-center gap-1">
-                            <CheckCircle className="w-3.5 h-3.5" /> Actif
+                        <span className="px-3 py-1.5 rounded-full bg-success text-white text-xs font-semibold flex items-center gap-1 shadow-sm">
+                            <CheckCircle weight="bold" className="w-3.5 h-3.5" /> Actif
                         </span>
                     </div>
                     {activeSub.pack && (
@@ -137,7 +137,7 @@ export default function PacksPage() {
             )}
 
             {/* All Packs */}
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {packs.map((pack, index) => {
                     const sub = getSubscriptionForPack(pack.id);
                     const isActive = sub && (sub.status === 'ACTIVE' || sub.status === 'PAID');
@@ -152,27 +152,27 @@ export default function PacksPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className={`card-premium p-6 relative flex flex-col ${isActive ? 'ring-2 ring-accent' : ''}`}
+                            className={`card-premium p-5 relative flex flex-col ${isActive ? 'ring-2 ring-accent' : ''}`}
                         >
                             {/* Status badge */}
                             {sub && (
                                 <div className="absolute -top-3 right-4">
-                                    <span className={`text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 ${getStatusBadge(sub.status).color}`}>
+                                    <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 ${getStatusBadge(sub.status).color}`}>
                                         {getStatusBadge(sub.status).icon}
                                         {sub.status === 'PARTIAL' ? 'Paiement Partiel' : getStatusBadge(sub.status).label}
                                     </span>
                                 </div>
                             )}
 
-                            <BrandIcon icon={Package} size={48} className="mb-4 shadow-md" />
+                            <BrandIcon icon={Package} size={36} className="mb-3 shadow-md" />
 
-                            <h3 className="text-lg font-bold text-primary">{pack.name}</h3>
-                            <p className="text-sm text-text-secondary mt-1 mb-3">{pack.description}</p>
-                            <div className="text-2xl font-extrabold text-primary mb-1">{pack.price.toLocaleString()} FCFA</div>
+                            <h3 className="text-base font-bold text-primary">{pack.name}</h3>
+                            <p className="text-xs text-text-secondary mt-0.5 mb-3 line-clamp-2">{pack.description}</p>
+                            <div className="text-xl font-extrabold text-primary mb-1">{pack.price.toLocaleString()} FCFA</div>
 
                             {/* Installments Info */}
                             {pack.installment1 && pack.installment2 && (
-                                <p className="text-xs text-info mb-4">Payable en 2 tranches : {pack.installment1.toLocaleString()} FCFA puis {pack.installment2.toLocaleString()} FCFA</p>
+                                <p className="text-[11px] font-medium text-info mb-4">En 2x : {pack.installment1.toLocaleString()} puis {pack.installment2.toLocaleString()} FCFA</p>
                             )}
 
                             {/* Partial Payment Progress */}
@@ -188,44 +188,44 @@ export default function PacksPage() {
                                 </div>
                             )}
 
-                            <ul className="space-y-2 mb-6 flex-1">
+                            <ul className="space-y-1.5 mb-5 flex-1">
                                 {features.map((f: string) => (
-                                    <li key={f} className="flex items-center gap-2 text-sm text-text-primary">
-                                        <CheckCircle className="w-4 h-4 text-success flex-shrink-0" />
-                                        {f}
+                                    <li key={f} className="flex items-start gap-2 text-xs text-text-primary">
+                                        <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" />
+                                        <span className="leading-tight">{f}</span>
                                     </li>
                                 ))}
                             </ul>
 
                             <div className="mt-auto">
                                 {subscribing === pack.id ? (
-                                    <div className="w-full py-3 rounded-xl font-semibold text-sm transition-all bg-primary/10 text-primary flex items-center justify-center gap-2">
+                                    <div className="w-full py-2.5 rounded-xl font-semibold text-xs transition-all bg-primary/10 text-primary flex items-center justify-center gap-2">
                                         <Loader2 className="w-4 h-4 animate-spin" /> Souscription...
                                     </div>
                                 ) : isActive ? (
-                                    <div className="w-full py-3 rounded-xl font-semibold text-sm transition-all bg-success/10 text-success flex items-center justify-center gap-2 cursor-default">
-                                        <CheckCircle className="w-4 h-4" /> Pack Actif
+                                    <div className="w-full py-2.5 rounded-xl font-semibold text-xs transition-all bg-success text-white flex items-center justify-center gap-2 cursor-default shadow-sm">
+                                        <CheckCircle weight="bold" className="w-4 h-4" /> Pack Actif
                                     </div>
                                 ) : sub?.status === 'PARTIAL' ? (
                                     <button
                                         onClick={() => { setSelectedSubForPay(sub); setPaymentModalOpen(true); }}
-                                        className="w-full flex items-center justify-center gap-2 py-3 bg-success/10 text-success rounded-xl font-bold hover:bg-success/20 transition-all"
+                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-success text-white rounded-xl font-bold hover:bg-success/90 transition-all text-xs shadow-sm hover:shadow"
                                     >
-                                        <CreditCard className="w-4 h-4" /> Finaliser le paiement
+                                        <CreditCard weight="bold" className="w-4 h-4" /> Finaliser le paiement
                                     </button>
                                 ) : isPending ? (
                                     <button
                                         onClick={() => { setSelectedSubForPay(sub); setPaymentModalOpen(true); }}
-                                        className="w-full flex items-center justify-center gap-2 py-3 bg-warning/10 text-warning rounded-xl font-bold hover:bg-warning/20 transition-all font-sans"
+                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-warning text-white rounded-xl font-bold hover:bg-warning/90 transition-all text-xs shadow-sm hover:shadow"
                                     >
-                                        <Clock className="w-4 h-4" /> Activer mon pack
+                                        <Clock weight="bold" className="w-4 h-4" /> Activer mon pack
                                     </button>
                                 ) : (
                                     <button
                                         onClick={() => handleSubscribe(pack.id)}
-                                        className="w-full py-3 rounded-xl font-semibold text-sm transition-all bg-primary hover:bg-primary-dark text-white shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                                        className="w-full py-2.5 rounded-xl font-semibold text-xs transition-all bg-primary hover:bg-primary-dark text-white shadow hover:shadow-md flex items-center justify-center gap-2"
                                     >
-                                        Souscrire <ArrowRight className="w-4 h-4" />
+                                        Souscrire <ArrowRight weight="bold" className="w-4 h-4" />
                                     </button>
                                 )}
                             </div>
