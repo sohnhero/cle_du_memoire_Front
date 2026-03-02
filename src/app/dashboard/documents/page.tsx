@@ -8,6 +8,7 @@ import {
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
+import toast from 'react-hot-toast';
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ComponentType<any> }> = {
     UPLOADED: { label: 'Envoyé', color: 'bg-info/10 text-info', icon: Upload },
@@ -342,7 +343,7 @@ function ReviewModal({ doc, onClose, onReviewSuccess }: { doc: any, onClose: () 
             onClose();
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de l'enregistrement de l'évaluation.");
+            toast.error("Erreur lors de l'enregistrement de l'évaluation.");
             setIsSaving(false);
         }
     };
@@ -421,7 +422,7 @@ function UploadModal({ onClose, onUploadSuccess }: { onClose: () => void, onUplo
             onClose();
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de l'envoi");
+            toast.error("Erreur lors de l'envoi");
             setIsUploading(false);
         }
     };
@@ -502,7 +503,7 @@ function AiAssistantModal({ onClose }: { onClose: () => void }) {
             setResult(res);
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de l'analyse.");
+            toast.error("Erreur lors de l'analyse.");
         } finally {
             setIsAnalyzing(false);
         }

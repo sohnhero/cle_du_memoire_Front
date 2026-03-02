@@ -9,6 +9,7 @@ import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import { AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 const phasesList = [
     { id: 'TOPIC', name: 'Choix du sujet', description: 'Sujet validé par l\'accompagnateur' },
@@ -57,9 +58,9 @@ export default function MemoirePage() {
     }
 
     const currentPhaseIndex = Math.max(0, phasesList.findIndex(p => p.id === memoire.phase));
-    const progress = memoire?.progressPercent > 0
-        ? memoire.progressPercent
-        : Math.round((currentPhaseIndex / Math.max(1, phasesList.length - 1)) * 100);
+    // Progress is derived from the phase (source of truth for step-based completion)
+    const phaseBasedProgress = Math.round(((currentPhaseIndex + 1) / phasesList.length) * 100);
+    const progress = phaseBasedProgress > 0 ? phaseBasedProgress : (memoire?.progressPercent || 0);
 
     // Calculate dates (mocked for past phases based on creation for demo purposes, but real app might store phase transition dates)
     const phases = phasesList.map((p, index) => {
@@ -256,7 +257,7 @@ function EditMemoireModal({ memoire, onClose, onUpdate }: { memoire: any, onClos
             onUpdate(res.memoire);
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de la mise à jour");
+            toast.error("Erreur lors de la mise à jour");
         } finally {
             setLoading(false);
         }

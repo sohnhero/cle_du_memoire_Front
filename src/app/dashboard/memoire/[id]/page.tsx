@@ -8,6 +8,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
+import toast from 'react-hot-toast';
 
 const phasesList = [
     { id: 'TOPIC', name: 'Choix du sujet' },
@@ -40,14 +41,22 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
     const loadData = async () => {
         try {
             const [res, docsRes] = await Promise.all([
-                api.getMyMemoire().catch(() => ({ memoires: [] })),
+                api.getMyMemoire().catch(() => ({ memoires: [], memoire: null })),
                 api.getDocuments().catch(() => ({ documents: [] }))
             ]);
 
-            const found = res.memoires?.find((m: any) => m.id === params.id);
+            // Coach: search in memoires array; Student: use singular memoire
+            let found = res.memoires?.find((m: any) => m.id === params.id);
+            if (!found && (res as any).memoire?.id === params.id) {
+                found = (res as any).memoire;
+            }
+
             if (found) {
                 setMemoire(found);
-                setProgress(found.progressPercent);
+                // Always derive progress from phase (source of truth)
+                const phaseIndex = phasesList.findIndex(p => p.id === found.phase);
+                const phaseBasedProgress = phaseIndex >= 0 ? Math.round(((phaseIndex + 1) / phasesList.length) * 100) : 0;
+                setProgress(phaseBasedProgress > 0 ? phaseBasedProgress : (found.progressPercent || 0));
                 setPhase(found.phase);
                 setNotes(found.notes || '');
 
@@ -69,11 +78,11 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
                 phase,
                 notes
             });
-            setMemoire(res.memoire);
-            alert("Progression enregistrée !");
+            setMemoire((prev: any) => ({ ...prev, ...res.memoire, student: res.memoire.student || prev?.student }));
+            toast.success("Progression enregistrée !");
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de la sauvegarde");
+            toast.error("Erreur lors de la sauvegarde");
         } finally {
             setSaving(false);
         }
@@ -91,7 +100,7 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
                 </button>
                 <div>
                     <h1 className="text-2xl font-bold text-primary">Détails de l'étudiant</h1>
-                    <p className="text-text-secondary text-sm">Gérez la progression de {memoire.student.firstName} {memoire.student.lastName}</p>
+                    <p className="text-text-secondary text-sm">Gérez la progression de {memoire.student?.firstName || ''} {memoire.student?.lastName || ''}</p>
                 </div>
             </div>
 
@@ -100,15 +109,19 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
                 <div className="lg:col-span-2 space-y-6">
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-6">
                         <div className="flex items-start gap-4 mb-8 pb-6 border-b border-border-light">
-                            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xl shadow-inner">
-                                {memoire.student.firstName[0]}{memoire.student.lastName[0]}
-                            </div>
+                            {memoire.student?.avatar ? (
+                                <img src={memoire.student.avatar} alt={`${memoire.student?.firstName} ${memoire.student?.lastName}`} className="w-16 h-16 rounded-2xl object-cover shadow-md" />
+                            ) : (
+                                <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-md">
+                                    {memoire.student?.firstName?.[0] || '?'}{memoire.student?.lastName?.[0] || '?'}
+                                </div>
+                            )}
                             <div className="flex-1">
-                                <h2 className="text-xl font-bold text-primary">{memoire.student.firstName} {memoire.student.lastName}</h2>
-                                <p className="text-sm text-text-secondary font-medium">{memoire.student.field || 'Filière non renseignée'}</p>
+                                <h2 className="text-xl font-bold text-primary">{memoire.student?.firstName || 'Étudiant'} {memoire.student?.lastName || ''}</h2>
+                                <p className="text-sm text-text-secondary font-medium">{memoire.student?.field || 'Filière non renseignée'}</p>
                                 <div className="flex items-center gap-3 mt-2">
                                     <span className="text-[10px] font-bold uppercase tracking-wider bg-success/10 text-success px-2 py-0.5 rounded-md">Activé</span>
-                                    <span className="text-[10px] font-bold uppercase tracking-wider bg-bg-light text-text-muted px-2 py-0.5 rounded-md">{memoire.student.university || 'Univ. Inconnue'}</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-wider bg-bg-light text-text-muted px-2 py-0.5 rounded-md">{memoire.student?.university || 'Univ. Inconnue'}</span>
                                 </div>
                             </div>
                         </div>

@@ -103,9 +103,8 @@ function StudentDashboard() {
     ];
 
     const currentPhaseIndex = memoire ? Math.max(0, phasesList.findIndex(p => p.id === memoire.phase)) : 0;
-    const progress = memoire?.progressPercent > 0
-        ? memoire.progressPercent
-        : Math.round((currentPhaseIndex / Math.max(1, phasesList.length - 1)) * 100);
+    const phaseBasedProgress = Math.round(((currentPhaseIndex + 1) / phasesList.length) * 100);
+    const progress = phaseBasedProgress > 0 ? phaseBasedProgress : (memoire?.progressPercent || 0);
 
     return (
         <div className="space-y-8">

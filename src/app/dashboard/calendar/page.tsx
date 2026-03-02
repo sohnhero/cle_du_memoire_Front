@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 import {
     CalendarBlank as CalendarIcon, Clock, Plus, Trash as Trash2, CalendarBlank as CalendarDays, Warning as AlertTriangle, Video, X, CaretLeft as ChevronLeft, CaretRight as ChevronRight, CheckCircle as CheckCircle2, Circle
 } from '@phosphor-icons/react';
@@ -42,7 +43,7 @@ export default function CalendarPage() {
             setEvents(events.filter(e => e.id !== id));
         } catch (error) {
             console.error(error);
-            alert('Erreur lors de la suppression');
+            toast.error('Erreur lors de la suppression');
         }
     };
 
@@ -324,7 +325,7 @@ function AddEventModal({ onClose, onAdd }: { onClose: () => void, onAdd: () => v
             onClose();
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de la création");
+            toast.error("Erreur lors de la création");
             setIsSubmitting(false);
         }
     };

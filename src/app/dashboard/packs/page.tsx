@@ -7,6 +7,7 @@ import {
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 export default function PacksPage() {
     const [packs, setPacks] = useState<any[]>([]);
@@ -271,7 +272,7 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
             await api.notifyPayment({ method, reference, amount });
             onSuccess();
         } catch (err) {
-            alert('Erreur lors de l\'envoi');
+            toast.error('Erreur lors de l\'envoi');
         } finally {
             setLoading(false);
         }

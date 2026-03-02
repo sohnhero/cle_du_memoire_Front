@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 import {
     ChatCircle as MessageCircle, PaperPlaneRight as Send, MagnifyingGlass as Search, DotsThreeVertical as MoreVertical, Phone, Video, Paperclip, Smiley as Smile, Check, Checks as CheckCheck, CaretLeft as ChevronLeft, FileText, X, Plus, UserPlus, Info
 } from '@phosphor-icons/react';
@@ -113,7 +114,7 @@ export default function MessagesPage() {
             loadConversations();
         } catch (error) {
             console.error("Failed to send message:", error);
-            alert("Erreur lors de l'envoi du message");
+            toast.error("Erreur lors de l'envoi du message");
         }
     };
 

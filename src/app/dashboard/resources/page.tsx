@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 import {
     FileText, Download, Link as LinkIcon, Plus, Trash as Trash2, MagnifyingGlass as Search, BookOpen, ArrowSquareOut as ExternalLink, X, Upload
 } from '@phosphor-icons/react';
@@ -48,7 +49,7 @@ export default function ResourcesPage() {
             setResources(resources.filter(r => r.id !== id));
         } catch (error) {
             console.error(error);
-            alert('Erreur lors de la suppression');
+            toast.error('Erreur lors de la suppression');
         }
     };
 
@@ -224,7 +225,7 @@ function AddResourceModal({ onClose, onAdd }: { onClose: () => void, onAdd: () =
             onClose();
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de l'ajout");
+            toast.error("Erreur lors de l'ajout");
             setIsSubmitting(false);
         }
     };

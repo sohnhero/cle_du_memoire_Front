@@ -7,6 +7,7 @@ import {
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 const statusBadge: Record<string, string> = {
     PENDING: 'bg-warning/10 text-warning',
@@ -270,7 +271,7 @@ function CreatePackModal({ onClose, onSuccess }: { onClose: () => void, onSucces
             onSuccess();
             onClose();
         } catch (error) {
-            alert("Erreur lors de la création");
+            toast.error("Erreur lors de la création");
         } finally {
             setIsSaving(false);
         }

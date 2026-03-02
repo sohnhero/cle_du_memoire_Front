@@ -6,6 +6,7 @@ import {
     Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X
 } from '@phosphor-icons/react';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 const roleBadge: Record<string, string> = {
     STUDENT: 'bg-info/10 text-info',
@@ -243,7 +244,7 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
             onClose();
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de la modification");
+            toast.error("Erreur lors de la modification");
         } finally {
             setIsSaving(false);
         }
@@ -334,7 +335,7 @@ function AssignCoachModal({ student, coaches, onClose, onSuccess }: { student: a
             onClose();
         } catch (error) {
             console.error(error);
-            alert("Erreur lors de l'assignation");
+            toast.error("Erreur lors de l'assignation");
         } finally {
             setIsSaving(false);
         }
