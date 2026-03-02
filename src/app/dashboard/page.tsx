@@ -124,77 +124,71 @@ function StudentDashboard() {
 
             {/* Main Content Grid */}
             <div className="grid lg:grid-cols-3 gap-6">
-                {/* Progress Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="lg:col-span-2 card-premium p-6 cursor-pointer hover:border-accent/30 transition-colors"
-                    onClick={() => router.push('/dashboard/memoire')}
-                >
-                    <div className="flex justify-between items-start mb-6">
-                        <h3 className="text-lg font-bold text-primary flex items-center gap-3">
-                            <BrandIcon icon={BookOpen} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
-                            Progression du Mémoire
-                        </h3>
-                        {user?.targetDefenseDate && (
-                            <div className="text-right">
-                                <span className="block text-xs text-text-muted">Soutenance prévue</span>
-                                <span className="block text-sm font-bold text-accent">
-                                    {Math.ceil((new Date(user.targetDefenseDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} jours restants
-                                </span>
+                {/* Left Column: Progress Card */}
+                <div className="space-y-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="card-premium p-6 cursor-pointer hover:border-accent/30 transition-colors flex flex-col h-full"
+                        onClick={() => router.push('/dashboard/memoire')}
+                    >
+                        <div className="flex justify-between items-start mb-6">
+                            <h3 className="text-lg font-bold text-primary flex items-center gap-3">
+                                <BrandIcon icon={BookOpen} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
+                                Progression du Mémoire
+                            </h3>
+                            {user?.targetDefenseDate && (
+                                <div className="text-right">
+                                    <span className="block text-xs text-text-muted">Soutenance prévue</span>
+                                    <span className="block text-sm font-bold text-accent">
+                                        {Math.ceil((new Date(user.targetDefenseDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} jours restants
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+
+                        {memoire ? (
+                            <>
+                                <div className="mb-4">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="text-sm font-medium text-text-primary">{memoire.title}</span>
+                                        <span className="text-sm font-bold text-accent">{progress}%</span>
+                                    </div>
+                                    <div className="h-3 bg-bg-light rounded-full overflow-hidden">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${progress}%` }}
+                                            transition={{ duration: 1, delay: 0.8 }}
+                                            className="h-full bg-gradient-to-r from-accent to-info rounded-full"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Current Phase Highlight */}
+                                <div className="mt-6 flex items-center justify-between p-4 rounded-xl bg-accent/5 border border-accent/10 hover:bg-accent/10 transition-colors">
+                                    <div>
+                                        <span className="text-xs font-bold text-accent uppercase tracking-wider block mb-1">Phase Actuelle</span>
+                                        <span className="text-sm font-semibold text-primary">{phasesList[currentPhaseIndex]?.label || 'Démarrage'}</span>
+                                    </div>
+                                    <div className="w-10 h-10 rounded-full bg-accent/10 text-accent flex items-center justify-center">
+                                        <TrendingUp className="w-5 h-5" />
+                                    </div>
+                                </div>
+
+                                <div className="mt-auto pt-6 text-center">
+                                    <span className="text-xs font-bold text-accent hover:underline">Voir les détails du suivi →</span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="text-center py-8 text-text-secondary h-full flex items-center justify-center">
+                                Chargement de votre progression...
                             </div>
                         )}
-                    </div>
+                    </motion.div>
+                </div>
 
-                    {memoire ? (
-                        <>
-                            <div className="mb-4">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-sm font-medium text-text-primary">{memoire.title}</span>
-                                    <span className="text-sm font-bold text-accent">{progress}%</span>
-                                </div>
-                                <div className="h-3 bg-bg-light rounded-full overflow-hidden">
-                                    <motion.div
-                                        initial={{ width: 0 }}
-                                        animate={{ width: `${progress}%` }}
-                                        transition={{ duration: 1, delay: 0.8 }}
-                                        className="h-full bg-gradient-to-r from-accent to-info rounded-full"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Timeline */}
-                            <div className="space-y-3 mt-6">
-                                {phasesList.map((item, index) => {
-                                    let status = 'pending';
-                                    if (index < currentPhaseIndex) status = 'done';
-                                    else if (index === currentPhaseIndex) status = 'current';
-
-                                    return (
-                                        <div key={item.id} className="flex items-center gap-4">
-                                            <div className={`w-3 h-3 rounded-full flex-shrink-0 ${status === 'done' ? 'bg-success' : status === 'current' ? 'bg-accent ring-4 ring-accent/20' : 'bg-border'}`} />
-                                            <div className="flex-1 flex items-center justify-between">
-                                                <span className={`text-sm ${status === 'pending' ? 'text-text-muted' : 'text-text-primary'} font-medium`}>
-                                                    {item.label}
-                                                </span>
-                                                <span className={`text-xs ${status === 'current' ? 'text-accent font-semibold' : 'text-text-muted'}`}>
-                                                    {status === 'done' ? 'Terminé' : status === 'current' ? 'En cours' : '—'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </>
-                    ) : (
-                        <div className="text-center py-8 text-text-secondary">
-                            Chargement de votre progression...
-                        </div>
-                    )}
-                </motion.div>
-
-                {/* Right Column: Next Deadline & Quick Actions */}
+                {/* Middle Column: Next Deadline & Accompagnateur */}
                 <div className="space-y-6">
                     {/* Next Deadline Card */}
                     <motion.div
@@ -236,33 +230,6 @@ function StudentDashboard() {
                         <Calendar className="absolute -bottom-4 -right-4 w-24 h-24 text-primary/[0.03] group-hover:text-accent/[0.05] transition-colors" />
                     </motion.div>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="card-premium p-6"
-                    >
-                        <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                            <BrandIcon icon={Activity} size={36} className="!bg-primary/10 shadow-sm" iconClassName="!text-primary" />
-                            Actions Rapides
-                        </h3>
-                        <div className="space-y-3">
-                            {[
-                                { label: 'Envoyer un document', icon: FileText, color: 'bg-accent', href: '/dashboard/documents' },
-                                { label: 'Message à l\'accompagnateur', icon: MessageCircle, color: 'bg-info', href: '/dashboard/messages' },
-                                { label: 'Voir ma progression', icon: TrendingUp, color: 'bg-success', href: '/dashboard/memoire' },
-                                { label: 'Mes packs', icon: Package, color: 'bg-primary', href: '/dashboard/packs' },
-                            ].map((action) => (
-                                <button key={action.label} onClick={() => router.push(action.href)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-bg-light transition-colors text-left group">
-                                    <div className={`w-10 h-10 rounded-xl ${action.color}/10 flex items-center justify-center flex-shrink-0`}>
-                                        <action.icon className={`w-5 h-5 ${action.color.replace('bg-', 'text-')}`} />
-                                    </div>
-                                    <span className="text-sm font-medium text-text-primary group-hover:text-primary">{action.label}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
-
                     {memoire?.accompagnateur && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -295,6 +262,37 @@ function StudentDashboard() {
                             </button>
                         </motion.div>
                     )}
+                </div>
+
+                {/* Right Column: Actions Rapides */}
+                <div className="space-y-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="card-premium p-6"
+                    >
+                        <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
+                            <BrandIcon icon={Activity} size={36} className="!bg-primary/10 shadow-sm" iconClassName="!text-primary" />
+                            Actions Rapides
+                        </h3>
+                        <div className="space-y-3">
+                            {[
+                                { label: 'Envoyer un document', icon: FileText, color: 'bg-accent', href: '/dashboard/documents' },
+                                { label: 'Message à l\'accompagnateur', icon: MessageCircle, color: 'bg-info', href: '/dashboard/messages' },
+                                { label: 'Voir ma progression', icon: TrendingUp, color: 'bg-success', href: '/dashboard/memoire' },
+                                { label: 'Mes packs', icon: Package, color: 'bg-primary', href: '/dashboard/packs' },
+                            ].map((action) => (
+                                <button key={action.label} onClick={() => router.push(action.href)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-bg-light transition-colors text-left group">
+                                    <div className={`w-10 h-10 rounded-xl ${action.color}/10 flex items-center justify-center flex-shrink-0`}>
+                                        <action.icon className={`w-5 h-5 ${action.color.replace('bg-', 'text-')}`} />
+                                    </div>
+                                    <span className="text-sm font-medium text-text-primary group-hover:text-primary">{action.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </motion.div>
+
                 </div>
             </div>
         </div>
