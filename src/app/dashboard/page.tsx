@@ -223,7 +223,7 @@ function StudentDashboard() {
                             </>
                         ) : (
                             <div className="text-center py-8 text-text-secondary h-full flex items-center justify-center">
-                                Chargement de votre progression...
+                                Chargement de votre progression....
                             </div>
                         )}
                     </motion.div>
