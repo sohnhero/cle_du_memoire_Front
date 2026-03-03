@@ -52,7 +52,7 @@ summary {
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-size: 15px;
+    font-size: 13px;
     /* Slightly smaller base for desktop */
   }
 
