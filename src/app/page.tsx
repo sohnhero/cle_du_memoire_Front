@@ -7,7 +7,7 @@ import {
   BookOpen, GraduationCap, Users, ChatCircle as MessageCircle, CaretRight as ChevronRight,
   Star, List as Menu, X, ShieldCheck as Shield, Medal as Award, Target, TrendUp as TrendingUp, FileText,
   Heart, ChartBar as BarChart3, PaperPlaneRight as Send, Quotes as Quote, ArrowRight, CheckCircle, Clock, EnvelopeSimple as Mail, MapPin, Phone, Lightning as Zap, Check, Sparkle as Sparkles,
-  FacebookLogo, InstagramLogo, XLogo, TiktokLogo as TikTokLogo, LinkedinLogo, YoutubeLogo
+  FacebookLogo, InstagramLogo, XLogo, TiktokLogo as TikTokLogo, LinkedinLogo, YoutubeLogo, ArrowUp
 } from '@phosphor-icons/react';
 import Logo from '@/components/Logo';
 import { BrandIcon } from '@/components/BrandIcon';
@@ -83,9 +83,13 @@ function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center">
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="flex items-center"
+          >
             <Logo className="w-36 h-auto mt-1" variant="full" monochrome={false} />
-          </Link>
+          </a>
 
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
@@ -890,43 +894,43 @@ function CTASection() {
 
 function Contact() {
   return (
-    <section id="contact" className="section relative bg-bg-light overflow-hidden text-primary border-t border-border-light isolate perspective-[1000px] py-24 sm:py-32">
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+    <section id="contact" className="section relative bg-bg-light overflow-hidden text-primary border-t border-border-light isolate perspective-[1000px] py-16 sm:py-24 lg:py-32">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
 
         {/* Header */}
         <motion.div
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="text-center mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="text-center mb-10 sm:mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-primary mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary mb-4">
             Contactez-nous
           </h2>
         </motion.div>
 
-        {/* Overlapping Container */}
-        <div className="relative flex flex-col lg:flex-row items-stretch lg:items-center w-full mt-10">
+        {/* Container */}
+        <div className="relative flex flex-col lg:flex-row items-stretch lg:items-center w-full mt-6 sm:mt-10">
 
           {/* Left: Form Card */}
           <motion.div
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-[65%] bg-white rounded-3xl sm:rounded-[2rem] shadow-xl p-8 sm:p-12 z-10 relative opacity-0 -translate-x-6 lg:-translate-x-8 transform-gpu backface-hidden will-change-[opacity,transform] lg:-mr-12"
+            className="w-full lg:w-[65%] bg-white rounded-2xl sm:rounded-3xl lg:rounded-[2rem] shadow-xl p-6 sm:p-8 lg:p-12 z-10 relative opacity-0 lg:-translate-x-8 transform-gpu backface-hidden will-change-[opacity,transform] lg:-mr-12"
           >
-            <h3 className="text-2xl font-bold text-primary mb-2">Envoyez-nous un message</h3>
-            <p className="text-text-secondary text-sm mb-10 max-w-lg">
+            <h3 className="text-xl sm:text-2xl font-bold text-primary mb-2">Envoyez-nous un message</h3>
+            <p className="text-text-secondary text-sm mb-6 sm:mb-10 max-w-lg">
               Vous avez une question ? Besoin d&apos;aide pour choisir le bon pack ? N&apos;hésitez pas à nous contacter.
             </p>
 
-            <form className="space-y-6">
-              <div className="grid sm:grid-cols-2 gap-6">
+            <form className="space-y-4 sm:space-y-6">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-primary">Prénom</label>
                   <input
                     type="text"
                     placeholder="Votre prénom"
-                    className="w-full px-5 py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
                   />
                 </div>
                 <div className="space-y-2">
@@ -934,46 +938,46 @@ function Contact() {
                   <input
                     type="text"
                     placeholder="Votre nom"
-                    className="w-full px-5 py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
                   />
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-6">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-primary">Email</label>
                   <input
                     type="email"
                     placeholder="votre@email.com"
-                    className="w-full px-5 py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-primary">Téléphone</label>
                   <div className="flex">
-                    <div className="px-4 border border-r-0 border-border rounded-l-xl bg-bg-light flex items-center justify-center text-sm font-medium text-primary cursor-not-allowed">
+                    <div className="px-3 sm:px-4 border border-r-0 border-border rounded-l-xl bg-bg-light flex items-center justify-center text-sm font-medium text-primary cursor-not-allowed">
                       +221
                     </div>
                     <input
                       type="tel"
                       placeholder="00 000 00 00"
-                      className="w-full px-5 py-4 rounded-r-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
+                      className="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-r-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm placeholder:text-text-muted"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2 pb-4">
+              <div className="space-y-2 pb-2 sm:pb-4">
                 <label className="block text-sm font-bold text-primary">Message</label>
                 <textarea
                   rows={4}
                   placeholder="Votre message..."
-                  className="w-full px-5 py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm resize-none placeholder:text-text-muted"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm resize-none placeholder:text-text-muted"
                 />
               </div>
 
               <div className="flex justify-end">
-                <button type="submit" className="bg-primary hover:bg-primary-dark text-white rounded-xl py-4 px-10 font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                <button type="submit" className="bg-primary hover:bg-primary-dark text-white rounded-xl py-3 sm:py-4 px-8 sm:px-10 font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto">
                   Envoyer
                 </button>
               </div>
@@ -985,31 +989,31 @@ function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full lg:w-[40%] bg-primary text-white rounded-3xl sm:rounded-[2rem] shadow-2xl p-8 sm:p-12 z-20 relative opacity-0 translate-x-6 lg:translate-x-8 transform-gpu backface-hidden will-change-[opacity,transform] mt-8 lg:mt-0 flex flex-col"
+            className="w-full lg:w-[40%] bg-primary text-white rounded-2xl sm:rounded-3xl lg:rounded-[2rem] shadow-2xl p-6 sm:p-8 lg:p-12 z-20 relative opacity-0 lg:translate-x-8 transform-gpu backface-hidden will-change-[opacity,transform] mt-6 lg:mt-0 flex flex-col"
           >
-            <h3 className="text-xl sm:text-2xl font-bold mb-10 text-white/90">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-6 sm:mb-10 text-white/90">
               Bonjour ! Nous sommes toujours là pour vous aider.
             </h3>
 
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-3 sm:space-y-4">
               {[
                 { icon: Phone, label: 'Hotline:', value: '+221 77 470 74 13' },
                 { icon: MessageCircle, label: 'SMS / WhatsApp:', value: '+221 77 470 74 13' },
                 { icon: Mail, label: 'Email:', value: 'cledumemoire.sn@gmail.com' },
               ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-5 bg-white/10 border border-white/5 rounded-[1.25rem] p-5">
-                  <item.icon className="w-6 h-6 text-white/70 shrink-0" strokeWidth={1.5} />
-                  <div>
-                    <div className="text-sm text-white/60 mb-0.5">{item.label}</div>
-                    <div className="font-semibold">{item.value}</div>
+                <div key={idx} className="flex items-center gap-3 sm:gap-5 bg-white/10 border border-white/5 rounded-xl sm:rounded-[1.25rem] p-4 sm:p-5">
+                  <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white/70 shrink-0" strokeWidth={1.5} />
+                  <div className="min-w-0">
+                    <div className="text-xs sm:text-sm text-white/60 mb-0.5">{item.label}</div>
+                    <div className="font-semibold text-sm sm:text-base truncate">{item.value}</div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-12 pt-8 border-t border-white/10">
-              <div className="text-sm font-bold text-white mb-6">Connectez-vous avec nous</div>
-              <div className="flex items-center gap-4">
+            <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10">
+              <div className="text-sm font-bold text-white mb-4 sm:mb-6">Connectez-vous avec nous</div>
+              <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
                 {[
                   { Icon: CustomFacebookIcon, href: "https://www.facebook.com/share/18QJwVU1eM/?mibextid=wwXIfr" },
                   { Icon: InstagramLogo, href: "https://www.instagram.com/cle_du_memoire/" },
@@ -1097,6 +1101,34 @@ function Footer() {
   );
 }
 
+// ==================== SCROLL TO TOP ====================
+function ScrollToTop() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 20 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-accent text-primary flex items-center justify-center shadow-xl shadow-primary/15 hover:scale-110 hover:bg-accent-dark transition-all duration-200"
+          aria-label="Retour en haut"
+        >
+          <ArrowUp className="w-5 h-5" weight="bold" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+}
+
 // ==================== MAIN PAGE ====================
 import Loader from '@/components/Loader';
 
@@ -1130,6 +1162,7 @@ export default function HomePage() {
           <Contact />
           <Footer />
         </main>
+        <ScrollToTop />
       </div>
     </>
   );
