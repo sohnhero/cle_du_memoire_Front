@@ -5,7 +5,9 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Sparkles, ArrowLeft } from 'lucide-react';
+import { ChartBar, ChatCircle, FolderSimple } from '@phosphor-icons/react';
 import Logo from '@/components/Logo';
+import { BrandIcon } from '@/components/BrandIcon';
 import Loader from '@/components/Loader';
 import { useAuth } from '@/context/AuthContext';
 
@@ -64,12 +66,12 @@ export default function LoginPage() {
 
                             <div className="mt-12 space-y-4 text-left max-w-sm mx-auto">
                                 {[
-                                    { emoji: '📊', text: 'Suivi en temps réel de votre mémoire' },
-                                    { emoji: '💬', text: 'Messagerie directe avec votre accompagnateur' },
-                                    { emoji: '📁', text: 'Gestion centralisée de vos documents' },
+                                    { icon: ChartBar, text: 'Suivi en temps réel de votre mémoire' },
+                                    { icon: ChatCircle, text: 'Messagerie directe avec votre accompagnateur' },
+                                    { icon: FolderSimple, text: 'Gestion centralisée de vos documents' },
                                 ].map((item) => (
                                     <div key={item.text} className="flex items-center gap-3 text-white/70 text-sm">
-                                        <span className="text-lg">{item.emoji}</span>
+                                        <BrandIcon icon={item.icon} size={36} className="!bg-white" iconClassName="!text-primary" />
                                         {item.text}
                                     </div>
                                 ))}

@@ -5,7 +5,9 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { GraduationCap, Mail, Lock, User, Phone, Building, BookOpen, Eye, EyeOff, ArrowRight, CheckCircle, ArrowLeft } from 'lucide-react';
+import { UserCirclePlus, Package, Handshake } from '@phosphor-icons/react';
 import Logo from '@/components/Logo';
+import { BrandIcon } from '@/components/BrandIcon';
 import Loader from '@/components/Loader';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
@@ -88,14 +90,12 @@ export default function RegisterPage() {
 
                             <div className="mt-12 space-y-5 text-left max-w-sm mx-auto">
                                 {[
-                                    { title: 'Inscription gratuite', desc: 'Créez votre compte en 2 minutes' },
-                                    { title: 'Choix du pack', desc: 'Sélectionnez la formule adaptée' },
-                                    { title: 'Accompagnement immédiat', desc: 'Un expert vous est assigné' },
-                                ].map((item, i) => (
+                                    { icon: UserCirclePlus, title: 'Inscription gratuite', desc: 'Créez votre compte en 2 minutes' },
+                                    { icon: Package, title: 'Choix du pack', desc: 'Sélectionnez la formule adaptée' },
+                                    { icon: Handshake, title: 'Accompagnement immédiat', desc: 'Un expert vous est assigné' },
+                                ].map((item) => (
                                     <div key={item.title} className="flex items-start gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <span className="text-accent font-bold text-sm">{i + 1}</span>
-                                        </div>
+                                        <BrandIcon icon={item.icon} size={36} className="!bg-white mt-0.5" iconClassName="!text-primary" />
                                         <div>
                                             <div className="text-white font-semibold text-sm">{item.title}</div>
                                             <div className="text-white/40 text-xs">{item.desc}</div>
