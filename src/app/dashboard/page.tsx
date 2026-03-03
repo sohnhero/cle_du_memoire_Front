@@ -31,7 +31,7 @@ function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className={`card-premium p-4 sm:p-6 hover:shadow-xl transition-all duration-300 flex flex-col justify-between`}
+            className={`card-premium p-4 sm:p-6 hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden`}
         >
             <div className="flex items-start justify-between w-full">
                 <BrandIcon icon={Icon} size={36} className={`shadow-sm ${colorMap[color].split(' ')[0].replace('bg-', 'shadow-').replace('/10', '/20')}`} />
@@ -390,7 +390,7 @@ function AccompagnateurDashboard() {
                 <p className="text-text-secondary mt-1 text-sm">Gérez vos étudiants et leurs progressions</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 overflow-hidden">
                 <StatsCard icon={Users} label="Étudiants Suivis" value={memoires.length} color="primary" delay={0.1} />
                 <StatsCard icon={FileText} label="Documents en attente" value={pendingDocuments.length} color="warning" delay={0.2} />
                 <StatsCard icon={MessageCircle} label="Messages non lus" value={totalUnreadMessages} color="error" delay={0.3} />
