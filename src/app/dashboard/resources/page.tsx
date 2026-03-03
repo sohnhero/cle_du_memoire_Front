@@ -100,7 +100,7 @@ export default function ResourcesPage() {
                         className="bg-transparent text-sm outline-none flex-1 text-text-primary"
                     />
                 </div>
-                <div className="flex overflow-x-auto gap-2 w-full sm:w-auto pb-2 sm:pb-0 scrollbar-hide">
+                <div className="flex flex-wrap gap-2 w-full">
                     {categories.map(cat => (
                         <button
                             key={cat.id}
