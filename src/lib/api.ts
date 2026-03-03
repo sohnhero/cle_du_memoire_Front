@@ -248,11 +248,15 @@ class ApiClient {
         return this.request<{ events: any[] }>('/calendar');
     }
 
-    async createEvent(data: { title: string; description?: string; date: string; type?: string }) {
+    async createEvent(data: { title: string; description?: string; date: string; type?: string; studentId?: string }) {
         return this.request<{ event: any }>('/calendar', {
             method: 'POST',
             body: JSON.stringify(data),
         });
+    }
+
+    async getCoachStudents() {
+        return this.request<{ students: any[] }>('/calendar/students');
     }
 
     async deleteEvent(id: string) {

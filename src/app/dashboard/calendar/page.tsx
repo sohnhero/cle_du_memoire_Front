@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import {
-    CalendarBlank as CalendarIcon, Clock, Plus, Trash as Trash2, CalendarBlank as CalendarDays, Warning as AlertTriangle, Video, X, CaretLeft as ChevronLeft, CaretRight as ChevronRight, CheckCircle as CheckCircle2, Circle
+    CalendarBlank as CalendarIcon, Clock, Plus, Trash as Trash2, CalendarBlank as CalendarDays, Warning as AlertTriangle, Video, X, CaretLeft as ChevronLeft, CaretRight as ChevronRight, CheckCircle as CheckCircle2, Circle, UserCircle, ArrowSquareOut
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { useAuth } from '@/context/AuthContext';
@@ -234,6 +234,7 @@ export default function CalendarPage() {
                                         <button
                                             onClick={() => toggleEvent(event.id)}
                                             className="flex-shrink-0 hover:scale-110 transition-transform"
+                                            disabled={event.isFromCoach}
                                         >
                                             <Circle className="w-6 h-6 text-border-dark group-hover:text-accent" />
                                         </button>
@@ -242,13 +243,26 @@ export default function CalendarPage() {
                                             <div className="flex flex-wrap items-center gap-2 mb-1">
                                                 <h3 className="font-bold text-primary truncate leading-tight">{event.title}</h3>
                                                 {event.type === 'DEADLINE' && <span className="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Révision</span>}
+                                                {event.type === 'MEETING' && <span className="bg-info/10 text-info text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Réunion</span>}
                                                 {isUrgent(event) && <span className="bg-error text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider animate-pulse">Urgent</span>}
+                                                {event.isFromCoach && <span className="bg-success/10 text-success text-[10px] px-2 py-0.5 rounded-full font-bold">Par {event.coachName}</span>}
                                             </div>
+                                            {/* Student name for coach view */}
+                                            {event.student && (
+                                                <div className="flex items-center gap-1.5 text-xs text-info font-medium mb-1">
+                                                    <UserCircle className="w-3.5 h-3.5" weight="fill" />
+                                                    {event.student.firstName} {event.student.lastName}
+                                                </div>
+                                            )}
                                             {event.description && <p className="text-sm text-text-secondary line-clamp-1 mb-2">{event.description}</p>}
                                             <div className="flex items-center gap-4 text-xs text-text-muted">
                                                 <div className="flex items-center gap-1.5 font-medium">
                                                     <CalendarIcon className="w-3.5 h-3.5" />
                                                     {new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                </div>
+                                                <div className="flex items-center gap-1.5 font-medium">
+                                                    <Clock className="w-3.5 h-3.5" />
+                                                    {new Date(event.date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                                                 </div>
                                                 <div className="flex items-center gap-1.5 font-bold text-accent">
                                                     <div className="w-1 h-1 rounded-full bg-accent" />
@@ -257,9 +271,23 @@ export default function CalendarPage() {
                                             </div>
                                         </div>
 
-                                        <button onClick={() => handleDelete(event.id)} className="p-2 text-text-muted hover:text-error opacity-0 group-hover:opacity-100 transition-all rounded-xl hover:bg-error/5">
-                                            <Trash2 className="w-5 h-5" />
-                                        </button>
+                                        {/* Join meeting button */}
+                                        {event.type === 'MEETING' && event.meetingLink && (
+                                            <a
+                                                href={event.meetingLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 px-3 py-2 bg-info text-white text-xs font-bold rounded-xl hover:bg-info/90 transition-colors shrink-0"
+                                            >
+                                                <Video className="w-4 h-4" weight="fill" /> Rejoindre
+                                            </a>
+                                        )}
+
+                                        {!event.isFromCoach && (
+                                            <button onClick={() => handleDelete(event.id)} className="p-2 text-text-muted hover:text-error opacity-0 group-hover:opacity-100 transition-all rounded-xl hover:bg-error/5">
+                                                <Trash2 className="w-5 h-5" />
+                                            </button>
+                                        )}
                                     </motion.div>
                                 ))}
                             </div>
@@ -312,17 +340,38 @@ function AddEventModal({ onClose, onAdd }: { onClose: () => void, onAdd: () => v
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [type, setType] = useState('REMINDER');
+    const [studentId, setStudentId] = useState('');
+    const [students, setStudents] = useState<any[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const isCoach = user?.role === 'ACCOMPAGNATEUR' || user?.role === 'ADMIN';
+
+    useEffect(() => {
+        if (isCoach) {
+            api.getCoachStudents().then(res => setStudents(res.students || [])).catch(() => { });
+        }
+    }, [isCoach]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!title || !date || !time) return;
+        if (type === 'MEETING' && isCoach && !studentId) {
+            toast.error('Veuillez sélectionner un étudiant pour la réunion');
+            return;
+        }
         setIsSubmitting(true);
         try {
             const dateTime = new Date(`${date}T${time}`).toISOString();
-            await api.createEvent({ title, description, date: dateTime, type });
+            await api.createEvent({
+                title,
+                description,
+                date: dateTime,
+                type,
+                ...(type === 'MEETING' && studentId ? { studentId } : {}),
+            });
             onAdd();
             onClose();
+            toast.success(type === 'MEETING' ? 'Réunion planifiée ! L\'étudiant a été notifié.' : 'Événement créé !');
         } catch (error) {
             console.error(error);
             toast.error("Erreur lors de la création");
@@ -355,11 +404,36 @@ function AddEventModal({ onClose, onAdd }: { onClose: () => void, onAdd: () => v
                                 {user?.role !== 'STUDENT' && (
                                     <>
                                         <option value="DEADLINE">🚨 Échéance de rendu</option>
-                                        <option value="MEETING">👥 Réunion / Point coach</option>
+                                        <option value="MEETING">👥 Réunion / Séance</option>
                                     </>
                                 )}
                             </select>
                         </div>
+
+                        {/* Student picker for coaches on MEETING type */}
+                        {type === 'MEETING' && isCoach && (
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Étudiant concerné</label>
+                                {students.length === 0 ? (
+                                    <p className="text-xs text-text-muted px-1">Aucun étudiant assigné</p>
+                                ) : (
+                                    <select
+                                        value={studentId}
+                                        onChange={e => setStudentId(e.target.value)}
+                                        required
+                                        className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm font-semibold appearance-none cursor-pointer"
+                                    >
+                                        <option value="" disabled>Choisir un étudiant...</option>
+                                        {students.map(s => (
+                                            <option key={s.id} value={s.id}>{s.firstName} {s.lastName}</option>
+                                        ))}
+                                    </select>
+                                )}
+                                <p className="text-[10px] text-info px-1 flex items-center gap-1">
+                                    <Video className="w-3 h-3" /> Un lien de réunion Jitsi sera généré automatiquement
+                                </p>
+                            </div>
+                        )}
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1.5">
@@ -382,7 +456,7 @@ function AddEventModal({ onClose, onAdd }: { onClose: () => void, onAdd: () => v
                                 Annuler
                             </button>
                             <button type="submit" disabled={isSubmitting || !title || !date || !time} className="btn-primary px-6 py-3.5 text-sm shadow-lg shadow-accent/20">
-                                {isSubmitting ? '...' : 'Ajouter'}
+                                {isSubmitting ? '...' : type === 'MEETING' ? 'Planifier' : 'Ajouter'}
                             </button>
                         </div>
                     </form>

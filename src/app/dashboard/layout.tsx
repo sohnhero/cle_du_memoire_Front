@@ -37,6 +37,7 @@ const navByRole: Record<string, NavItem[]> = {
     ACCOMPAGNATEUR: [
         { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         { label: 'Mes Étudiants', href: '/dashboard/students', icon: Users },
+        { label: 'Calendrier', href: '/dashboard/calendar', icon: CalendarDays },
         { label: 'Documents', href: '/dashboard/documents', icon: FileText },
         { label: 'Messagerie', href: '/dashboard/messages', icon: MessageCircle },
         { label: 'Notifications', href: '/dashboard/notifications', icon: Bell },
