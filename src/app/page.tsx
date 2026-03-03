@@ -867,7 +867,9 @@ function CTASection() {
           <div className="text-sm font-bold tracking-tighter text-white">ESP DAKAR</div>
           <div className="text-sm font-bold tracking-tighter text-white">UGB ST-LOUIS</div>
           <div className="text-sm font-bold tracking-tighter text-white">ISM GROUP</div>
-          <div className="text-sm font-bold tracking-tighter text-white">BEM SÉNÉGAL</div>
+          <div className="text-sm font-bold tracking-tighter text-white">ESTM DAKAR</div>
+          <div className="text-sm font-bold tracking-tighter text-white">CFPC</div>
+
         </div>
       </motion.div>
     </section>
