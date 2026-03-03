@@ -63,7 +63,7 @@ export default function StudentsPage() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary">Mes Étudiants</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Mes Étudiants</h1>
                     <p className="text-text-secondary mt-1">{memoires.length} étudiant{memoires.length > 1 ? 's' : ''} suivi{memoires.length > 1 ? 's' : ''}</p>
                 </div>
             </div>
@@ -77,7 +77,7 @@ export default function StudentsPage() {
                     { label: 'Terminés', value: stats.completed, icon: CheckCircle, color: 'text-info bg-info/10' },
                 ].map((stat) => (
                     <div key={stat.label} className="card-premium p-4 flex items-center gap-3">
-                        <BrandIcon icon={stat.icon} size={40} className={stat.color} iconClassName={stat.color.split(' ')[0]} />
+                        <BrandIcon icon={stat.icon} size={32} className={stat.color} iconClassName={stat.color.split(' ')[0]} />
                         <div>
                             <div className="text-xl font-bold text-primary">{stat.value}</div>
                             <div className="text-xs text-text-muted">{stat.label}</div>
@@ -124,7 +124,7 @@ export default function StudentsPage() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.05 }}
-                                className="card-premium p-5 hover:shadow-lg transition-all"
+                                className="card-premium p-3 sm:p-5 hover:shadow-lg transition-all"
                             >
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                     <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0 cursor-pointer" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
@@ -142,11 +142,12 @@ export default function StudentsPage() {
                                                 <span className="text-[10px] bg-warning/10 text-warning px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">En retard</span>
                                             )}
                                         </div>
-                                        <div className="text-xs text-text-muted mt-1">
-                                            {student.field || 'Filière inconnue'} — {student.university || 'Université inconnue'} · Phase : {getPhaseLabel(memoire.phase)}
+                                        <div className="text-xs text-text-muted mt-1 truncate">
+                                            <span className="hidden sm:inline">{student.field || 'Filière inconnue'} — {student.university || 'Université inconnue'} · </span>
+                                            <span>Phase : {getPhaseLabel(memoire.phase)}</span>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-5 sm:gap-6 flex-shrink-0">
+                                    <div className="flex items-center gap-3 sm:gap-5 flex-shrink-0 w-full sm:w-auto justify-between sm:justify-end mt-3 sm:mt-0">
                                         <div className="text-right flex-shrink-0 space-y-1">
                                             <div className="text-lg font-bold text-primary leading-none">{memoire.progressPercent}%</div>
                                             <div className="w-20 sm:w-24 h-1.5 bg-border rounded-full overflow-hidden">

@@ -88,7 +88,7 @@ summary {
   }
 
   html {
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
   }
 

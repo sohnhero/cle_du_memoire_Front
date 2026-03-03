@@ -92,34 +92,34 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
     if (!memoire) return <div className="p-8 text-center text-text-secondary">Mémoire non trouvé.</div>;
 
     return (
-        <div className="space-y-8 max-w-5xl mx-auto pb-12">
+        <div className="space-y-6 sm:space-y-8 max-w-5xl mx-auto pb-12">
             {/* Header */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
                 <button onClick={() => router.back()} className="p-2 hover:bg-bg-light rounded-xl transition-colors border border-border-light">
                     <ArrowLeft className="w-5 h-5 text-primary" />
                 </button>
                 <div>
-                    <h1 className="text-2xl font-bold text-primary">Détails de l'étudiant</h1>
-                    <p className="text-text-secondary text-sm">Gérez la progression de {memoire.student?.firstName || ''} {memoire.student?.lastName || ''}</p>
+                    <h1 className="text-lg sm:text-2xl font-bold text-primary">Détails de l'étudiant</h1>
+                    <p className="text-text-secondary text-xs sm:text-sm">Gérez la progression de {memoire.student?.firstName || ''} {memoire.student?.lastName || ''}</p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
                 {/* Left: Student Info & Form */}
                 <div className="lg:col-span-2 space-y-6">
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-6">
-                        <div className="flex items-start gap-4 mb-8 pb-6 border-b border-border-light">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-4 sm:p-6">
+                        <div className="flex items-start gap-3 sm:gap-4 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-border-light">
                             {memoire.student?.avatar ? (
                                 <img src={memoire.student.avatar} alt={`${memoire.student?.firstName} ${memoire.student?.lastName}`} className="w-16 h-16 rounded-2xl object-cover shadow-md" />
                             ) : (
-                                <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-md">
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-primary flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-md">
                                     {memoire.student?.firstName?.[0] || '?'}{memoire.student?.lastName?.[0] || '?'}
                                 </div>
                             )}
                             <div className="flex-1">
-                                <h2 className="text-xl font-bold text-primary">{memoire.student?.firstName || 'Étudiant'} {memoire.student?.lastName || ''}</h2>
+                                <h2 className="text-base sm:text-xl font-bold text-primary">{memoire.student?.firstName || 'Étudiant'} {memoire.student?.lastName || ''}</h2>
                                 <p className="text-sm text-text-secondary font-medium">{memoire.student?.field || 'Filière non renseignée'}</p>
-                                <div className="flex items-center gap-3 mt-2">
+                                <div className="flex items-center gap-2 sm:gap-3 mt-2 flex-wrap">
                                     <span className="text-[10px] font-bold uppercase tracking-wider bg-success/10 text-success px-2 py-0.5 rounded-md">Activé</span>
                                     <span className="text-[10px] font-bold uppercase tracking-wider bg-bg-light text-text-muted px-2 py-0.5 rounded-md">{memoire.student?.university || 'Univ. Inconnue'}</span>
                                 </div>
@@ -189,7 +189,7 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
 
                 {/* Right: Sidebar Stats / History */}
                 <div className="space-y-6">
-                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="card-premium p-6">
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="card-premium p-4 sm:p-6">
                         <h3 className="font-bold text-primary mb-6 flex items-center gap-2">
                             <TrendingUp className="w-5 h-5 text-accent" />
                             Récapitulatif
@@ -216,7 +216,7 @@ export default function MemoireDetailCoachPage({ params: paramsPromise }: { para
                         </div>
                     </motion.div>
 
-                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="card-premium p-6">
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="card-premium p-4 sm:p-6">
                         <h3 className="font-bold text-primary mb-6 flex items-center gap-2">
                             <MessageCircle className="w-5 h-5 text-primary" />
                             Contacter l'étudiant

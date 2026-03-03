@@ -31,19 +31,19 @@ function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className={`card-premium p-5 sm:p-6 hover:shadow-xl transition-all duration-300 aspect-[4/3] flex flex-col justify-between`}
+            className={`card-premium p-4 sm:p-6 hover:shadow-xl transition-all duration-300 flex flex-col justify-between`}
         >
             <div className="flex items-start justify-between w-full">
-                <BrandIcon icon={Icon} size={48} className={`shadow-sm ${colorMap[color].split(' ')[0].replace('bg-', 'shadow-').replace('/10', '/20')}`} />
+                <BrandIcon icon={Icon} size={36} className={`shadow-sm ${colorMap[color].split(' ')[0].replace('bg-', 'shadow-').replace('/10', '/20')}`} />
                 {change && (
-                    <p className="text-[10px] sm:text-xs font-bold text-success flex items-center gap-1 bg-success/10 px-2.5 py-1 rounded-full whitespace-nowrap">
+                    <p className="text-[10px] sm:text-xs font-bold text-success flex items-center gap-1 bg-success/10 px-2 py-1 rounded-full whitespace-nowrap">
                         <ArrowUpRight className="w-3 h-3" /> {change}
                     </p>
                 )}
             </div>
-            <div>
-                <p className="text-3xl font-extrabold text-primary mb-1">{value}</p>
-                <p className="text-sm font-medium text-text-secondary">{label}</p>
+            <div className="mt-3 sm:mt-4">
+                <p className="text-2xl sm:text-3xl font-extrabold text-primary mb-1">{value}</p>
+                <p className="text-xs sm:text-sm font-medium text-text-secondary">{label}</p>
             </div>
         </motion.div>
     );
@@ -386,8 +386,8 @@ function AccompagnateurDashboard() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-2xl font-bold text-primary">Espace Accompagnateur</h1>
-                <p className="text-text-secondary mt-1">Gérez vos étudiants et leurs progressions</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-primary">Espace Accompagnateur</h1>
+                <p className="text-text-secondary mt-1 text-sm">Gérez vos étudiants et leurs progressions</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -397,13 +397,13 @@ function AccompagnateurDashboard() {
                 <StatsCard icon={TrendingUp} label="Progression Moyenne" value={`${memoires.length > 0 ? Math.round(memoires.reduce((acc, m) => acc + m.progressPercent, 0) / memoires.length) : 0}%`} color="success" delay={0.4} />
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
                 {/* Students List */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="lg:col-span-2 card-premium p-6"
+                    className="lg:col-span-2 card-premium p-4 sm:p-6"
                 >
                     <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
                         <BrandIcon icon={Users} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
@@ -423,7 +423,7 @@ function AccompagnateurDashboard() {
                             {memoires.map((memoire) => {
                                 const studentName = `${memoire.student.firstName} ${memoire.student.lastName}`;
                                 return (
-                                    <div key={memoire.id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-bg-light transition-colors cursor-pointer group" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
+                                    <div key={memoire.id} className="flex items-center gap-3 sm:gap-4 p-3 rounded-xl hover:bg-bg-light transition-colors cursor-pointer group" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
                                         <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
                                             {memoire.student.firstName[0]}{memoire.student.lastName[0]}
                                         </div>
@@ -433,7 +433,7 @@ function AccompagnateurDashboard() {
                                                 <span className="px-2 py-0.5 rounded-md bg-success/10 text-success text-[10px] font-bold">Actif</span>
                                             </div>
                                             <div className="text-xs text-text-muted truncate mt-0.5">{memoire.student.field || 'Filière inconnue'} — {getPhaseLabel(memoire.phase)}</div>
-                                            <div className="mt-2 h-1.5 bg-border rounded-full overflow-hidden max-w-[200px]">
+                                            <div className="mt-2 h-1.5 bg-border rounded-full overflow-hidden sm:max-w-[200px]">
                                                 <div className="h-full bg-accent rounded-full" style={{ width: `${memoire.progressPercent}%` }} />
                                             </div>
                                         </div>
@@ -441,7 +441,7 @@ function AccompagnateurDashboard() {
                                             <div className="text-sm font-bold text-primary">{memoire.progressPercent}%</div>
                                             <button className="text-[10px] font-medium text-text-muted hover:text-accent mt-1 transition-colors">Détails</button>
                                         </div>
-                                        <Eye className="w-4 h-4 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <Eye className="w-4 h-4 text-text-muted sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0" />
                                     </div>
                                 );
                             })}
@@ -454,7 +454,7 @@ function AccompagnateurDashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="card-premium p-6 flex flex-col h-full"
+                    className="card-premium p-4 sm:p-6 flex flex-col h-full"
                 >
                     <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
                         <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
