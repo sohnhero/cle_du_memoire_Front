@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +14,7 @@ import { BrandIcon } from '@/components/BrandIcon';
 import Logo from '@/components/Logo';
 import Loader from '@/components/Loader';
 import PaymentGate from '@/components/PaymentGate';
+import { api } from '@/lib/api';
 
 interface NavItem {
     label: string;
@@ -75,6 +76,33 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+    const userMenuRef = useRef<HTMLDivElement>(null);
+
+    // Close user menu on outside click
+    useEffect(() => {
+        function handleClickOutside(e: MouseEvent) {
+            if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+                setShowUserMenu(false);
+            }
+        }
+        if (showUserMenu) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showUserMenu]);
+
+    // Fetch unread notification count
+    useEffect(() => {
+        if (user) {
+            api.getNotifications()
+                .then(res => {
+                    const unread = (res.notifications || []).filter((n: any) => !n.isRead).length;
+                    setUnreadNotifCount(unread);
+                })
+                .catch(() => { });
+        }
+    }, [user, pathname]);
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -143,7 +171,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                         className="absolute left-0 top-0 bottom-0 w-1 bg-accent"
                                     />
                                 )}
-                                <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors ${isActive ? 'text-accent' : 'group-hover:text-white'}`} />
+                                <div className="relative flex-shrink-0">
+                                    <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-accent' : 'group-hover:text-white'}`} />
+                                    {item.label === 'Notifications' && unreadNotifCount > 0 && (
+                                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-error rounded-full border-2 border-primary" />
+                                    )}
+                                </div>
                                 <AnimatePresence>
                                     {sidebarOpen && (
                                         <motion.span
@@ -151,9 +184,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                             animate={{ opacity: 1, width: 'auto' }}
                                             exit={{ opacity: 0, width: 0 }}
                                             transition={{ duration: 0.2 }}
-                                            className="whitespace-nowrap overflow-hidden"
+                                            className="whitespace-nowrap overflow-hidden flex items-center gap-2"
                                         >
                                             {item.label}
+                                            {item.label === 'Notifications' && unreadNotifCount > 0 && (
+                                                <span className="bg-error text-white text-[9px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                                                    {unreadNotifCount > 9 ? '9+' : unreadNotifCount}
+                                                </span>
+                                            )}
                                         </motion.span>
                                     )}
                                 </AnimatePresence>
@@ -248,8 +286,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                             {isActive && (
                                                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent" />
                                             )}
-                                            <item.icon className="w-5 h-5" />
-                                            <span>{item.label}</span>
+                                            <div className="relative flex-shrink-0">
+                                                <item.icon className="w-5 h-5" />
+                                                {item.label === 'Notifications' && unreadNotifCount > 0 && (
+                                                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-error rounded-full border-2 border-primary" />
+                                                )}
+                                            </div>
+                                            <span className="flex items-center gap-2">
+                                                {item.label}
+                                                {item.label === 'Notifications' && unreadNotifCount > 0 && (
+                                                    <span className="bg-error text-white text-[9px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                                                        {unreadNotifCount > 9 ? '9+' : unreadNotifCount}
+                                                    </span>
+                                                )}
+                                            </span>
                                         </Link>
                                     );
                                 })}
@@ -278,21 +328,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 <Menu className="w-6 h-6" />
                             </button>
                             <Logo className="w-32 h-auto lg:hidden" monochrome={false} variant="full" />
-                            <div className="hidden sm:flex items-center gap-3 bg-bg-light/80 rounded-2xl px-4 py-3 w-72 border border-border/50 focus-within:border-accent/40 focus-within:bg-white focus-within:ring-4 focus-within:ring-accent/10 transition-all shadow-sm">
-                                <Search className="w-4 h-4 text-text-muted" />
-                                <input type="text" placeholder="Rechercher..." className="bg-transparent text-sm outline-none flex-1 text-text-primary placeholder:text-text-muted" />
-                            </div>
                         </div>
 
                         <div className="flex items-center gap-3">
-                            {/* Notifications */}
-                            <button className="relative p-2.5 rounded-xl hover:bg-bg-light transition-colors">
-                                <Bell className="w-5 h-5 text-text-secondary" />
-                                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full border-2 border-white" />
-                            </button>
-
                             {/* User menu */}
-                            <div className="relative">
+                            <div className="relative" ref={userMenuRef}>
                                 <button
                                     onClick={() => setShowUserMenu(!showUserMenu)}
                                     className="flex items-center gap-3 pl-3 pr-4 py-2.5 rounded-2xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 group"
