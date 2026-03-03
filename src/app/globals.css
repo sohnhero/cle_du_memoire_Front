@@ -15,6 +15,23 @@ summary {
   cursor: pointer !important;
 }
 
+/* Prevent iOS Safari auto-zoom on input focus (triggers when font-size < 16px) */
+@media screen and (max-width: 768px) {
+
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Prevent any element from overflowing the viewport */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 @theme inline {
   /* ── Brand ── */
   --color-primary: #0f1729;

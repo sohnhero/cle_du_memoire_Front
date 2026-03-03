@@ -74,7 +74,7 @@ export default function ResourcesPage() {
     );
 
     return (
-        <div className="space-y-6 max-w-6xl mx-auto overflow-hidden">
+        <div className="space-y-6 overflow-hidden">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 className="text-lg sm:text-2xl font-bold text-primary flex items-center gap-2">
