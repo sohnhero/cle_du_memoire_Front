@@ -41,7 +41,7 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
             className={`card-premium transition-all ${isLatest ? 'p-5 shadow-sm border-l-4 border-l-primary' : 'p-4 bg-bg-light/40 border-dashed opacity-80 hover:opacity-100 hover:bg-white'}`}
         >
             <div className="flex items-start gap-3 sm:gap-4">
-                <BrandIcon icon={FileText} size={isLatest ? 48 : 40} className="shadow-sm hidden sm:block" />
+                <BrandIcon icon={FileText} size={isLatest ? 40 : 36} className="shadow-sm flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                         <div className="min-w-0">
