@@ -508,30 +508,30 @@ function AdminDashboard() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-2xl font-bold text-primary">Administration</h1>
-                <p className="text-text-secondary mt-1">Vue d&apos;ensemble de la plateforme</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-primary">Administration</h1>
+                <p className="text-text-secondary mt-1 text-sm">Vue d'ensemble de la plateforme</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <StatsCard icon={Users} label="Utilisateurs" value={156} change="+12 ce mois" color="primary" delay={0.1} />
                 <StatsCard icon={Package} label="Abonnements actifs" value={89} change="+8 cette semaine" color="accent" delay={0.2} />
                 <StatsCard icon={FileText} label="Documents" value={342} color="info" delay={0.3} />
                 <StatsCard icon={MessageCircle} label="Messages" value="1.2k" color="success" delay={0.4} />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
                 <StatsCard icon={Users} label="Étudiants" value={120} color="info" delay={0.5} />
                 <StatsCard icon={BookOpen} label="Accompagnateurs" value={12} color="success" delay={0.6} />
                 <StatsCard icon={Shield} label="Admins" value={3} color="accent" delay={0.7} />
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
                 {/* Recent Activity */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
-                    className="lg:col-span-2 card-premium p-6"
+                    className="lg:col-span-2 card-premium p-4 sm:p-6"
                 >
                     <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
                         <BrandIcon icon={Activity} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
@@ -549,18 +549,18 @@ function AdminDashboard() {
                             ].map((item, i) => (
                                 <div key={i} className="flex gap-4 group/activity">
                                     <div className="relative flex flex-col items-center">
-                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border border-white shadow-sm transition-all duration-300 ${item.bg} group-hover/activity:scale-[-1.05] group-hover/activity:rotate-3`}>
-                                            <item.icon className={`w-6 h-6 ${item.color}`} />
+                                        <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border border-white shadow-sm transition-all duration-300 ${item.bg}`}>
+                                            <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${item.color}`} />
                                         </div>
                                     </div>
-                                    <div className="flex-1 pb-2 flex items-center justify-between">
-                                        <div>
-                                            <div className="text-sm font-semibold text-primary mb-1 tracking-tight">{item.action}</div>
+                                    <div className="flex-1 pb-2 flex items-center justify-between gap-2 min-w-0">
+                                        <div className="min-w-0">
+                                            <div className="text-xs sm:text-sm font-semibold text-primary mb-1 tracking-tight truncate">{item.action}</div>
                                             <div className="text-xs font-medium text-text-muted flex items-center gap-1.5">
                                                 <Clock className="w-3.5 h-3.5" /> {item.time}
                                             </div>
                                         </div>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider bg-bg-light px-3 py-1.5 rounded-md text-text-secondary border border-border/50">
+                                        <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-bg-light px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-text-secondary border border-border/50 flex-shrink-0 hidden sm:block">
                                             {item.badge}
                                         </span>
                                     </div>
@@ -575,7 +575,7 @@ function AdminDashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9 }}
-                    className="card-premium p-6"
+                    className="card-premium p-4 sm:p-6"
                 >
                     <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
                         <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
@@ -595,7 +595,7 @@ function AdminDashboard() {
 
                     <div className="mt-6">
                         <h4 className="text-sm font-bold text-primary mb-3">Revenus du mois</h4>
-                        <div className="text-3xl font-extrabold text-accent">1.250.000</div>
+                        <div className="text-2xl sm:text-3xl font-extrabold text-accent">1.250.000</div>
                         <div className="text-xs text-text-muted">FCFA — +15% vs mois précédent</div>
                     </div>
                 </motion.div>

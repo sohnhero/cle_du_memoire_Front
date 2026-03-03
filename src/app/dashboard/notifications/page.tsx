@@ -107,10 +107,10 @@ export default function NotificationsPage() {
 
     return (
         <div className="max-w-3xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary">Notifications</h1>
-                    <p className="text-text-secondary mt-1">
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Notifications</h1>
+                    <p className="text-text-secondary mt-1 text-sm">
                         {unreadCount > 0
                             ? `${unreadCount} notification${unreadCount > 1 ? 's' : ''} non lue${unreadCount > 1 ? 's' : ''}`
                             : 'Toutes les notifications sont lues'}
@@ -148,12 +148,12 @@ export default function NotificationsPage() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.03 }}
                                     onClick={() => handleNotificationClick(notif)}
-                                    className={`p-4 rounded-xl border transition-all cursor-pointer ${notif.isRead
+                                    className={`p-3 sm:p-4 rounded-xl border transition-all cursor-pointer ${notif.isRead
                                         ? 'bg-white border-border/30 opacity-60'
                                         : 'bg-white border-accent/20 shadow-sm hover:shadow-md'
                                         }`}
                                 >
-                                    <div className="flex items-start gap-4">
+                                    <div className="flex items-start gap-3 sm:gap-4">
                                         <div className={`w-10 h-10 rounded-xl ${config.color} flex items-center justify-center flex-shrink-0`}>
                                             <Icon className="w-5 h-5" />
                                         </div>

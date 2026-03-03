@@ -71,8 +71,8 @@ export default function AdminPacksPage() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary">Gestion des Packs & Abonnements</h1>
-                    <p className="text-text-secondary mt-1">Supervisez les forfaits et paiements des étudiants</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Gestion des Packs & Abonnements</h1>
+                    <p className="text-text-secondary mt-1 text-sm">Supervisez les forfaits et paiements des étudiants</p>
                 </div>
                 {activeTab === 'packs' && (
                     <button onClick={() => setIsCreateModalOpen(true)} className="btn-primary py-3 px-6 text-sm">
@@ -82,16 +82,16 @@ export default function AdminPacksPage() {
             </div>
 
             {/* Sub/Packs Tabs */}
-            <div className="flex bg-bg-light p-1 rounded-xl w-fit">
+            <div className="flex bg-bg-light p-1 rounded-xl w-full sm:w-fit">
                 <button
                     onClick={() => setActiveTab('subs')}
-                    className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors ${activeTab === 'subs' ? 'bg-white text-primary shadow-sm' : 'text-text-secondary hover:text-primary'}`}
+                    className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-colors ${activeTab === 'subs' ? 'bg-white text-primary shadow-sm' : 'text-text-secondary hover:text-primary'}`}
                 >
                     Abonnements
                 </button>
                 <button
                     onClick={() => setActiveTab('packs')}
-                    className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors ${activeTab === 'packs' ? 'bg-white text-primary shadow-sm' : 'text-text-secondary hover:text-primary'}`}
+                    className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-colors ${activeTab === 'packs' ? 'bg-white text-primary shadow-sm' : 'text-text-secondary hover:text-primary'}`}
                 >
                     Catalogue de Packs
                 </button>
@@ -100,7 +100,7 @@ export default function AdminPacksPage() {
             {activeTab === 'subs' && (
                 <>
                     <div className="flex items-center gap-3">
-                        <div className="flex-1 min-w-[200px] flex items-center gap-2 bg-white rounded-xl border border-border px-4 py-3 shadow-sm focus-within:border-accent transition-all">
+                        <div className="flex-1 flex items-center gap-2 bg-white rounded-xl border border-border px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm focus-within:border-accent transition-all">
                             <Search className="w-4 h-4 text-text-muted" />
                             <input
                                 type="text"
@@ -117,12 +117,12 @@ export default function AdminPacksPage() {
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-bg-light/50 border-b border-border-light text-text-secondary text-xs uppercase tracking-wider font-semibold">
-                                        <th className="px-6 py-4">Étudiant</th>
-                                        <th className="px-6 py-4">Pack</th>
+                                        <th className="px-3 sm:px-6 py-3 sm:py-4">Étudiant</th>
+                                        <th className="px-3 sm:px-6 py-3 sm:py-4">Pack</th>
                                         <th className="px-6 py-4 hidden md:table-cell">Date Souscription</th>
-                                        <th className="px-6 py-4">Montant Payé</th>
-                                        <th className="px-6 py-4">Statut</th>
-                                        <th className="px-6 py-4 text-right">Actions</th>
+                                        <th className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">Montant Payé</th>
+                                        <th className="px-3 sm:px-6 py-3 sm:py-4">Statut</th>
+                                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -147,7 +147,7 @@ export default function AdminPacksPage() {
                                             transition={{ delay: idx * 0.02 }}
                                             className="border-b border-border-light hover:bg-bg-light/30 transition-colors"
                                         >
-                                            <td className="px-6 py-4">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-9 h-9 rounded-xl bg-info/10 text-info flex items-center justify-center font-bold text-sm">
                                                         {sub.user?.firstName?.[0]}{sub.user?.lastName?.[0]}
@@ -158,22 +158,22 @@ export default function AdminPacksPage() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4">
                                                 <div className="font-semibold text-sm text-primary">{sub.pack?.name}</div>
                                                 <div className="text-xs text-text-muted">{sub.pack?.price} FCFA</div>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell">
                                                 {new Date(sub.createdAt).toLocaleDateString('fr-FR')}
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
                                                 <span className="text-sm font-semibold text-primary">{sub.amountPaid} FCFA</span>
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4">
                                                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${statusBadge[sub.status] || 'bg-border text-text-secondary'}`}>
                                                     {statusLabel[sub.status] || sub.status}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-right">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
                                                 {sub.status === 'PENDING' || sub.status === 'PARTIAL' ? (
                                                     <button onClick={() => handleOpenPayment(sub)} className="px-3 py-1.5 bg-success/10 text-success hover:bg-success/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto">
                                                         <CreditCard className="w-3.5 h-3.5" /> Encaisser
@@ -192,7 +192,7 @@ export default function AdminPacksPage() {
             )}
 
             {activeTab === 'packs' && (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {loading ? (
                         <div className="col-span-full py-12 flex justify-center">
                             <div className="w-8 h-8 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
@@ -207,7 +207,7 @@ export default function AdminPacksPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.05 }}
-                            className="card-premium p-6"
+                            className="card-premium p-4 sm:p-6"
                         >
                             <BrandIcon icon={Package} size={48} className="mb-4 shadow-sm" />
                             <h3 className="text-lg font-bold text-primary">{pack.name}</h3>

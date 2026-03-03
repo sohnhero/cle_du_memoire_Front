@@ -54,7 +54,7 @@ export default function AdminUsersPage() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary">Gestion des Utilisateurs</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Gestion des Utilisateurs</h1>
                     <p className="text-text-secondary mt-1">{users.length} utilisateurs enregistrés</p>
                 </div>
                 <div className="flex gap-2">
@@ -69,7 +69,7 @@ export default function AdminUsersPage() {
 
             {/* Filters */}
             <div className="flex flex-wrap items-center gap-3">
-                <div className="flex-1 min-w-[200px] flex items-center gap-2 bg-white rounded-xl border border-border px-4 py-3 shadow-sm hover:border-accent/30 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/10 transition-all">
+                <div className="flex-1 flex items-center gap-2 bg-white rounded-xl border border-border px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm hover:border-accent/30 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/10 transition-all">
                     <Search className="w-4 h-4 text-text-muted" />
                     <input
                         type="text"
@@ -79,7 +79,7 @@ export default function AdminUsersPage() {
                         className="bg-transparent text-sm outline-none flex-1 text-primary placeholder:text-text-muted"
                     />
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
+                <div className="flex flex-wrap gap-2">
                     {['ALL', 'STUDENT', 'ACCOMPAGNATEUR', 'ADMIN'].map((role) => (
                         <button key={role} onClick={() => setFilterRole(role)}
                             className={`px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all shadow-sm ${filterRole === role ? 'bg-primary text-white' : 'bg-white border border-border text-text-secondary hover:bg-bg-light'
@@ -96,13 +96,13 @@ export default function AdminUsersPage() {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-border-light bg-bg-light/50">
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4">Utilisateur</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4">Rôle</th>
+                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-3 sm:px-6 py-3 sm:py-4">Utilisateur</th>
+                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-3 sm:px-6 py-3 sm:py-4">Rôle</th>
                                 <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden md:table-cell">Université</th>
                                 <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden lg:table-cell">Inscription</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4">Accompagnateur</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4">Statut</th>
-                                <th className="text-right text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4">Actions</th>
+                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden md:table-cell">Accompagnateur</th>
+                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden sm:table-cell">Statut</th>
+                                <th className="text-right text-xs font-semibold text-text-secondary uppercase tracking-wider px-3 sm:px-6 py-3 sm:py-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -131,7 +131,7 @@ export default function AdminUsersPage() {
                                         transition={{ delay: index * 0.02 }}
                                         className="border-b border-border-light/50 hover:bg-bg-light/30 transition-colors"
                                     >
-                                        <td className="px-6 py-4">
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
                                                     {user.firstName[0]}{user.lastName[0]}
@@ -142,7 +142,7 @@ export default function AdminUsersPage() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                                             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${roleBadge[user.role]}`}>
                                                 {roleLabel[user.role]}
                                             </span>
@@ -151,7 +151,7 @@ export default function AdminUsersPage() {
                                         <td className="px-6 py-4 text-xs text-text-muted hidden lg:table-cell">
                                             {new Date(user.createdAt).toLocaleDateString('fr-FR')}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 hidden md:table-cell">
                                             {user.role === 'STUDENT' ? (
                                                 assignedCoach ? (
                                                     <div className="text-sm font-medium text-primary">
@@ -169,14 +169,14 @@ export default function AdminUsersPage() {
                                                 <span className="text-text-muted text-sm">—</span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 hidden sm:table-cell">
                                             {user.isActive ? (
                                                 <span className="flex items-center gap-1.5 text-xs text-success font-medium"><UserCheck className="w-3.5 h-3.5" /> Actif</span>
                                             ) : (
                                                 <span className="flex items-center gap-1.5 text-xs text-error font-medium"><UserX className="w-3.5 h-3.5" /> Inactif</span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
                                             <div className="flex items-center justify-end gap-1">
                                                 {user.role === 'STUDENT' && assignedCoach && (
                                                     <button
@@ -262,7 +262,7 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-text-primary mb-1.5">Prénom</label>
                             <input type="text" value={formData.firstName} onChange={e => setFormData({ ...formData, firstName: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" required />
@@ -273,7 +273,7 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-text-primary mb-1.5">Téléphone</label>
                             <input type="text" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" />
@@ -288,7 +288,7 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-text-primary mb-1.5">Université</label>
                             <input type="text" value={formData.university} onChange={e => setFormData({ ...formData, university: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" />
