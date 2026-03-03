@@ -52,6 +52,22 @@ summary {
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-size: 15px;
+    /* Slightly smaller base for desktop */
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 16px;
+      /* Keep full size on mobile */
+    }
+  }
+
+  @media (min-width: 1600px) {
+    html {
+      font-size: 14.5px;
+      /* Scale down a bit more on very large screens */
+    }
   }
 
   body {
