@@ -144,12 +144,12 @@ export default function CalendarPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-primary tracking-tight">
+                    <h1 className="text-xl sm:text-3xl font-bold text-primary tracking-tight">
                         Calendrier & Échéances
                     </h1>
                     <p className="text-text-secondary mt-1 text-sm">Organisez votre travail et suivez vos jalons importants</p>
                 </div>
-                <button onClick={() => setIsAddModalOpen(true)} className="btn-primary py-3 px-6 text-sm flex items-center gap-2 shadow-lg shadow-accent/20">
+                <button onClick={() => setIsAddModalOpen(true)} className="btn-primary py-2.5 sm:py-3 px-5 sm:px-6 text-sm flex items-center gap-2 shadow-lg shadow-accent/20 w-full sm:w-auto justify-center">
                     <Plus className="w-5 h-5" /> Ajouter une échéance
                 </button>
             </div>
@@ -229,7 +229,7 @@ export default function CalendarPage() {
                                     <motion.div
                                         layout
                                         key={event.id}
-                                        className={`card-premium p-4 flex items-center gap-4 transition-all group ${getEventStatusStyle(event)}`}
+                                        className={`card-premium p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 transition-all group ${getEventStatusStyle(event)}`}
                                     >
                                         <button
                                             onClick={() => toggleEvent(event.id)}
@@ -255,7 +255,7 @@ export default function CalendarPage() {
                                                 </div>
                                             )}
                                             {event.description && <p className="text-sm text-text-secondary line-clamp-1 mb-2">{event.description}</p>}
-                                            <div className="flex items-center gap-4 text-xs text-text-muted">
+                                            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs text-text-muted">
                                                 <div className="flex items-center gap-1.5 font-medium">
                                                     <CalendarIcon className="w-3.5 h-3.5" />
                                                     {new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
@@ -284,7 +284,7 @@ export default function CalendarPage() {
                                         )}
 
                                         {!event.isFromCoach && (
-                                            <button onClick={() => handleDelete(event.id)} className="p-2 text-text-muted hover:text-error opacity-0 group-hover:opacity-100 transition-all rounded-xl hover:bg-error/5">
+                                            <button onClick={() => handleDelete(event.id)} className="p-2 text-text-muted hover:text-error sm:opacity-0 sm:group-hover:opacity-100 transition-all rounded-xl hover:bg-error/5">
                                                 <Trash2 className="w-5 h-5" />
                                             </button>
                                         )}

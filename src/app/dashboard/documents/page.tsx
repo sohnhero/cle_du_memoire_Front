@@ -40,24 +40,24 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
             animate={{ opacity: 1, x: 0 }}
             className={`card-premium transition-all ${isLatest ? 'p-5 shadow-sm border-l-4 border-l-primary' : 'p-4 bg-bg-light/40 border-dashed opacity-80 hover:opacity-100 hover:bg-white'}`}
         >
-            <div className="flex items-start gap-4">
-                <BrandIcon icon={FileText} size={isLatest ? 48 : 40} className="shadow-sm" />
+            <div className="flex items-start gap-3 sm:gap-4">
+                <BrandIcon icon={FileText} size={isLatest ? 48 : 40} className="shadow-sm hidden sm:block" />
                 <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                        <div>
-                            <div className="flex items-center gap-2">
-                                <h4 className={`font-semibold text-primary line-clamp-1 ${isLatest ? 'text-sm' : 'text-xs'}`}>{doc.filename}</h4>
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                        <div className="min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <h4 className={`font-semibold text-primary truncate max-w-[200px] sm:max-w-none ${isLatest ? 'text-sm' : 'text-xs'}`}>{doc.filename}</h4>
                                 <span className={`flex-shrink-0 px-2 py-0.5 rounded text-[10px] font-bold ${isLatest ? 'bg-primary/10 text-primary' : 'bg-bg-light text-text-muted border border-border/50'}`}>
                                     v{doc.version}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3 mt-1 text-[10px] text-text-muted">
+                            <div className="flex items-center gap-2 sm:gap-3 mt-1 text-[10px] text-text-muted flex-wrap">
                                 <span>{(doc.fileSize / 1024 / 1024).toFixed(2)} MB</span>
-                                <span>•</span>
+                                <span className="hidden sm:inline">•</span>
                                 <span>{new Date(doc.createdAt).toLocaleDateString('fr-FR')}</span>
                                 {userRole !== 'STUDENT' && doc.uploader && (
                                     <>
-                                        <span>•</span>
+                                        <span className="hidden sm:inline">•</span>
                                         <span className="font-medium text-accent">Étudiant: {doc.uploader.firstName} {doc.uploader.lastName}</span>
                                     </>
                                 )}
@@ -68,11 +68,10 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
                                 <StatusIcon className="w-3 h-3" />
                                 {status.label}
                             </span>
-                            <button className="p-1.5 rounded-lg hover:bg-bg-light text-text-muted transition-colors"><MoreVertical className="w-3.5 h-3.5" /></button>
                         </div>
                     </div>
                     {doc.feedback && (
-                        <div className={`mt-3 p-3 rounded-lg text-[11px] leading-relaxed ${doc.status === 'REVISION_NEEDED' ? 'bg-error/5 text-error/80 border border-error/10 shadow-inner' : 'bg-success/5 text-success/80 border border-success/10 shadow-inner'}`}>
+                        <div className={`mt-3 p-2.5 sm:p-3 rounded-lg text-[11px] leading-relaxed ${doc.status === 'REVISION_NEEDED' ? 'bg-error/5 text-error/80 border border-error/10 shadow-inner' : 'bg-success/5 text-success/80 border border-success/10 shadow-inner'}`}>
                             <div className="flex items-center gap-2 mb-1">
                                 <MessageCircle className="w-3 h-3" />
                                 <span className="font-bold uppercase tracking-wider text-[9px]">Retour Accompanateur</span>
@@ -82,7 +81,7 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
                     )}
                 </div>
             </div>
-            <div className={`flex items-center gap-2 mt-4 ${isLatest ? 'pl-16' : 'pl-14'}`}>
+            <div className={`flex items-center gap-2 mt-3 flex-wrap ${isLatest ? 'sm:pl-16' : 'sm:pl-14'}`}>
                 <button onClick={() => onPreview(doc.filePath)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold text-primary bg-primary/5 hover:bg-primary/10 transition-colors border border-transparent hover:border-primary/10">
                     <Eye className="w-3 h-3" /> Voir
                 </button>
@@ -92,9 +91,9 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
                 {userRole !== 'STUDENT' && isLatest && (
                     <button
                         onClick={onReview}
-                        className="ml-auto flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[10px] font-bold text-white bg-accent hover:bg-accent-light shadow-md hover:shadow-lg transition-all"
+                        className="sm:ml-auto flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[10px] font-bold text-white bg-accent hover:bg-accent-light shadow-md hover:shadow-lg transition-all"
                     >
-                        <ClipboardCheck className="w-3 h-3" /> Évaluer {isLatest ? 'cette version' : ''}
+                        <ClipboardCheck className="w-3 h-3" /> Évaluer
                     </button>
                 )}
             </div>

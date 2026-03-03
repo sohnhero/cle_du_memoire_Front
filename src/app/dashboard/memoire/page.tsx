@@ -80,28 +80,28 @@ export default function MemoirePage() {
 
     return (
         <div className="space-y-8">
-            <div className="flex justify-between items-start">
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary">Suivi du Mémoire</h1>
-                    <p className="text-text-secondary mt-1">Suivez votre progression étape par étape</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Suivi du Mémoire</h1>
+                    <p className="text-text-secondary mt-1 text-sm">Suivez votre progression étape par étape</p>
                 </div>
                 <button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="btn-primary py-2.5 px-5 text-sm flex items-center gap-2"
+                    className="btn-primary py-2.5 px-5 text-sm flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
                     <Target className="w-4 h-4" /> Modifier mon sujet
                 </button>
             </div>
 
             {/* Header Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-8 bg-primary/5">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-5 sm:p-8 bg-primary/5">
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-4">
                             <BrandIcon icon={BookOpen} size={48} className="shadow-sm" />
                             <div>
-                                <h2 className="text-lg font-bold text-primary">{memoire.title}</h2>
-                                <p className="text-sm text-text-secondary">{user?.field || 'Filière non renseignée'} — {user?.university || 'Université non renseignée'}</p>
+                                <h2 className="text-base sm:text-lg font-bold text-primary">{memoire.title}</h2>
+                                <p className="text-xs sm:text-sm text-text-secondary">{user?.field || 'Filière non renseignée'} — {user?.university || 'Université non renseignée'}</p>
                                 <div className="mt-3 flex flex-wrap gap-2">
                                     {user?.studyLevel && (
                                         <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
@@ -167,7 +167,7 @@ export default function MemoirePage() {
             </AnimatePresence>
 
             {/* Timeline */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-5 sm:p-8">
                 <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
                     <BrandIcon icon={TrendingUp} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
                     Progression Détaillée

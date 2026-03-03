@@ -81,11 +81,11 @@ export default function LoginPage() {
                 </div>
 
                 {/* Right Panel - Form */}
-                <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+                <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8">
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="w-full max-w-md opacity-0"
+                        className="w-full max-w-md"
                     >
                         {/* Mobile Logo */}
                         <div className="lg:hidden flex justify-center mb-8">
@@ -98,7 +98,7 @@ export default function LoginPage() {
                         </Link>
 
                         <div className="mb-8">
-                            <h1 className="text-3xl font-bold text-primary mb-2">Connexion</h1>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2">Connexion</h1>
                             <p className="text-text-secondary">
                                 Accédez à votre espace personnel
                             </p>
@@ -108,7 +108,7 @@ export default function LoginPage() {
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-error/10 text-error px-4 py-3 rounded-xl text-sm mb-6 border border-error/20 opacity-0"
+                                className="bg-error/10 text-error px-4 py-3 rounded-xl text-sm mb-6 border border-error/20"
                             >
                                 {error}
                             </motion.div>
@@ -152,7 +152,7 @@ export default function LoginPage() {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input type="checkbox" className="rounded border-border text-accent focus:ring-accent/30" />
                                     <span className="text-sm text-text-secondary">Se souvenir de moi</span>

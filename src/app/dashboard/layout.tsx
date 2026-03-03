@@ -267,11 +267,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </AnimatePresence>
 
             {/* Main Content */}
-            <motion.div
-                initial={false}
-                animate={{ marginLeft: sidebarOpen ? 280 : 80 }}
-                transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-                className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-[80px]'}`}
+            <div
+                className={`flex-1 flex flex-col min-h-screen lg:transition-[margin-left] lg:duration-300 ${sidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-[80px]'}`}
             >
                 {/* Top Header */}
                 <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl border-b border-black/[0.04]">
@@ -341,12 +338,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </header>
 
                 {/* Page Content */}
-                <main className="p-4 sm:p-8">
+                <main className="p-3 sm:p-4 md:p-8 overflow-x-hidden">
                     <PaymentGate user={user}>
                         {children}
                     </PaymentGate>
                 </main>
-            </motion.div>
+            </div>
 
             {/* Logout Confirmation Modal */}
             <AnimatePresence>

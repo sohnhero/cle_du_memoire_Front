@@ -55,7 +55,7 @@ export default function ResourcesPage() {
 
     const getIcon = (type: string) => {
         const icon = type === 'LINK' ? LinkIcon : FileText;
-        return <BrandIcon icon={icon} size={48} className="shadow-sm" />;
+        return <BrandIcon icon={icon} size={36} className="shadow-sm" />;
     };
 
     const handlePreview = (url: string) => {
@@ -74,13 +74,13 @@ export default function ResourcesPage() {
     );
 
     return (
-        <div className="space-y-6 max-w-6xl mx-auto">
+        <div className="space-y-6 max-w-6xl mx-auto overflow-hidden">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-primary flex items-center gap-2">
-                        <BookOpen className="w-6 h-6 text-accent" /> Bibliothèque de Ressources
+                    <h1 className="text-lg sm:text-2xl font-bold text-primary flex items-center gap-2">
+                        <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0" /> Bibliothèque de Ressources
                     </h1>
-                    <p className="text-text-secondary mt-1">Gabarits, guides et exemples pour vous aider dans votre rédaction.</p>
+                    <p className="text-text-secondary mt-1 text-sm">Gabarits, guides et exemples pour vous aider dans votre rédaction.</p>
                 </div>
                 {user?.role === 'ADMIN' && (
                     <button onClick={() => setIsAddModalOpen(true)} className="btn-primary py-2.5 px-5 text-sm flex items-center gap-2">
@@ -89,8 +89,8 @@ export default function ResourcesPage() {
                 )}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="flex-1 w-full sm:w-auto flex items-center gap-2 bg-white rounded-xl px-4 py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all shadow-sm">
+            <div className="flex flex-col gap-3 sm:gap-4">
+                <div className="w-full flex items-center gap-2 bg-white rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all shadow-sm">
                     <Search className="w-4 h-4 text-text-muted" />
                     <input
                         type="text"
@@ -105,7 +105,7 @@ export default function ResourcesPage() {
                         <button
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
-                            className={`px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all ${activeCategory === cat.id
+                            className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${activeCategory === cat.id
                                 ? 'bg-accent text-primary shadow-sm'
                                 : 'bg-white text-text-secondary border border-border-light hover:bg-bg-light'
                                 }`}
@@ -124,21 +124,21 @@ export default function ResourcesPage() {
                     <p className="text-text-secondary font-medium">Aucune ressource trouvée</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-8">
                     {filteredResources.map(resource => (
-                        <div key={resource.id} className="card-premium p-5 flex flex-col group">
+                        <div key={resource.id} className="card-premium p-3 sm:p-5 flex flex-col group overflow-hidden">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="group-hover:scale-105 transition-transform">
                                     {getIcon(resource.fileType)}
                                 </div>
                                 {user?.role === 'ADMIN' && (
-                                    <button onClick={() => handleDelete(resource.id)} className="p-1.5 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                                    <button onClick={() => handleDelete(resource.id)} className="p-1.5 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors sm:opacity-0 sm:group-hover:opacity-100">
                                         <Trash2 className="w-4 h-4" />
                                     </button>
                                 )}
                             </div>
 
-                            <div className="flex-1 mb-6">
+                            <div className="flex-1 mb-4 sm:mb-6 min-w-0">
                                 <div className="flex items-center gap-2 mb-2">
                                     <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-accent/10 text-accent">
                                         {resource.category}
@@ -147,19 +147,19 @@ export default function ResourcesPage() {
                                         {resource.fileType}
                                     </span>
                                 </div>
-                                <h3 className="font-bold text-primary text-base mb-1.5 line-clamp-2">{resource.title}</h3>
+                                <h3 className="font-bold text-primary text-sm sm:text-base mb-1.5 line-clamp-2 break-words">{resource.title}</h3>
                                 {resource.description && (
                                     <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">{resource.description}</p>
                                 )}
                             </div>
 
-                            <div className="mt-auto flex gap-2">
+                            <div className="mt-auto flex flex-col sm:flex-row gap-2">
                                 {resource.fileType === 'LINK' ? (
                                     <a
                                         href={resource.fileUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="w-full btn-secondary py-2.5 px-4 text-sm flex justify-center items-center gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
+                                        className="w-full btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
                                     >
                                         <ExternalLink className="w-4 h-4" /> Ouvrir le lien
                                     </a>
@@ -167,7 +167,7 @@ export default function ResourcesPage() {
                                     <>
                                         <button
                                             onClick={() => handlePreview(resource.fileUrl)}
-                                            className="flex-1 btn-secondary py-2.5 px-4 text-sm flex justify-center items-center gap-2 bg-primary/5 text-primary border border-primary/10 hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
+                                            className="flex-1 btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-1.5 sm:gap-2 bg-primary/5 text-primary border border-primary/10 hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
                                         >
                                             <ExternalLink className="w-4 h-4" /> Voir
                                         </button>
@@ -175,7 +175,7 @@ export default function ResourcesPage() {
                                             href={resource.fileUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 btn-secondary py-2.5 px-4 text-sm flex justify-center items-center gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
+                                            className="flex-1 btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-1.5 sm:gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
                                         >
                                             <Download className="w-4 h-4" /> Télécharger
                                         </a>

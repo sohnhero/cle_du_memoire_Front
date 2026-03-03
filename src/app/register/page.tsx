@@ -108,11 +108,11 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Right Panel - Form */}
-                <div className="w-full lg:w-1/2 flex items-center justify-center p-8 overflow-y-auto">
+                <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className={`w-full transition-all duration-500 opacity-0 ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}
+                        className={`w-full transition-all duration-500 ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}
                     >
                         <div className="lg:hidden flex justify-center mb-8">
                             <Logo className="w-48 h-auto" monochrome={false} />
@@ -124,12 +124,12 @@ export default function RegisterPage() {
                         </Link>
 
                         <div className="mb-8">
-                            <h1 className="text-3xl font-bold text-primary mb-2">Créer un compte</h1>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2">Créer un compte</h1>
                             <p className="text-text-secondary">Démarrez votre parcours vers la réussite</p>
                         </div>
 
                         {/* Step indicator */}
-                        <div className="flex items-center gap-3 mb-8">
+                        <div className="flex items-center gap-2 sm:gap-3 mb-8 flex-wrap">
                             {[1, 2, 3].map((s) => (
                                 <button key={s} onClick={() => s < step && setStep(s)}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${step === s ? 'bg-accent text-primary' : step > s ? 'bg-success/10 text-success' : 'bg-border-light text-text-muted'
@@ -142,14 +142,14 @@ export default function RegisterPage() {
 
                         {error && (
                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                                className="bg-error/10 text-error px-4 py-3 rounded-xl text-sm mb-6 border border-error/20 opacity-0">
+                                className="bg-error/10 text-error px-4 py-3 rounded-xl text-sm mb-6 border border-error/20">
                                 {error}
                             </motion.div>
                         )}
 
                         <form onSubmit={handleSubmit} className="space-y-5">
                             {step === 1 && (
-                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5 opacity-0">
+                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
                                             <label className="block text-sm font-medium text-primary mb-2">Prénom</label>
@@ -207,7 +207,7 @@ export default function RegisterPage() {
                             )}
 
                             {step === 2 && (
-                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5 opacity-0">
+                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
                                     <div>
                                         <label className="block text-sm font-medium text-primary mb-2">Vous êtes</label>
                                         <div className="grid grid-cols-2 gap-3">
@@ -288,7 +288,7 @@ export default function RegisterPage() {
                             )}
 
                             {step === 3 && (
-                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 w-full opacity-0">
+                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 w-full">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                                         {packsLoading ? (
                                             <div className="col-span-full py-12 flex flex-col items-center justify-center bg-bg-light rounded-2xl border border-dashed border-border gap-4">

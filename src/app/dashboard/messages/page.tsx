@@ -160,10 +160,10 @@ export default function MessagesPage() {
     const activeParticipant = tentativePartner || getOtherParticipant(currentConv);
 
     return (
-        <div className="h-[calc(100vh-8rem)]">
+        <div className="h-[calc(100vh-6rem)] sm:h-[calc(100vh-8rem)]">
             <div className="flex h-full rounded-2xl overflow-hidden border border-border-light bg-white shadow-sm">
                 {/* Conversations List */}
-                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${(selectedConvId || tentativePartner) && !showMobileConv ? 'hidden md:flex' : 'flex'}`}>
+                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'}`}>
                     {/* Header */}
                     <div className="p-4 border-b border-border-light bg-bg-light/30">
                         <div className="flex items-center justify-between mb-4">
@@ -237,7 +237,7 @@ export default function MessagesPage() {
                                     return (
                                         <button
                                             key={conv.id}
-                                            onClick={() => { setSelectedConvId(conv.id); setTentativePartner(null); setShowMobileConv(false); }}
+                                            onClick={() => { setSelectedConvId(conv.id); setTentativePartner(null); }}
                                             className={`w-full flex items-start gap-3 p-4 hover:bg-bg-light transition-colors text-left border-b border-border-light/50 ${selectedConvId === conv.id ? 'bg-accent/5 border-l-2 border-l-accent' : ''
                                                 }`}
                                         >
@@ -275,13 +275,13 @@ export default function MessagesPage() {
                 </div>
 
                 {/* Chat Area */}
-                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) || showMobileConv ? 'hidden md:flex' : 'flex'}`}>
+                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'}`}>
                     {activeParticipant ? (
                         <>
                             {/* Chat Header */}
-                            <div className="flex items-center justify-between px-6 py-4 border-b border-border-light bg-white shadow-sm z-10">
+                            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border-light bg-white shadow-sm z-10">
                                 <div className="flex items-center gap-3">
-                                    <button onClick={() => setShowMobileConv(true)} className="md:hidden text-primary mr-1">
+                                    <button onClick={() => { setSelectedConvId(null); setTentativePartner(null); }} className="md:hidden text-primary mr-1">
                                         <ChevronLeft className="w-5 h-5" />
                                     </button>
                                     <div className="relative">
@@ -303,7 +303,7 @@ export default function MessagesPage() {
                             </div>
 
                             {/* Messages */}
-                            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4 bg-bg-light/30">
+                            <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 bg-bg-light/30">
                                 {loadingMessages ? (
                                     <div className="flex justify-center p-8">
                                         <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
@@ -324,7 +324,7 @@ export default function MessagesPage() {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                                             >
-                                                <div className={`max-w-[75%] ${isMe
+                                                <div className={`max-w-[85%] sm:max-w-[75%] ${isMe
                                                     ? 'bg-primary text-white rounded-2xl rounded-br-md shadow-md'
                                                     : 'bg-white text-text-primary rounded-2xl rounded-bl-md shadow-sm border border-border-light'
                                                     } px-4 py-3`}
@@ -361,7 +361,7 @@ export default function MessagesPage() {
                             </div>
 
                             {/* Input */}
-                            <div className="px-6 py-4 border-t border-border-light bg-white">
+                            <div className="px-3 sm:px-6 py-3 sm:py-4 border-t border-border-light bg-white">
                                 {attachment && (
                                     <div className="mb-3 flex items-center justify-between gap-2 bg-accent/10 border border-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-medium w-fit max-w-sm">
                                         <div className="flex items-center gap-2 truncate">
@@ -376,7 +376,7 @@ export default function MessagesPage() {
                                         </button>
                                     </div>
                                 )}
-                                <div className="flex items-center gap-3 max-w-4xl mx-auto">
+                                <div className="flex items-center gap-2 sm:gap-3 max-w-4xl mx-auto">
                                     <button onClick={() => fileInputRef.current?.click()} className="p-2.5 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative">
                                         <Paperclip className="w-5 h-5" />
                                     </button>
