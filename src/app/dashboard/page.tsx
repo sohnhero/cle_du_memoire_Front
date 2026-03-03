@@ -31,7 +31,7 @@ function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className={`card-premium p-4 sm:p-6 hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden`}
+            className={`card-premium p-3 sm:p-6 hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden min-w-0`}
         >
             <div className="flex items-start justify-between w-full">
                 <BrandIcon icon={Icon} size={36} className={`shadow-sm ${colorMap[color].split(' ')[0].replace('bg-', 'shadow-').replace('/10', '/20')}`} />
@@ -41,9 +41,9 @@ function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
                     </p>
                 )}
             </div>
-            <div className="mt-3 sm:mt-4">
-                <p className="text-2xl sm:text-3xl font-extrabold text-primary mb-1">{value}</p>
-                <p className="text-xs sm:text-sm font-medium text-text-secondary">{label}</p>
+            <div className="mt-3 sm:mt-4 min-w-0">
+                <p className="text-xl sm:text-3xl font-extrabold text-primary mb-1 truncate">{value}</p>
+                <p className="text-[11px] sm:text-sm font-medium text-text-secondary truncate">{label}</p>
             </div>
         </motion.div>
     );
@@ -460,7 +460,7 @@ function AccompagnateurDashboard() {
                         <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
                         Actions Requises
                     </h3>
-                    <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="space-y-3 flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
                         {pendingDocuments.length === 0 && totalUnreadMessages === 0 ? (
                             <div className="text-center py-6 text-text-secondary">
                                 Tout est à jour ! Aucune action requise.
