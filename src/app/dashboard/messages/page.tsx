@@ -161,32 +161,32 @@ export default function MessagesPage() {
     const activeParticipant = tentativePartner || getOtherParticipant(currentConv);
 
     return (
-        <div className="h-[calc(100vh-6rem)] sm:h-[calc(100vh-8rem)]">
-            <div className="flex h-full rounded-2xl overflow-hidden border border-border-light bg-white shadow-sm">
+        <div className="h-[calc(100dvh-6rem)] sm:h-[calc(100vh-8rem)] -mt-2 sm:mt-0">
+            <div className="flex h-full rounded-2xl overflow-hidden border border-border-light bg-white shadow-sm relative">
                 {/* Conversations List */}
                 <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'}`}>
                     {/* Header */}
-                    <div className="p-4 border-b border-border-light bg-bg-light/30">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-bold text-primary flex items-center gap-2">
+                    <div className="p-3 sm:p-4 border-b border-border-light bg-bg-light/30">
+                        <div className="flex items-center justify-between mb-3 sm:mb-4">
+                            <h2 className="text-base sm:text-lg font-bold text-primary flex items-center gap-2">
                                 <MessageCircle className="w-5 h-5 text-accent" />
                                 Messages
                             </h2>
-                            <span className="text-xs bg-accent/10 text-accent px-2.5 py-1 rounded-full font-semibold">
+                            <span className="text-[10px] sm:text-xs bg-accent/10 text-accent px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-semibold">
                                 {conversations.reduce((acc, c) => acc + (c.unreadCount || 0), 0)} non lus
                             </span>
                         </div>
                         <div className="flex gap-2">
-                            <div className="flex-1 flex items-center gap-2 bg-white rounded-xl px-3 py-2.5 border border-border-light shadow-sm">
+                            <div className="flex-1 flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-border-light shadow-sm">
                                 <Search className="w-4 h-4 text-text-muted" />
-                                <input type="text" placeholder="Rechercher..." className="bg-transparent text-sm outline-none flex-1 text-text-primary" />
+                                <input type="text" placeholder="Rechercher..." className="bg-transparent text-xs sm:text-sm outline-none flex-1 text-text-primary" />
                             </div>
                             <button
                                 onClick={() => setIsNewChatModalOpen(true)}
-                                className="p-2.5 bg-accent text-primary rounded-xl hover:bg-accent-dark shadow-sm transition-all"
+                                className="p-2 sm:p-2.5 bg-accent text-primary rounded-xl hover:bg-accent-dark shadow-sm transition-all"
                                 title="Nouvelle discussion"
                             >
-                                <UserPlus className="w-5 h-5" />
+                                <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
                             </button>
                         </div>
                     </div>
@@ -280,26 +280,26 @@ export default function MessagesPage() {
                     {activeParticipant ? (
                         <>
                             {/* Chat Header */}
-                            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border-light bg-white shadow-sm z-10">
-                                <div className="flex items-center gap-3">
-                                    <button onClick={() => { setSelectedConvId(null); setTentativePartner(null); }} className="md:hidden text-primary mr-1">
+                            <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-4 border-b border-border-light bg-white shadow-sm z-10">
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                    <button onClick={() => { setSelectedConvId(null); setTentativePartner(null); }} className="md:hidden p-1.5 -ml-1 text-primary hover:bg-bg-light rounded-lg transition-colors">
                                         <ChevronLeft className="w-5 h-5" />
                                     </button>
                                     <div className="relative">
-                                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-sm">
+                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xs sm:text-sm">
                                             {activeParticipant.firstName[0]}{activeParticipant.lastName[0]}
                                         </div>
-                                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border-2 border-white" />
+                                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-success rounded-full border-2 border-white" />
                                     </div>
-                                    <div>
-                                        <div className="font-semibold text-primary text-sm">{activeParticipant.firstName} {activeParticipant.lastName}</div>
-                                        <div className="text-xs text-text-muted">{selectedConvId ? 'En ligne' : 'Prêt à discuter'}</div>
+                                    <div className="min-w-0">
+                                        <div className="font-semibold text-primary text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">{activeParticipant.firstName} {activeParticipant.lastName}</div>
+                                        <div className="text-[10px] sm:text-xs text-text-muted">{selectedConvId ? 'En ligne' : 'Prêt à discuter'}</div>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-1">
-                                    <button className="p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Phone className="w-4 h-4" /></button>
-                                    <button className="p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Video className="w-4 h-4" /></button>
-                                    <button className="p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><MoreVertical className="w-4 h-4" /></button>
+                                <div className="flex items-center gap-0.5 sm:gap-1">
+                                    <button className="p-2 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
+                                    <button className="p-2 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Video className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
+                                    <button className="p-2 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><MoreVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
                                 </div>
                             </div>
 
@@ -337,9 +337,9 @@ export default function MessagesPage() {
                                                                     <img src={msg.attachmentUrl} alt="Pièce jointe" className="max-w-[200px] rounded-lg max-h-48 object-cover cursor-pointer hover:opacity-90 transition-opacity border border-white/20" />
                                                                 </a>
                                                             ) : (
-                                                                <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 p-2.5 rounded-lg ${isMe ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-primary/5 hover:bg-primary/10 text-primary'} transition-colors inline-block`}>
-                                                                    <FileText className="w-4 h-4" />
-                                                                    <span className="text-xs font-semibold underline underline-offset-2">Voir le document</span>
+                                                                <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 p-2 rounded-lg ${isMe ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-primary/5 hover:bg-primary/10 text-primary'} transition-colors inline-block`}>
+                                                                    <FileText className="w-3.5 h-3.5" />
+                                                                    <span className="text-[10px] sm:text-xs font-semibold underline underline-offset-2">Voir le document</span>
                                                                 </a>
                                                             )}
                                                         </div>
@@ -378,32 +378,32 @@ export default function MessagesPage() {
                                     </div>
                                 )}
                                 <div className="flex items-center gap-2 sm:gap-3 max-w-4xl mx-auto">
-                                    <button onClick={() => fileInputRef.current?.click()} className="p-2.5 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative">
-                                        <Paperclip className="w-5 h-5" />
+                                    <button onClick={() => fileInputRef.current?.click()} className="p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative">
+                                        <Paperclip className="w-5 h-5 sm:w-5 sm:h-5" />
                                     </button>
                                     <input type="file" ref={fileInputRef} onChange={(e) => setAttachment(e.target.files?.[0] || null)} className="hidden" />
-                                    <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-xl px-4 py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
+                                    <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-xl px-3 sm:px-4 py-2 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
                                         <input
                                             type="text"
                                             value={newMessage}
                                             onChange={(e) => setNewMessage(e.target.value)}
-                                            placeholder="Écrivez votre message..."
-                                            className="flex-1 bg-transparent text-sm outline-none text-text-primary"
+                                            placeholder="Message..."
+                                            className="flex-1 bg-transparent text-xs sm:text-sm outline-none text-text-primary"
                                             onKeyDown={(e) => e.key === 'Enter' && (newMessage.trim() || attachment) && handleSendMessage()}
                                         />
-                                        <button className="text-text-muted hover:text-primary transition-colors">
+                                        <button className="text-text-muted hover:text-primary transition-colors hidden sm:block">
                                             <Smile className="w-5 h-5" />
                                         </button>
                                     </div>
                                     <button
                                         onClick={handleSendMessage}
                                         disabled={!newMessage.trim() && !attachment}
-                                        className={`p-3 rounded-xl transition-all ${newMessage.trim() || attachment
+                                        className={`p-2.5 sm:p-3 rounded-xl transition-all ${newMessage.trim() || attachment
                                             ? 'bg-accent text-primary hover:bg-accent-dark shadow-lg shadow-accent/20'
                                             : 'bg-bg-light text-text-muted cursor-not-allowed'
                                             }`}
                                     >
-                                        <Send className="w-5 h-5" />
+                                        <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                                     </button>
                                 </div>
                             </div>

@@ -48,10 +48,12 @@ function Section({ icon: Icon, title, color, children, delay = 0 }: {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className="card-premium p-6"
+            className="card-premium p-4 sm:p-6 shadow-sm border border-border/50"
         >
-            <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
-                <BrandIcon icon={Icon} size={36} className={colorMap[color]} iconClassName={iconColorMap[color]} />
+            <h3 className="text-base sm:text-lg font-bold text-primary mb-5 sm:mb-6 flex items-center gap-3">
+                <div className="flex-shrink-0">
+                    <BrandIcon icon={Icon} size={32} className={`${colorMap[color]} sm:scale-110 transition-transform`} iconClassName={iconColorMap[color]} />
+                </div>
                 {title}
             </h3>
             {children}
@@ -203,10 +205,10 @@ export default function SettingsPage() {
     const getVal = (key: string) => platform[key] || '';
 
     return (
-        <div className="max-w-3xl mx-auto space-y-6 pb-8">
-            <div>
-                <h1 className="text-2xl font-bold text-primary">Paramètres</h1>
-                <p className="text-text-secondary mt-1 text-sm">Configuration de votre compte et de la plateforme</p>
+        <div className="max-w-3xl mx-auto px-4 sm:px-0 space-y-4 sm:space-y-6 pb-12 sm:pb-8">
+            <div className="pt-2 sm:pt-0">
+                <h1 className="text-xl sm:text-2xl font-bold text-primary">Paramètres</h1>
+                <p className="text-text-secondary mt-1 text-xs sm:text-sm">Configuration de votre compte et de la plateforme</p>
             </div>
 
             {/* ── Mon Profil ──────────────────────────────────────── */}
@@ -487,10 +489,12 @@ export default function SettingsPage() {
                         { label: 'Localisation', value: getVal('contactAddress') || 'Dakar, Sénégal — Almadies', icon: MapPin },
                         { label: 'Organisation', value: 'CdM SAS', icon: Building2 },
                     ].map(item => (
-                        <div key={item.label} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-bg-light">
-                            <item.icon className="w-4 h-4 text-text-muted flex-shrink-0" />
-                            <span className="text-text-secondary w-28 flex-shrink-0">{item.label}</span>
-                            <span className="text-primary font-medium">{item.value}</span>
+                        <div key={item.label} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 px-4 py-3 rounded-xl bg-bg-light">
+                            <div className="flex items-center gap-2">
+                                <item.icon className="w-4 h-4 text-text-muted flex-shrink-0" />
+                                <span className="text-text-secondary sm:w-28 flex-shrink-0 text-xs sm:text-sm">{item.label}</span>
+                            </div>
+                            <span className="text-primary font-medium text-sm sm:text-base break-all ml-6 sm:ml-0">{item.value}</span>
                         </div>
                     ))}
                 </div>
