@@ -11,6 +11,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { BrandIcon } from '@/components/BrandIcon';
 import { useAuth } from '@/context/AuthContext';
 import ConfirmModal from '@/components/ConfirmModal';
+import Pagination from '@/components/Pagination';
 
 export default function ResourcesPage() {
     const { user } = useAuth();
@@ -22,6 +23,11 @@ export default function ResourcesPage() {
     const [editingResource, setEditingResource] = useState<any>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalResources, setTotalResources] = useState(0);
+
     const categories = [
         { id: 'ALL', label: 'Tout' },
         { id: 'GUIDES', label: 'Guides' },
@@ -30,23 +36,33 @@ export default function ResourcesPage() {
         { id: 'GENERAL', label: 'Général' }
     ];
 
-    useEffect(() => {
-        loadResources();
-    }, [activeCategory]);
-
     const loadResources = async () => {
         setLoading(true);
         try {
-            const res = await api.getResources(activeCategory);
+            const res = await api.getResources(activeCategory, currentPage, 12, searchQuery);
             setResources(res.resources || []);
+            setTotalPages(res.totalPages || 1);
+            setTotalResources(res.total || 0);
         } catch (error) {
             console.error(error);
+            toast.error("Erreur de chargement des ressources");
         } finally {
             setLoading(false);
         }
     };
 
+    useEffect(() => {
+        loadResources();
+    }, [activeCategory, currentPage]);
 
+    // Debounced search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (currentPage !== 1) setCurrentPage(1);
+            else loadResources();
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     const handleDelete = async (id: string) => {
         try {
@@ -73,11 +89,6 @@ export default function ResourcesPage() {
         const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}`;
         window.open(viewerUrl, '_blank');
     };
-
-    const filteredResources = resources.filter(res =>
-        res.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (res.description && res.description.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
 
     return (
         <div className="space-y-6 overflow-hidden">
@@ -124,77 +135,87 @@ export default function ResourcesPage() {
 
             {loading ? (
                 <div className="p-20 flex justify-center"><LoadingSpinner size="lg" /></div>
-            ) : filteredResources.length === 0 ? (
+            ) : resources.length === 0 ? (
                 <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-border-light">
                     <BrandIcon icon={BookOpen} size={64} className="mx-auto mb-3 opacity-30 grayscale" />
                     <p className="text-text-secondary font-medium">Aucune ressource trouvée</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-8">
-                    {filteredResources.map(resource => (
-                        <div key={resource.id} className="card-premium p-3 sm:p-5 flex flex-col group overflow-hidden">
-                            <div className="flex justify-between items-start mb-4">
-                                <div className="group-hover:scale-105 transition-transform">
-                                    {getIcon(resource.fileType)}
-                                </div>
-                                {user?.role === 'ADMIN' && (
-                                    <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                                        <button onClick={() => setEditingResource(resource)} className="p-1.5 text-text-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
-                                            <Pencil className="w-4 h-4" />
-                                        </button>
-                                        <button onClick={() => setDeleteConfirm(resource.id)} className="p-1.5 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors">
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
+                <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        {resources.map((resource) => (
+                            <div key={resource.id} className="card-premium p-3 sm:p-5 flex flex-col group overflow-hidden">
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="group-hover:scale-105 transition-transform">
+                                        {getIcon(resource.fileType)}
                                     </div>
-                                )}
-                            </div>
-
-                            <div className="flex-1 mb-4 sm:mb-6 min-w-0">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-accent/10 text-accent">
-                                        {resource.category}
-                                    </span>
-                                    <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted">
-                                        {resource.fileType}
-                                    </span>
+                                    {user?.role === 'ADMIN' && (
+                                        <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => setEditingResource(resource)} className="p-1.5 text-text-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
+                                                <Pencil className="w-4 h-4" />
+                                            </button>
+                                            <button onClick={() => setDeleteConfirm(resource.id)} className="p-1.5 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-                                <h3 className="font-bold text-primary text-sm sm:text-base mb-1.5 line-clamp-2 break-words">{resource.title}</h3>
-                                {resource.description && (
-                                    <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">{resource.description}</p>
-                                )}
-                            </div>
 
-                            <div className="mt-auto flex flex-col sm:flex-row gap-2">
-                                {resource.fileType === 'LINK' ? (
-                                    <a
-                                        href={resource.fileUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
-                                    >
-                                        <ExternalLink className="w-4 h-4" /> Ouvrir le lien
-                                    </a>
-                                ) : (
-                                    <>
-                                        <button
-                                            onClick={() => handlePreview(resource.fileUrl)}
-                                            className="flex-1 btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-1.5 sm:gap-2 bg-primary/5 text-primary border border-primary/10 hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
-                                        >
-                                            <ExternalLink className="w-4 h-4" /> Voir
-                                        </button>
+                                <div className="flex-1 mb-4 sm:mb-6 min-w-0">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-accent/10 text-accent">
+                                            {resource.category}
+                                        </span>
+                                        <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted">
+                                            {resource.fileType}
+                                        </span>
+                                    </div>
+                                    <h3 className="font-bold text-primary text-sm sm:text-base mb-1.5 line-clamp-2 break-words">{resource.title}</h3>
+                                    {resource.description && (
+                                        <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">{resource.description}</p>
+                                    )}
+                                </div>
+
+                                <div className="mt-auto flex flex-col sm:flex-row gap-2">
+                                    {resource.fileType === 'LINK' ? (
                                         <a
                                             href={resource.fileUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-1.5 sm:gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
+                                            className="w-full btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
                                         >
-                                            <Download className="w-4 h-4" /> Télécharger
+                                            <ExternalLink className="w-4 h-4" /> Ouvrir le lien
                                         </a>
-                                    </>
-                                )}
+                                    ) : (
+                                        <>
+                                            <button
+                                                onClick={() => handlePreview(resource.fileUrl)}
+                                                className="flex-1 btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-1.5 sm:gap-2 bg-primary/5 text-primary border border-primary/10 hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
+                                            >
+                                                <ExternalLink className="w-4 h-4" /> Voir
+                                            </button>
+                                            <a
+                                                href={resource.fileUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex-1 btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-1.5 sm:gap-2 bg-bg-light border border-border-light text-primary hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
+                                            >
+                                                <Download className="w-4 h-4" /> Télécharger
+                                            </a>
+                                        </>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={totalResources}
+                        itemsPerPage={5}
+                    />
                 </div>
             )}
 

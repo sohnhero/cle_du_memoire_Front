@@ -506,6 +506,44 @@ function AccompagnateurDashboard() {
 
 // ==================== ADMIN DASHBOARD ====================
 function AdminDashboard() {
+    const router = useRouter();
+    const [stats, setStats] = useState<any>(null);
+    const [recentActivity, setRecentActivity] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.getAdminStats()
+            .then(res => {
+                setStats(res.stats);
+                setRecentActivity(res.recentActivity || []);
+            })
+            .catch(err => console.error('Admin stats error:', err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    const actionConfig: Record<string, { icon: any; color: string; bg: string; badge: string }> = {
+        LOGIN: { icon: ChevronRight, color: 'text-success', bg: 'bg-success/10', badge: 'Connexion' },
+        LOGOUT: { icon: Clock, color: 'text-text-muted', bg: 'bg-border/20', badge: 'Déconnexion' },
+        UPLOAD: { icon: FileText, color: 'text-info', bg: 'bg-info/10', badge: 'Document' },
+        REVIEW: { icon: CheckCircle, color: 'text-success', bg: 'bg-success/10', badge: 'Révision' },
+        REGISTER: { icon: Users, color: 'text-primary', bg: 'bg-primary/10', badge: 'Inscription' },
+        MESSAGE: { icon: MessageCircle, color: 'text-info', bg: 'bg-info/10', badge: 'Message' },
+        LOGIN_FAILED: { icon: AlertTriangle, color: 'text-error', bg: 'bg-error/10', badge: 'Échec' },
+        USER_UPDATE: { icon: Users, color: 'text-warning', bg: 'bg-warning/10', badge: 'Modif' },
+        DOCUMENT_UPDATE: { icon: FileText, color: 'text-warning', bg: 'bg-warning/10', badge: 'Modif Doc' },
+    };
+
+    function timeAgo(dateStr: string) {
+        const diff = Date.now() - new Date(dateStr).getTime();
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+        if (minutes < 1) return 'À l\'instant';
+        if (minutes < 60) return `Il y a ${minutes}min`;
+        if (hours < 24) return `Il y a ${hours}h`;
+        return `Il y a ${days}j`;
+    }
+
     return (
         <div className="space-y-8">
             <div>
@@ -513,94 +551,119 @@ function AdminDashboard() {
                 <p className="text-text-secondary mt-1 text-sm">Vue d'ensemble de la plateforme</p>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                <StatsCard icon={Users} label="Utilisateurs" value={156} change="+12 ce mois" color="primary" delay={0.1} />
-                <StatsCard icon={Package} label="Abonnements actifs" value={89} change="+8 cette semaine" color="accent" delay={0.2} />
-                <StatsCard icon={FileText} label="Documents" value={342} color="info" delay={0.3} />
-                <StatsCard icon={MessageCircle} label="Messages" value="1.2k" color="success" delay={0.4} />
-            </div>
+            {loading ? (
+                <div className="flex items-center justify-center py-20">
+                    <LoadingSpinner size="lg" />
+                </div>
+            ) : (
+                <>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                        <StatsCard icon={Users} label="Utilisateurs" value={stats?.totalUsers ?? '—'} color="primary" delay={0.1} />
+                        <StatsCard icon={Package} label="Abonnements actifs" value={stats?.activeSubscriptions ?? '—'} color="accent" delay={0.2} />
+                        <StatsCard icon={FileText} label="Documents" value={stats?.totalDocuments ?? '—'} color="info" delay={0.3} />
+                        <StatsCard icon={MessageCircle} label="Messages" value={stats?.totalMessages ?? '—'} color="success" delay={0.4} />
+                    </div>
 
-            <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                <StatsCard icon={Users} label="Étudiants" value={120} color="info" delay={0.5} />
-                <StatsCard icon={BookOpen} label="Accompagnateurs" value={12} color="success" delay={0.6} />
-                <StatsCard icon={Shield} label="Admins" value={3} color="accent" delay={0.7} />
-            </div>
+                    <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                        <StatsCard icon={Users} label="Étudiants" value={stats?.totalStudents ?? '—'} color="info" delay={0.5} />
+                        <StatsCard icon={BookOpen} label="Accompagnateurs" value={stats?.totalAccompagnateurs ?? '—'} color="success" delay={0.6} />
+                        <StatsCard icon={Shield} label="Packs total" value={stats?.totalPacks ?? '—'} color="accent" delay={0.7} />
+                    </div>
 
-            <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
-                {/* Recent Activity */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 }}
-                    className="lg:col-span-2 card-premium p-4 sm:p-6"
-                >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                        <BrandIcon icon={Activity} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
-                        Activité Récente
-                    </h3>
-                    <div className="mt-8 relative pt-2">
-                        <div className="absolute left-[27px] top-6 bottom-4 w-px bg-border-light z-0" />
-                        <div className="space-y-6 relative z-10">
-                            {[
-                                { action: 'Moussa Diop a soumis un document', time: 'Il y a 5 min', type: 'document', badge: 'Étudiant', icon: FileText, color: 'text-info', bg: 'bg-info/10' },
-                                { action: 'Fatou Ndiaye a validé un chapitre', time: 'Il y a 30 min', type: 'validation', badge: 'Accompagnateur', icon: CheckCircle, color: 'text-success', bg: 'bg-success/10' },
-                                { action: 'Nouvel abonnement Pack Complet', time: 'Il y a 1h', type: 'subscription', badge: 'Paiement', icon: Package, color: 'text-accent', bg: 'bg-accent/10' },
-                                { action: "Aïssatou Ba s'est inscrite", time: 'Il y a 2h', type: 'register', badge: 'Inscription', icon: Users, color: 'text-primary', bg: 'bg-primary/10' },
-                                { action: 'Omar Seck a terminé son mémoire', time: 'Il y a 3h', type: 'completion', badge: 'Succès', icon: TrendingUp, color: 'text-success', bg: 'bg-success/10' },
-                            ].map((item, i) => (
-                                <div key={i} className="flex gap-4 group/activity">
-                                    <div className="relative flex flex-col items-center">
-                                        <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border border-white shadow-sm transition-all duration-300 ${item.bg}`}>
-                                            <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${item.color}`} />
-                                        </div>
-                                    </div>
-                                    <div className="flex-1 pb-2 flex items-center justify-between gap-2 min-w-0">
-                                        <div className="min-w-0">
-                                            <div className="text-xs sm:text-sm font-semibold text-primary mb-1 tracking-tight truncate">{item.action}</div>
-                                            <div className="text-xs font-medium text-text-muted flex items-center gap-1.5">
-                                                <Clock className="w-3.5 h-3.5" /> {item.time}
-                                            </div>
-                                        </div>
-                                        <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-bg-light px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-text-secondary border border-border/50 flex-shrink-0 hidden sm:block">
-                                            {item.badge}
-                                        </span>
+                    <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
+                        {/* Recent Activity */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8 }}
+                            className="lg:col-span-2 card-premium p-4 sm:p-6"
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-bold text-primary flex items-center gap-3">
+                                    <BrandIcon icon={Activity} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
+                                    Activité Récente
+                                </h3>
+                                <button onClick={() => router.push('/dashboard/logs')} className="text-xs font-semibold text-accent hover:underline">
+                                    Voir les logs →
+                                </button>
+                            </div>
+
+                            {recentActivity.length === 0 ? (
+                                <div className="py-12 text-center text-text-muted text-sm">Aucune activité récente</div>
+                            ) : (
+                                <div className="relative pt-2">
+                                    <div className="absolute left-[27px] top-2 bottom-0 w-px bg-border-light z-0" />
+                                    <div className="space-y-5 relative z-10">
+                                        {recentActivity.slice(0, 8).map((item, i) => {
+                                            const cfg = actionConfig[item.action] || actionConfig.LOGIN;
+                                            const Icon = cfg.icon;
+                                            return (
+                                                <div key={item.id || i} className="flex gap-4">
+                                                    <div className={`w-[54px] h-[54px] rounded-2xl flex items-center justify-center shrink-0 border border-white shadow-sm ${cfg.bg}`}>
+                                                        <Icon className={`w-5 h-5 ${cfg.color}`} />
+                                                    </div>
+                                                    <div className="flex-1 pb-1 flex items-center justify-between gap-2 min-w-0">
+                                                        <div className="min-w-0">
+                                                            <div className="text-sm font-semibold text-primary mb-0.5 truncate">
+                                                                {item.user ? `${item.user.firstName} ${item.user.lastName}` : 'Utilisateur inconnu'}
+                                                                <span className="ml-1 font-normal text-text-secondary">— {item.action.replace('_', ' ').toLowerCase()}</span>
+                                                            </div>
+                                                            {item.details && (
+                                                                <div className="text-xs text-text-muted truncate">{item.details}</div>
+                                                            )}
+                                                            <div className="text-xs font-medium text-text-muted flex items-center gap-1 mt-0.5">
+                                                                <Clock className="w-3 h-3" /> {timeAgo(item.createdAt)}
+                                                            </div>
+                                                        </div>
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider bg-bg-light px-2.5 py-1 rounded-md text-text-secondary border border-border/50 flex-shrink-0 hidden sm:block">
+                                                            {cfg.badge}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
+                            )}
+                        </motion.div>
 
-                {/* Alerts */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.9 }}
-                    className="card-premium p-4 sm:p-6"
-                >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                        <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
-                        Alertes
-                    </h3>
-                    <div className="space-y-3">
-                        {[
-                            { text: '3 paiements en attente de validation', color: 'bg-warning/10 text-warning border-warning/20' },
-                            { text: '2 étudiants inactifs depuis 7 jours', color: 'bg-error/10 text-error border-error/20' },
-                            { text: '5 documents en attente de revue', color: 'bg-info/10 text-info border-info/20' },
-                        ].map((alert, i) => (
-                            <div key={i} className={`p-3 rounded-xl border text-sm font-medium ${alert.color}`}>
-                                {alert.text}
+                        {/* Quick Links Panel */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.9 }}
+                            className="card-premium p-4 sm:p-6 flex flex-col gap-4"
+                        >
+                            <h3 className="text-lg font-bold text-primary flex items-center gap-3">
+                                <BrandIcon icon={BarChart3} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
+                                Accès Rapides
+                            </h3>
+                            <div className="space-y-2">
+                                {[
+                                    { label: 'Gérer les utilisateurs', icon: Users, href: '/dashboard/users', color: 'text-primary', bg: 'bg-primary/10' },
+                                    { label: 'Packs & Abonnements', icon: Package, href: '/dashboard/packs-admin', color: 'text-accent', bg: 'bg-accent/10' },
+                                    { label: 'Documents soumis', icon: FileText, href: '/dashboard/documents', color: 'text-info', bg: 'bg-info/10' },
+                                    { label: 'Ressources pédagogiques', icon: BookOpen, href: '/dashboard/resources', color: 'text-success', bg: 'bg-success/10' },
+                                    { label: 'Journaux d\'activité', icon: Activity, href: '/dashboard/logs', color: 'text-warning', bg: 'bg-warning/10' },
+                                    { label: 'Calendrier & événements', icon: Calendar, href: '/dashboard/calendar', color: 'text-primary', bg: 'bg-primary/10' },
+                                ].map(item => (
+                                    <button
+                                        key={item.href}
+                                        onClick={() => router.push(item.href)}
+                                        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-bg-light transition-colors text-left group"
+                                    >
+                                        <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center flex-shrink-0`}>
+                                            <item.icon className={`w-4.5 h-4.5 ${item.color}`} />
+                                        </div>
+                                        <span className="text-sm font-medium text-text-primary group-hover:text-primary transition-colors">{item.label}</span>
+                                        <ChevronRight className="w-4 h-4 text-text-muted ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </button>
+                                ))}
                             </div>
-                        ))}
+                        </motion.div>
                     </div>
-
-                    <div className="mt-6">
-                        <h4 className="text-sm font-bold text-primary mb-3">Revenus du mois</h4>
-                        <div className="text-2xl sm:text-3xl font-extrabold text-accent">1.250.000</div>
-                        <div className="text-xs text-text-muted">FCFA — +15% vs mois précédent</div>
-                    </div>
-                </motion.div>
-            </div>
+                </>
+            )}
         </div>
     );
 }

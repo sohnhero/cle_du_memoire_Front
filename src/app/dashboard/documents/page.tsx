@@ -10,6 +10,7 @@ import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import Pagination from '@/components/Pagination';
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ComponentType<any> }> = {
     UPLOADED: { label: 'Envoyé', color: 'bg-info/10 text-info', icon: Upload },
@@ -110,7 +111,15 @@ export default function DocumentsPage() {
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const [reviewingDoc, setReviewingDoc] = useState<any>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeCategory, setActiveCategory] = useState('ALL');
+    const [activeStatus, setActiveStatus] = useState('ALL');
     const [expandedHistory, setExpandedHistory] = useState<Record<string, boolean>>({});
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalDocs, setTotalDocs] = useState(0);
+    const [stats, setStats] = useState({ total: 0, approved: 0, underReview: 0, revision: 0 });
 
     const toggleHistory = (catId: string) => {
         setExpandedHistory(prev => ({ ...prev, [catId]: !prev[catId] }));
@@ -118,34 +127,40 @@ export default function DocumentsPage() {
 
     useEffect(() => {
         loadDocuments();
-    }, []);
+    }, [currentPage, activeCategory, activeStatus]);
 
-    const loadDocuments = () => {
-        api.getDocuments()
-            .then(res => {
-                setDocuments(res.documents);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Failed to fetch documents", err);
-                setLoading(false);
-            });
+    // Debounced search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (currentPage !== 1) setCurrentPage(1);
+            else loadDocuments();
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    const loadDocuments = async () => {
+        setLoading(true);
+        try {
+            const res = await api.getDocuments(currentPage, 5, searchQuery, activeCategory, activeStatus);
+            setDocuments(res.documents || []);
+            setTotalPages(res.totalPages || 1);
+            setTotalDocs(res.total || 0);
+
+            // For stats, we might need a separate endpoint or compute from what we have
+            // Since stats are for the whole collection, we'll just keep them as is or update if the API provides them
+            // For now, let's just use the total from the response
+            setStats(prev => ({ ...prev, total: res.total || 0 }));
+        } catch (error) {
+            console.error("Failed to fetch documents", error);
+            toast.error("Erreur de chargement des documents");
+        } finally {
+            setLoading(false);
+        }
     };
-
-    const stats = {
-        total: documents.length,
-        approved: documents.filter(d => d.status === 'APPROVED').length,
-        underReview: documents.filter(d => d.status === 'UNDER_REVIEW').length,
-        revision: documents.filter(d => d.status === 'REVISION_NEEDED').length,
-    };
-
-    const filteredDocs = documents.filter(doc =>
-        doc.filename.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     // Group documents by category
     const groupedDocs = CATEGORIES.reduce((acc: any, cat) => {
-        const docsInCat = filteredDocs.filter(d => d.category === cat.id);
+        const docsInCat = documents.filter(d => d.category === cat.id);
         if (docsInCat.length > 0) {
             // Sort by version descending
             acc[cat.id] = docsInCat.sort((a, b) => b.version - a.version);
@@ -153,8 +168,8 @@ export default function DocumentsPage() {
         return acc;
     }, {});
 
-    // Also collect any that don't match our categories if they exist (though shouldn't happen with strict typing)
-    const otherDocs = filteredDocs.filter(d => !CATEGORIES.find(c => c.id === d.category));
+    // Also collect any that don't match our categories if they exist
+    const otherDocs = documents.filter(d => !CATEGORIES.find(c => c.id === d.category));
     if (otherDocs.length > 0) {
         groupedDocs['OTHER'] = otherDocs.sort((a, b) => b.version - a.version);
     }
@@ -214,7 +229,7 @@ export default function DocumentsPage() {
             </div>
 
             {/* Formatting & Controls */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <div className="flex-1 flex items-center gap-2 bg-white rounded-xl border border-border px-4 py-3 shadow-sm hover:border-accent/30 transition-colors focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/10">
                     <Search className="w-4 h-4 text-text-muted" />
                     <input
@@ -225,9 +240,24 @@ export default function DocumentsPage() {
                         className="bg-transparent text-sm outline-none flex-1 text-primary placeholder:text-text-muted"
                     />
                 </div>
-                <button className="p-3 rounded-xl border border-border bg-white hover:bg-bg-light transition-colors text-text-secondary shadow-sm">
-                    <Filter className="w-4 h-4" />
-                </button>
+                <div className="flex gap-2">
+                    <select
+                        value={activeCategory}
+                        onChange={(e) => setActiveCategory(e.target.value)}
+                        className="px-4 py-3 rounded-xl border border-border bg-white text-sm text-text-secondary shadow-sm hover:border-accent/30 outline-none transition-all cursor-pointer appearance-none"
+                    >
+                        <option value="ALL">Toutes catégories</option>
+                        {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
+                    </select>
+                    <select
+                        value={activeStatus}
+                        onChange={(e) => setActiveStatus(e.target.value)}
+                        className="px-4 py-3 rounded-xl border border-border bg-white text-sm text-text-secondary shadow-sm hover:border-accent/30 outline-none transition-all cursor-pointer appearance-none"
+                    >
+                        <option value="ALL">Tous statuts</option>
+                        {Object.entries(statusConfig).map(([id, cfg]) => <option key={id} value={id}>{cfg.label}</option>)}
+                    </select>
+                </div>
             </div>
 
             {loading ? (
@@ -311,6 +341,14 @@ export default function DocumentsPage() {
                             </div>
                         );
                     })}
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={totalDocs}
+                        itemsPerPage={5}
+                    />
                 </div>
             )}
 

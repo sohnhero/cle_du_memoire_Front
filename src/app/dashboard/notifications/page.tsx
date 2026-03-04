@@ -8,6 +8,7 @@ import {
 } from '@phosphor-icons/react';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useRouter } from 'next/navigation';
+import Pagination from '@/components/Pagination';
 
 const TYPE_CONFIG: Record<string, { icon: React.ComponentType<any>; color: string }> = {
     message: { icon: MessageCircle, color: 'bg-info/10 text-info' },
@@ -22,15 +23,24 @@ export default function NotificationsPage() {
     const [notifications, setNotifications] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [markingAll, setMarkingAll] = useState(false);
+    const [unreadOnly, setUnreadOnly] = useState(false);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalNotifs, setTotalNotifs] = useState(0);
 
     useEffect(() => {
         loadNotifications();
-    }, []);
+    }, [currentPage, unreadOnly]);
 
     async function loadNotifications() {
+        setLoading(true);
         try {
-            const res = await api.getNotifications();
-            setNotifications(res.notifications);
+            const res = await api.getNotifications(currentPage, 5, unreadOnly);
+            setNotifications(res.notifications || []);
+            setTotalPages(res.totalPages || 1);
+            setTotalNotifs(res.total || 0);
         } catch (err) {
             console.error(err);
         } finally {
@@ -59,7 +69,6 @@ export default function NotificationsPage() {
         }
     }
 
-    const unreadCount = notifications.filter(n => !n.isRead).length;
 
     const handleNotificationClick = async (notif: any) => {
         if (!notif.isRead) {
@@ -106,18 +115,26 @@ export default function NotificationsPage() {
         );
     }
 
+
     return (
         <div className="max-w-3xl mx-auto space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
                     <h1 className="text-xl sm:text-2xl font-bold text-primary">Notifications</h1>
                     <p className="text-text-secondary mt-1 text-sm">
-                        {unreadCount > 0
-                            ? `${unreadCount} notification${unreadCount > 1 ? 's' : ''} non lue${unreadCount > 1 ? 's' : ''}`
-                            : 'Toutes les notifications sont lues'}
+                        {unreadOnly ? `${totalNotifs} notifications non lues` : `${totalNotifs} notifications au total`}
                     </p>
                 </div>
-                {unreadCount > 0 && (
+                <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                        <div
+                            className={`w-10 h-6 rounded-full p-1 transition-colors ${unreadOnly ? 'bg-accent' : 'bg-border'}`}
+                            onClick={() => { setUnreadOnly(!unreadOnly); setCurrentPage(1); }}
+                        >
+                            <div className={`w-4 h-4 bg-white rounded-full transition-transform ${unreadOnly ? 'translate-x-4' : 'translate-x-0'}`} />
+                        </div>
+                        <span className="text-sm font-medium text-text-secondary group-hover:text-primary transition-colors">Non lues uniquement</span>
+                    </label>
                     <button
                         onClick={handleMarkAllRead}
                         disabled={markingAll}
@@ -126,7 +143,7 @@ export default function NotificationsPage() {
                         {markingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCheck className="w-4 h-4" />}
                         Tout marquer comme lu
                     </button>
-                )}
+                </div>
             </div>
 
             {notifications.length === 0 ? (
@@ -136,12 +153,11 @@ export default function NotificationsPage() {
                     <p className="text-text-muted text-sm mt-1">Vous recevrez des notifications pour les messages, documents et mises à jour.</p>
                 </motion.div>
             ) : (
-                <div className="space-y-2">
+                <div className="space-y-2 pb-12">
                     <AnimatePresence>
                         {notifications.map((notif, index) => {
                             const config = TYPE_CONFIG[notif.type] || TYPE_CONFIG.info;
                             const Icon = config.icon;
-
                             return (
                                 <motion.div
                                     key={notif.id}
@@ -175,8 +191,17 @@ export default function NotificationsPage() {
                             );
                         })}
                     </AnimatePresence>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={totalNotifs}
+                        itemsPerPage={5}
+                    />
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }

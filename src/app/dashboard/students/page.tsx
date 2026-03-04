@@ -10,6 +10,8 @@ import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
+import Pagination from '@/components/Pagination';
+
 const phasesList = [
     { id: 'TOPIC', label: 'Choix du sujet' },
     { id: 'OUTLINE', label: 'Plan détaillé' },
@@ -26,18 +28,37 @@ export default function StudentsPage() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalStudents, setTotalStudents] = useState(0);
+
+    const loadStudents = async () => {
+        setLoading(true);
+        try {
+            const res = await api.getMyMemoire(currentPage, 5, searchQuery);
+            setMemoires(res.memoires || []);
+            setTotalPages(res.totalPages || 1);
+            setTotalStudents(res.total || 0);
+        } catch (error) {
+            console.error("Failed to fetch students data", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        api.getMyMemoire()
-            .then(res => {
-                setMemoires(res.memoires || []);
-            })
-            .catch(err => {
-                console.error("Failed to fetch students data", err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
+        loadStudents();
+    }, [currentPage]);
+
+    // Debounced search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (currentPage !== 1) setCurrentPage(1);
+            else loadStudents();
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     const getPhaseLabel = (phaseId: string) => {
         const phase = phasesList.find(p => p.id === phaseId);
@@ -49,16 +70,11 @@ export default function StudentsPage() {
     const isOnTrack = (m: any) => !isDelayed(m) && !isCompleted(m);
 
     const stats = {
-        total: memoires.length,
-        onTrack: memoires.filter(isOnTrack).length,
+        total: totalStudents,
+        onTrack: memoires.filter(isOnTrack).length, // Note: these stats are now only for the current page, which is okay for a quick glance but ideally backend should provide them
         delayed: memoires.filter(isDelayed).length,
         completed: memoires.filter(isCompleted).length,
     };
-
-    const filteredMemoires = memoires.filter(m => {
-        const fullName = `${m.student.firstName} ${m.student.lastName}`.toLowerCase();
-        return fullName.includes(searchQuery.toLowerCase());
-    });
 
     return (
         <div className="space-y-6">
@@ -116,7 +132,7 @@ export default function StudentsPage() {
                 <div className="flex justify-center py-20">
                     <LoadingSpinner size="lg" />
                 </div>
-            ) : filteredMemoires.length === 0 ? (
+            ) : memoires.length === 0 ? (
                 <div className="card-premium p-12 text-center text-text-secondary">
                     <BrandIcon icon={Users} size={64} className="mx-auto mb-4 opacity-30 grayscale" />
                     <h3 className="text-xl font-bold text-primary mb-2">Aucun étudiant trouvé</h3>
@@ -125,7 +141,7 @@ export default function StudentsPage() {
             ) : (
                 <div className="card-premium p-4 sm:p-6">
                     <div className="space-y-1">
-                        {filteredMemoires.map((memoire, index) => {
+                        {memoires.map((memoire, index) => {
                             const student = memoire.student;
                             const studentName = `${student.firstName} ${student.lastName}`;
                             return (
@@ -137,7 +153,7 @@ export default function StudentsPage() {
                                     className="flex items-center gap-3 sm:gap-4 p-3 rounded-xl hover:bg-bg-light transition-colors cursor-pointer group"
                                     onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
+                                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm uppercase">
                                         {student.firstName[0]}{student.lastName[0]}
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -183,6 +199,16 @@ export default function StudentsPage() {
                                 </motion.div>
                             );
                         })}
+                    </div>
+
+                    <div className="mt-6 pt-6 border-t border-border-light">
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                            totalItems={totalStudents}
+                            itemsPerPage={5}
+                        />
                     </div>
                 </div>
             )}

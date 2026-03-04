@@ -9,6 +9,8 @@ import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 
+import Pagination from '@/components/Pagination';
+
 const statusBadge: Record<string, string> = {
     PENDING: 'bg-warning/10 text-warning',
     ACTIVE: 'bg-success/10 text-success',
@@ -32,22 +34,36 @@ export default function AdminPacksPage() {
     const [packs, setPacks] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState('ALL');
     const [activeTab, setActiveTab] = useState<'subs' | 'packs'>('subs');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedSubscription, setSelectedSubscription] = useState<any>(null);
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalSubs, setTotalSubs] = useState(0);
+
     const loadData = async () => {
         setLoading(true);
         try {
-            const [subsRes, packsRes] = await Promise.all([
-                api.getAllSubscriptions(),
-                api.getPacks()
-            ]);
-            setSubscriptions(subsRes.subscriptions || []);
-            setPacks(packsRes.packs || []);
+            if (activeTab === 'subs') {
+                const [subsRes, packsRes] = await Promise.all([
+                    api.getAllSubscriptions(currentPage, 5, searchQuery, statusFilter),
+                    api.getPacks()
+                ]);
+                setSubscriptions(subsRes.subscriptions || []);
+                setTotalPages(subsRes.totalPages || 1);
+                setTotalSubs(subsRes.total || 0);
+                setPacks(packsRes.packs || []);
+            } else {
+                const packsRes = await api.getPacks();
+                setPacks(packsRes.packs || []);
+            }
         } catch (error) {
             console.error("Erreur de chargement", error);
+            toast.error("Erreur de chargement des données");
         } finally {
             setLoading(false);
         }
@@ -55,17 +71,28 @@ export default function AdminPacksPage() {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [currentPage, statusFilter, activeTab]);
+
+    // Initial load for packs if needed
+    useEffect(() => {
+        if (activeTab === 'packs' && packs.length === 0) {
+            loadData();
+        }
+    }, [activeTab]);
+
+    // Debounced search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (currentPage !== 1) setCurrentPage(1);
+            else loadData();
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     const handleOpenPayment = (sub: any) => {
         setSelectedSubscription(sub);
         setIsPaymentModalOpen(true);
     };
-
-    const filteredSubs = subscriptions.filter(sub => {
-        const target = (sub.user?.firstName + ' ' + sub.user?.lastName + ' ' + sub.user?.email + ' ' + sub.pack?.name).toLowerCase();
-        return target.includes(searchQuery.toLowerCase());
-    });
 
     return (
         <div className="space-y-6">
@@ -99,95 +126,117 @@ export default function AdminPacksPage() {
 
             {activeTab === 'subs' && (
                 <>
-                    <div className="flex items-center gap-3">
-                        <div className="flex-1 flex items-center gap-2 bg-white rounded-xl border border-border px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm focus-within:border-accent transition-all">
-                            <Search className="w-4 h-4 text-text-muted" />
-                            <input
-                                type="text"
-                                placeholder="Rechercher un étudiant ou un pack..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="bg-transparent text-sm outline-none flex-1 text-primary placeholder:text-text-muted"
-                            />
+                    <>
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            <div className="flex-1 flex items-center gap-2 bg-white rounded-xl border border-border px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm focus-within:ring-2 focus-within:ring-accent/10 focus-within:border-accent transition-all">
+                                <Search className="w-4 h-4 text-text-muted" />
+                                <input
+                                    type="text"
+                                    placeholder="Rechercher un étudiant ou un pack..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="bg-transparent text-sm outline-none flex-1 text-primary placeholder:text-text-muted"
+                                />
+                            </div>
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="px-4 py-3 rounded-xl border border-border bg-white text-sm text-text-secondary shadow-sm outline-none hover:border-accent/30 appearance-none cursor-pointer min-w-[150px]"
+                            >
+                                <option value="ALL">Tous les statuts</option>
+                                {Object.keys(statusLabel).map(status => (
+                                    <option key={status} value={status}>{statusLabel[status]}</option>
+                                ))}
+                            </select>
                         </div>
-                    </div>
 
-                    <div className="card-premium overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-bg-light/50 border-b border-border-light text-text-secondary text-xs uppercase tracking-wider font-semibold">
-                                        <th className="px-3 sm:px-6 py-3 sm:py-4">Étudiant</th>
-                                        <th className="px-3 sm:px-6 py-3 sm:py-4">Pack</th>
-                                        <th className="px-6 py-4 hidden md:table-cell">Date Souscription</th>
-                                        <th className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">Montant Payé</th>
-                                        <th className="px-3 sm:px-6 py-3 sm:py-4">Statut</th>
-                                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {loading ? (
-                                        <tr>
-                                            <td colSpan={6} className="px-6 py-12 text-center text-text-muted">
-                                                <div className="w-8 h-8 border-4 border-accent/20 border-t-accent rounded-full animate-spin mx-auto mb-4" />
-                                                Chargement...
-                                            </td>
-                                        </tr>
-                                    ) : filteredSubs.length === 0 ? (
-                                        <tr>
-                                            <td colSpan={6} className="px-6 py-12 text-center text-text-muted">
-                                                Aucun abonnement trouvé
-                                            </td>
-                                        </tr>
-                                    ) : filteredSubs.map((sub, idx) => (
-                                        <motion.tr
-                                            key={sub.id}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: idx * 0.02 }}
-                                            className="border-b border-border-light hover:bg-bg-light/30 transition-colors"
-                                        >
-                                            <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-9 h-9 rounded-xl bg-info/10 text-info flex items-center justify-center font-bold text-sm">
-                                                        {sub.user?.firstName?.[0]}{sub.user?.lastName?.[0]}
-                                                    </div>
-                                                    <div>
-                                                        <div className="font-semibold text-sm text-primary">{sub.user?.firstName} {sub.user?.lastName}</div>
-                                                        <div className="text-xs text-text-muted">{sub.user?.email}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                                <div className="font-semibold text-sm text-primary">{sub.pack?.name}</div>
-                                                <div className="text-xs text-text-muted">{sub.pack?.price} FCFA</div>
-                                            </td>
-                                            <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell">
-                                                {new Date(sub.createdAt).toLocaleDateString('fr-FR')}
-                                            </td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
-                                                <span className="text-sm font-semibold text-primary">{sub.amountPaid} FCFA</span>
-                                            </td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${statusBadge[sub.status] || 'bg-border text-text-secondary'}`}>
-                                                    {statusLabel[sub.status] || sub.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
-                                                {sub.status === 'PENDING' || sub.status === 'PARTIAL' ? (
-                                                    <button onClick={() => handleOpenPayment(sub)} className="px-3 py-1.5 bg-success/10 text-success hover:bg-success/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto">
-                                                        <CreditCard className="w-3.5 h-3.5" /> Encaisser
-                                                    </button>
-                                                ) : (
-                                                    <span className="text-xs text-text-muted">—</span>
-                                                )}
-                                            </td>
-                                        </motion.tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        <div className="card-premium overflow-hidden">
+                            {loading ? (
+                                <div className="px-6 py-20 text-center text-text-muted">
+                                    <div className="w-10 h-10 border-4 border-accent/10 border-t-accent rounded-full animate-spin mx-auto mb-4" />
+                                    <p className="text-sm font-medium">Récupération des abonnements...</p>
+                                </div>
+                            ) : subscriptions.length === 0 ? (
+                                <div className="px-6 py-20 text-center text-text-muted">
+                                    <AlertCircle className="w-12 h-12 text-text-muted mx-auto mb-4 opacity-20" />
+                                    <p className="text-sm font-medium">Aucun abonnement trouvé</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left border-collapse">
+                                            <thead>
+                                                <tr className="bg-bg-light/50 border-b border-border-light text-text-secondary text-xs uppercase tracking-wider font-semibold">
+                                                    <th className="px-3 sm:px-6 py-3 sm:py-4">Étudiant</th>
+                                                    <th className="px-3 sm:px-6 py-3 sm:py-4">Pack</th>
+                                                    <th className="px-6 py-4 hidden md:table-cell">Date Souscription</th>
+                                                    <th className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">Montant Payé</th>
+                                                    <th className="px-3 sm:px-6 py-3 sm:py-4">Statut</th>
+                                                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-right">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {subscriptions.map((sub, idx) => (
+                                                    <motion.tr
+                                                        key={sub.id}
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        transition={{ delay: idx * 0.02 }}
+                                                        className="border-b border-border-light hover:bg-bg-light/30 transition-colors"
+                                                    >
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="w-9 h-9 rounded-xl bg-info/10 text-info flex items-center justify-center font-bold text-sm uppercase">
+                                                                    {sub.user?.firstName?.[0]}{sub.user?.lastName?.[0]}
+                                                                </div>
+                                                                <div>
+                                                                    <div className="font-semibold text-sm text-primary">{sub.user?.firstName} {sub.user?.lastName}</div>
+                                                                    <div className="text-xs text-text-muted">{sub.user?.email}</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                                                            <div className="font-semibold text-sm text-primary">{sub.pack?.name}</div>
+                                                            <div className="text-xs text-text-muted">{sub.pack?.price.toLocaleString()} FCFA</div>
+                                                        </td>
+                                                        <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell">
+                                                            {new Date(sub.createdAt).toLocaleDateString('fr-FR')}
+                                                        </td>
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
+                                                            <span className="text-sm font-semibold text-primary">{sub.amountPaid?.toLocaleString()} FCFA</span>
+                                                        </td>
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
+                                                            <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-lg ${statusBadge[sub.status] || 'bg-border text-text-secondary'}`}>
+                                                                {statusLabel[sub.status] || sub.status}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
+                                                            {sub.status === 'PENDING' || sub.status === 'PARTIAL' ? (
+                                                                <button onClick={() => handleOpenPayment(sub)} className="px-3 py-1.5 bg-success/10 text-success hover:bg-success/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto">
+                                                                    <CreditCard className="w-3.5 h-3.5" /> Encaisser
+                                                                </button>
+                                                            ) : (
+                                                                <span className="text-xs text-text-muted">—</span>
+                                                            )}
+                                                        </td>
+                                                    </motion.tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="p-4 border-t border-border-light">
+                                        <Pagination
+                                            currentPage={currentPage}
+                                            totalPages={totalPages}
+                                            onPageChange={setCurrentPage}
+                                            totalItems={totalSubs}
+                                            itemsPerPage={5}
+                                        />
+                                    </div>
+                                </>
+                            )}
                         </div>
-                    </div>
+                    </>
                 </>
             )}
 

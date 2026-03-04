@@ -66,8 +66,11 @@ class ApiClient {
     }
 
     // Users
-    async getUsers() {
-        return this.request<{ users: any[] }>('/users');
+    async getUsers(page = 1, limit = 5, search = '', role = 'ALL') {
+        let url = `/users?page=${page}&limit=${limit}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (role && role !== 'ALL') url += `&role=${role}`;
+        return this.request<{ users: any[]; total: number; page: number; totalPages: number }>(url);
     }
 
     async updateUser(id: string, data: any) {
@@ -104,8 +107,12 @@ class ApiClient {
     }
 
     // Documents
-    async getDocuments() {
-        return this.request<{ documents: any[] }>('/documents');
+    async getDocuments(page = 1, limit = 5, search = '', category = 'ALL', status = 'ALL') {
+        let url = `/documents?page=${page}&limit=${limit}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (category && category !== 'ALL') url += `&category=${category}`;
+        if (status && status !== 'ALL') url += `&status=${status}`;
+        return this.request<{ documents: any[]; total: number; page: number; totalPages: number }>(url);
     }
 
     async uploadDocument(data: FormData) {
@@ -159,8 +166,29 @@ class ApiClient {
         return this.request<{ stats: any; recentUsers: any[]; recentActivity: any[] }>('/admin/stats');
     }
 
-    async getAllSubscriptions() {
-        return this.request<{ subscriptions: any[] }>('/admin/subscriptions');
+    async getTrackingData(page = 1, limit = 5, search = '', phase = 'ALL', coachId = '') {
+        let url = `/admin/tracking?page=${page}&limit=${limit}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (phase && phase !== 'ALL') url += `&phase=${phase}`;
+        if (coachId) url += `&coachId=${coachId}`;
+        return this.request<{
+            memoires: any[]; total: number; page: number; totalPages: number;
+            stats: any; coaches: any[];
+        }>(url);
+    }
+
+    async getAdminLogs(page = 1, limit = 5, search = '', type = 'ALL') {
+        let url = `/admin/logs?page=${page}&limit=${limit}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (type && type !== 'ALL') url += `&type=${type}`;
+        return this.request<{ logs: any[]; total: number; page: number; totalPages: number }>(url);
+    }
+
+    async getAllSubscriptions(page = 1, limit = 5, search = '', status = 'ALL') {
+        let url = `/admin/subscriptions?page=${page}&limit=${limit}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (status && status !== 'ALL') url += `&status=${status}`;
+        return this.request<{ subscriptions: any[]; total: number; page: number; totalPages: number }>(url);
     }
 
     async activateSubscription(subscriptionId: string) {
@@ -184,8 +212,10 @@ class ApiClient {
     }
 
     // Memoires
-    async getMyMemoire() {
-        return this.request<{ memoire: any; memoires?: any[] }>('/memoires');
+    async getMyMemoire(page = 1, limit = 5, search = '') {
+        let url = `/memoires?page=${page}&limit=${limit}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        return this.request<{ memoire: any; memoires?: any[]; total?: number; page?: number; totalPages?: number }>(url);
     }
 
     async updateMemoire(id: string, data: Partial<{ title: string; phase: string; progressPercent: number; notes: string }>) {
@@ -223,8 +253,10 @@ class ApiClient {
     }
 
     // Notifications
-    async getNotifications() {
-        return this.request<{ notifications: any[] }>('/notifications');
+    async getNotifications(page = 1, limit = 5, unreadOnly = false) {
+        let url = `/notifications?page=${page}&limit=${limit}`;
+        if (unreadOnly) url += `&unread=true`;
+        return this.request<{ notifications: any[]; total: number; page: number; totalPages: number }>(url);
     }
 
     async markNotificationRead(id: string) {
@@ -279,9 +311,15 @@ class ApiClient {
     }
 
     // Resources
-    async getResources(category?: string) {
-        const url = category && category !== 'ALL' ? `/resources?category=${category}` : '/resources';
-        return this.request<{ resources: any[] }>(url);
+    async getResources(category?: string, page = 1, limit = 5, search = '') {
+        let url = `/resources?page=${page}&limit=${limit}`;
+        if (category && category !== 'ALL') {
+            url += `&category=${category}`;
+        }
+        if (search) {
+            url += `&search=${encodeURIComponent(search)}`;
+        }
+        return this.request<{ resources: any[]; total: number; page: number; totalPages: number }>(url);
     }
 
     async createResource(data: FormData) {

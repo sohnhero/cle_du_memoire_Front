@@ -8,6 +8,7 @@ import {
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import Pagination from '@/components/Pagination';
 
 const roleBadge: Record<string, string> = {
     STUDENT: 'bg-info/10 text-info',
@@ -22,6 +23,11 @@ export default function AdminUsersPage() {
     const [filterRole, setFilterRole] = useState('ALL');
     const [searchQuery, setSearchQuery] = useState('');
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalUsers, setTotalUsers] = useState(0);
+
     // Modals state
     const [editingUser, setEditingUser] = useState<any>(null);
     const [assigningCoachFor, setAssigningCoachFor] = useState<any>(null);
@@ -29,10 +35,13 @@ export default function AdminUsersPage() {
     const loadUsers = async () => {
         setLoading(true);
         try {
-            const res = await api.getUsers();
+            const res = await api.getUsers(currentPage, 5, searchQuery, filterRole);
             setUsers(res.users || []);
+            setTotalPages(res.totalPages || 1);
+            setTotalUsers(res.total || 0);
         } catch (error) {
             console.error("Erreur de chargement des utilisateurs", error);
+            toast.error("Erreur de chargement des données");
         } finally {
             setLoading(false);
         }
@@ -40,14 +49,16 @@ export default function AdminUsersPage() {
 
     useEffect(() => {
         loadUsers();
-    }, []);
+    }, [currentPage, filterRole]);
 
-    const filtered = users.filter(u => {
-        const matchesRole = filterRole === 'ALL' || u.role === filterRole;
-        const searchTarget = (u.firstName + ' ' + u.lastName + ' ' + u.email).toLowerCase();
-        const matchesSearch = searchTarget.includes(searchQuery.toLowerCase());
-        return matchesRole && matchesSearch;
-    });
+    // Debounced search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (currentPage !== 1) setCurrentPage(1);
+            else loadUsers();
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     const coaches = users.filter(u => u.role === 'ACCOMPAGNATEUR' && u.isActive);
 
@@ -56,7 +67,7 @@ export default function AdminUsersPage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 className="text-xl sm:text-2xl font-bold text-primary">Gestion des Utilisateurs</h1>
-                    <p className="text-text-secondary mt-1">{users.length} utilisateurs enregistrés</p>
+                    <p className="text-text-secondary mt-1">{totalUsers} utilisateurs enregistrés</p>
                 </div>
                 <div className="flex gap-2">
                     <button onClick={loadUsers} className="p-3 rounded-xl border border-border bg-white hover:bg-bg-light transition-colors text-text-secondary shadow-sm">
@@ -114,14 +125,14 @@ export default function AdminUsersPage() {
                                         Chargement des données...
                                     </td>
                                 </tr>
-                            ) : filtered.length === 0 ? (
+                            ) : users.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="px-6 py-12 text-center text-text-muted">
                                         <Users className="w-10 h-10 mx-auto mb-3 opacity-20" />
                                         Aucun utilisateur trouvé
                                     </td>
                                 </tr>
-                            ) : filtered.map((user, index) => {
+                            ) : users.map((user, index) => {
                                 const assignedCoach = user.memoiresAsStudent?.[0]?.accompagnateur;
 
                                 return (
@@ -201,6 +212,14 @@ export default function AdminUsersPage() {
                         </tbody>
                     </table>
                 </div>
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    totalItems={totalUsers}
+                    itemsPerPage={5}
+                />
             </div>
 
             <AnimatePresence>
