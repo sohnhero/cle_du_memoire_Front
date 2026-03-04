@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
+import MaintenanceGuard from "@/components/MaintenanceGuard";
 
 export const metadata: Metadata = {
   title: "Clé du Mémoire — Accompagnement académique premium au Sénégal",
@@ -20,10 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="scroll-smooth">
+    <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
       <body>
         <AuthProvider>
-          {children}
+          <MaintenanceGuard>
+            {children}
+          </MaintenanceGuard>
         </AuthProvider>
         <Toaster position="top-right" toastOptions={{ duration: 3000, style: { borderRadius: '12px', background: '#1a1a2e', color: '#fff', fontSize: '14px', fontWeight: '500' } }} />
       </body>

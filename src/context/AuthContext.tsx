@@ -11,6 +11,9 @@ interface AuthContextType {
     register: (data: any) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
+    config: Record<string, string>;
+    setConfig: (config: Record<string, string>) => void;
+    setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,8 +21,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [config, setConfig] = useState<Record<string, string>>({});
 
     useEffect(() => {
+        // Fetch public platform config
+        api.getPublicSettings()
+            .then(({ settings }) => setConfig(settings))
+            .catch(err => console.error('Failed to fetch platform config', err));
+
         const token = api.getToken();
         if (token) {
             api.getMe()
@@ -52,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, logout, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, loading, login, register, logout, isAuthenticated: !!user, config, setConfig, setUser }}>
             {children}
         </AuthContext.Provider>
     );

@@ -181,6 +181,10 @@ class ApiClient {
         return this.request<{ settings: any[] }>('/admin/config');
     }
 
+    async getPublicSettings() {
+        return this.request<{ settings: Record<string, string> }>('/admin/config/public');
+    }
+
     async updateGlobalSettings(settings: { key: string, value: any }[]) {
         return this.request<{ settings: any[] }>('/admin/config', {
             method: 'PATCH',
