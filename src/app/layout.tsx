@@ -5,7 +5,7 @@ import { Toaster } from "react-hot-toast";
 import MaintenanceGuard from "@/components/MaintenanceGuard";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cle-du-memoire.com"), // Placeholder domain, needs actual one if exists
+  metadataBase: new URL("https://www.cledumemoire.com"),
   title: {
     default: "Clé du Mémoire — Accompagnement académique premium au Sénégal",
     template: "%s | Clé du Mémoire"
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Clé du Mémoire — Votre clé vers la réussite académique",
     description: "Plateforme d'accompagnement académique premium pour les étudiants du supérieur au Sénégal. Réussissez votre mémoire avec un expert dédié.",
-    url: "https://cle-du-memoire.com",
+    url: "https://www.cledumemoire.com",
     siteName: "Clé du Mémoire",
     locale: "fr_FR",
     type: "website",

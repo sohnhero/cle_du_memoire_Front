@@ -17,10 +17,10 @@ const structuredData = {
   "@graph": [
     {
       "@type": "EducationalOrganization",
-      "@id": "https://cle-du-memoire.com/#organization",
+      "@id": "https://www.cledumemoire.com/#organization",
       "name": "Clé du Mémoire",
-      "url": "https://cle-du-memoire.com",
-      "logo": "https://cle-du-memoire.com/favicon.png",
+      "url": "https://www.cledumemoire.com",
+      "logo": "https://www.cledumemoire.com/favicon.png",
       "description": "Plateforme d'accompagnement académique premium pour la rédaction de mémoire au Sénégal.",
       "address": {
         "@type": "PostalAddress",
@@ -35,9 +35,9 @@ const structuredData = {
     {
       "@type": "ProfessionalService",
       "name": "Coaching de mémoire Clé du Mémoire",
-      "image": "https://cle-du-memoire.com/hero-graduate.png",
+      "image": "https://www.cledumemoire.com/hero-graduate.png",
       "description": "Accompagnement personnalisé pour le choix du sujet, la rédaction et la soutenance de mémoires au Sénégal.",
-      "provider": { "@id": "https://cle-du-memoire.com/#organization" },
+      "provider": { "@id": "https://www.cledumemoire.com/#organization" },
       "priceRange": "$$"
     },
     {

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: ['/dashboard/', '/login/', '/register/'], // Disallow these for focus and privacy
         },
-        sitemap: 'https://cle-du-memoire.com/sitemap.xml',
+        sitemap: 'https://www.cledumemoire.com/sitemap.xml',
     }
 }
