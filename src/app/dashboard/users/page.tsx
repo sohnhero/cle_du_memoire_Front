@@ -32,6 +32,7 @@ export default function AdminUsersPage() {
     // Modals state
     const [editingUser, setEditingUser] = useState<any>(null);
     const [assigningCoachFor, setAssigningCoachFor] = useState<any>(null);
+    const [isAddingUser, setIsAddingUser] = useState(false);
 
     const loadUsers = async () => {
         setLoading(true);
@@ -74,7 +75,7 @@ export default function AdminUsersPage() {
                     <button onClick={loadUsers} className="p-3 rounded-xl border border-border bg-white hover:bg-bg-light transition-colors text-text-secondary shadow-sm">
                         {loading ? <LoadingSpinner size="sm" className="text-accent" /> : <RefreshCw className="w-4 h-4" />}
                     </button>
-                    <button className="btn-primary py-3 px-6 text-sm">
+                    <button onClick={() => setIsAddingUser(true)} className="btn-primary py-3 px-6 text-sm">
                         <Plus className="w-4 h-4" /> Ajouter un utilisateur
                     </button>
                 </div>
@@ -204,6 +205,23 @@ export default function AdminUsersPage() {
                         >
                             <Edit className="w-4 h-4" />
                         </button>
+                        {!user.isActive && user.role === 'ACCOMPAGNATEUR' && (
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        await api.updateUser(user.id, { isActive: true });
+                                        toast.success("Compte approuvé");
+                                        loadUsers();
+                                    } catch {
+                                        toast.error("Erreur d'approbation");
+                                    }
+                                }}
+                                className="p-2 sm:p-2 rounded-lg hover:bg-success/10 text-success transition-colors bg-white sm:bg-transparent shadow-sm sm:shadow-none"
+                                title="Approuver le compte"
+                            >
+                                <UserCheck className="w-4 h-4" />
+                            </button>
+                        )}
                     </>
                 )}
             />
@@ -229,6 +247,12 @@ export default function AdminUsersPage() {
                         student={assigningCoachFor}
                         coaches={coaches}
                         onClose={() => setAssigningCoachFor(null)}
+                        onSuccess={loadUsers}
+                    />
+                )}
+                {isAddingUser && (
+                    <AddUserModal
+                        onClose={() => setIsAddingUser(false)}
                         onSuccess={loadUsers}
                     />
                 )}
@@ -405,6 +429,130 @@ function AssignCoachModal({ student, coaches, onClose, onSuccess }: { student: a
                         {isSaving ? 'Assignation...' : 'Assigner'}
                     </button>
                 </div>
+            </motion.div>
+        </div>
+    );
+}
+
+function AddUserModal({ onClose, onSuccess }: { onClose: () => void, onSuccess: () => void }) {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        role: 'STUDENT',
+        phone: '',
+        university: '',
+        field: '',
+        studyLevel: 'MASTER_2',
+        targetDefenseDate: ''
+    });
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSaving(true);
+        try {
+            await api.createUser(formData);
+            toast.success("Utilisateur créé avec succès");
+            onSuccess();
+            onClose();
+        } catch (error: any) {
+            console.error(error);
+            toast.error(error.error || "Erreur lors de la création");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-xl p-6 overflow-y-auto max-h-[90vh]">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-bold text-primary">Nouvel utilisateur</h3>
+                    <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-text-primary mb-1.5">Prénom</label>
+                            <input type="text" value={formData.firstName} onChange={e => setFormData({ ...formData, firstName: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" required />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-text-primary mb-1.5">Nom</label>
+                            <input type="text" value={formData.lastName} onChange={e => setFormData({ ...formData, lastName: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" required />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Email</label>
+                        <input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" required />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Mot de passe</label>
+                        <input type="password" value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" required />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-text-primary mb-1.5">Rôle</label>
+                            <select value={formData.role} onChange={e => setFormData({ ...formData, role: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-3 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all">
+                                <option value="STUDENT">Étudiant</option>
+                                <option value="ACCOMPAGNATEUR">Accompagnateur</option>
+                                <option value="ADMIN">Administrateur</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-text-primary mb-1.5">Téléphone</label>
+                            <input type="text" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" />
+                        </div>
+                    </div>
+
+                    {formData.role === 'STUDENT' && (
+                        <div className="space-y-4 pt-2 border-t border-border-light">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-semibold text-text-primary mb-1.5">Université</label>
+                                    <input type="text" value={formData.university} onChange={e => setFormData({ ...formData, university: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-text-primary mb-1.5">Filière</label>
+                                    <input type="text" value={formData.field} onChange={e => setFormData({ ...formData, field: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-semibold text-text-primary mb-1.5">Niveau</label>
+                                    <select value={formData.studyLevel} onChange={e => setFormData({ ...formData, studyLevel: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-3 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all">
+                                        <option value="LICENCE_3">Licence 3</option>
+                                        <option value="MASTER_1">Master 1</option>
+                                        <option value="MASTER_2">Master 2</option>
+                                        <option value="DOCTORAT">Doctorat</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-text-primary mb-1.5">Date de soutenance prévue</label>
+                                    <input type="date" value={formData.targetDefenseDate} onChange={e => setFormData({ ...formData, targetDefenseDate: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-border-light">
+                        <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl font-medium text-text-secondary hover:bg-bg-light transition-colors">
+                            Annuler
+                        </button>
+                        <button type="submit" disabled={isSaving} className="btn-primary px-6 py-2.5 flex items-center gap-2">
+                            {isSaving ? <LoadingSpinner size="sm" light /> : <Plus className="w-4 h-4" />}
+                            {isSaving ? 'Création...' : 'Créer l\'utilisateur'}
+                        </button>
+                    </div>
+                </form>
             </motion.div>
         </div>
     );

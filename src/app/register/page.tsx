@@ -241,7 +241,7 @@ export default function RegisterPage() {
                                                 <div className="grid grid-cols-2 gap-3">
                                                     {[
                                                         { value: 'STUDENT', label: 'Étudiant', icon: GraduationCap },
-                                                        { value: 'ACCOMPAGNATEUR', label: 'Accompagnateur', icon: BookOpen },
+                                                        // { value: 'ACCOMPAGNATEUR', label: 'Accompagnateur', icon: BookOpen },
                                                     ].map((r) => (
                                                         <button key={r.value} type="button" onClick={() => updateField('role', r.value)}
                                                             className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${formData.role === r.value ? 'border-accent bg-accent/5 text-primary' : 'border-border text-text-secondary hover:border-accent/30'

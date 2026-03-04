@@ -80,6 +80,13 @@ class ApiClient {
         });
     }
 
+    async createUser(data: any) {
+        return this.request<{ user: any }>('/users', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    }
+
     async assignCoach(studentId: string, coachId: string) {
         return this.request<{ message: string, memoire: any }>(`/users/${studentId}/assign-coach`, {
             method: 'POST',
