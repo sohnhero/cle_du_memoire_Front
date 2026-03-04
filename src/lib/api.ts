@@ -177,6 +177,17 @@ class ApiClient {
         }>(url);
     }
 
+    async getGlobalSettings() {
+        return this.request<{ settings: any[] }>('/admin/config');
+    }
+
+    async updateGlobalSettings(settings: { key: string, value: any }[]) {
+        return this.request<{ settings: any[] }>('/admin/config', {
+            method: 'PATCH',
+            body: JSON.stringify({ settings }),
+        });
+    }
+
     async getAdminLogs(page = 1, limit = 5, search = '', type = 'ALL') {
         let url = `/admin/logs?page=${page}&limit=${limit}`;
         if (search) url += `&search=${encodeURIComponent(search)}`;
