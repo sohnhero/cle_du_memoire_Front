@@ -14,6 +14,7 @@ import {
 import { api } from '@/lib/api';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
+import ResponsiveTable from '@/components/ResponsiveTable';
 import toast from 'react-hot-toast';
 
 const actionIcons: Record<string, { icon: React.ComponentType<any>; color: string; label: string }> = {
@@ -121,58 +122,80 @@ export default function LogsPage() {
                     Aucun log trouvé pour cette recherche.
                 </div>
             ) : (
-                <div className="card-premium overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead>
-                                <tr className="border-b border-border-light bg-bg-light/50">
-                                    <th className="text-left text-xs font-semibold text-text-secondary uppercase px-3 sm:px-6 py-3 sm:py-4">Action</th>
-                                    <th className="text-left text-xs font-semibold text-text-secondary uppercase px-3 sm:px-6 py-3 sm:py-4">Utilisateur</th>
-                                    <th className="text-left text-xs font-semibold text-text-secondary uppercase px-6 py-4 hidden md:table-cell">Détails</th>
-                                    <th className="text-left text-xs font-semibold text-text-secondary uppercase px-6 py-4 hidden lg:table-cell">IP</th>
-                                    <th className="text-right text-xs font-semibold text-text-secondary uppercase px-3 sm:px-6 py-3 sm:py-4">Heure</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {logs.map((log, i) => {
-                                    const actionConfig = actionIcons[log.action] || actionIcons.LOGIN;
-                                    const ActionIcon = actionConfig.icon;
-                                    return (
-                                        <motion.tr key={log.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.03 }}
-                                            className={`border-b border-border-light/50 hover:bg-bg-light/30 transition-colors ${log.action === 'LOGIN_FAILED' ? 'bg-error/[0.02]' : ''}`}>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-3.5">
-                                                <div className="flex items-center gap-2">
-                                                    <div className={`w-8 h-8 rounded-lg ${actionConfig.color} flex items-center justify-center`}>
-                                                        <ActionIcon className="w-4 h-4" />
-                                                    </div>
-                                                    <span className="text-xs font-mono text-text-primary uppercase">{log.action}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-3.5">
-                                                {log.user ? (
-                                                    <>
-                                                        <div className="text-sm font-medium text-primary">{log.user.firstName} {log.user.lastName}</div>
-                                                        <div className="text-xs text-text-muted uppercase tracking-wider font-bold">{log.user.role}</div>
-                                                    </>
-                                                ) : (
-                                                    <span className="text-text-muted italic">Inconnu</span>
-                                                )}
-                                            </td>
-                                            <td className="px-6 py-3.5 text-sm text-text-secondary hidden md:table-cell max-w-xs truncate" title={log.description}>{log.description}</td>
-                                            <td className="px-6 py-3.5 text-xs font-mono text-text-muted hidden lg:table-cell">{log.ipAddress || '—'}</td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-3.5 text-right">
-                                                <span className="text-xs text-text-muted flex items-center justify-end gap-1">
-                                                    <Clock className="w-3 h-3" /> {formatDate(log.createdAt)}
-                                                </span>
-                                            </td>
-                                        </motion.tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                <>
+                    <ResponsiveTable
+                        loading={loading}
+                        data={logs}
+                        primaryKey="id"
+                        columns={[
+                            { key: 'action', label: 'Action' },
+                            { key: 'user', label: 'Utilisateur' },
+                            { key: 'description', label: 'Détails', breakpoint: 'md' },
+                            { key: 'ip', label: 'IP', breakpoint: 'lg' },
+                            { key: 'date', label: 'Heure', className: 'text-right' }
+                        ]}
+                        renderDesktopRow={(log) => {
+                            const actionConfig = actionIcons[log.action] || actionIcons.LOGIN;
+                            const ActionIcon = actionConfig.icon;
+                            return (
+                                <>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-8 h-8 rounded-lg ${actionConfig.color} flex items-center justify-center`}>
+                                                <ActionIcon className="w-4 h-4" />
+                                            </div>
+                                            <span className="text-xs font-mono text-text-primary uppercase">{log.action}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {log.user ? (
+                                            <>
+                                                <div className="text-sm font-medium text-primary">{log.user.firstName} {log.user.lastName}</div>
+                                                <div className="text-xs text-text-muted uppercase tracking-wider font-bold">{log.user.role}</div>
+                                            </>
+                                        ) : (
+                                            <span className="text-text-muted italic">Inconnu</span>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell max-w-xs truncate" title={log.description}>
+                                        {log.description}
+                                    </td>
+                                    <td className="px-6 py-4 text-xs font-mono text-text-muted hidden lg:table-cell">{log.ipAddress || '—'}</td>
+                                    <td className="px-6 py-4 text-right">
+                                        <span className="text-xs text-text-muted flex items-center justify-end gap-1">
+                                            <Clock className="w-3 h-3" /> {formatDate(log.createdAt)}
+                                        </span>
+                                    </td>
+                                </>
+                            );
+                        }}
+                        renderMobileSummary={(log) => {
+                            const actionConfig = actionIcons[log.action] || actionIcons.LOGIN;
+                            const ActionIcon = actionConfig.icon;
+                            return {
+                                label: 'Action',
+                                value: (
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary`}>
+                                            <ActionIcon className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span className="font-mono text-xs">{log.action}</span>
+                                    </div>
+                                )
+                            };
+                        }}
+                        renderMobileDetails={(log) => [
+                            {
+                                label: 'Utilisateur',
+                                value: log.user ? `${log.user.firstName} ${log.user.lastName} (${log.user.role})` : 'Inconnu'
+                            },
+                            { label: 'Détails', value: log.description },
+                            { label: 'IP', value: log.ipAddress || '—' },
+                            { label: 'Heure', value: formatDate(log.createdAt) }
+                        ]}
+                    />
 
-                    <div className="p-4 border-t border-border-light">
+                    <div className="mt-4">
                         <Pagination
                             currentPage={currentPage}
                             totalPages={totalPages}
@@ -181,7 +204,7 @@ export default function LogsPage() {
                             itemsPerPage={5}
                         />
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

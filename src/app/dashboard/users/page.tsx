@@ -9,6 +9,7 @@ import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
+import ResponsiveTable from '@/components/ResponsiveTable';
 
 const roleBadge: Record<string, string> = {
     STUDENT: 'bg-info/10 text-info',
@@ -103,124 +104,117 @@ export default function AdminUsersPage() {
             </div>
 
             {/* Table */}
-            <div className="card-premium overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-border-light bg-bg-light/50">
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-3 sm:px-6 py-3 sm:py-4">Utilisateur</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-3 sm:px-6 py-3 sm:py-4">Rôle</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden md:table-cell">Université</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden lg:table-cell">Inscription</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden md:table-cell">Accompagnateur</th>
-                                <th className="text-left text-xs font-semibold text-text-secondary uppercase tracking-wider px-6 py-4 hidden sm:table-cell">Statut</th>
-                                <th className="text-right text-xs font-semibold text-text-secondary uppercase tracking-wider px-3 sm:px-6 py-3 sm:py-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading && users.length === 0 ? (
-                                <tr>
-                                    <td colSpan={7} className="px-6 py-12 text-center text-text-muted">
-                                        <LoadingSpinner size="lg" className="mx-auto mb-4" />
-                                        Chargement des données...
-                                    </td>
-                                </tr>
-                            ) : users.length === 0 ? (
-                                <tr>
-                                    <td colSpan={7} className="px-6 py-12 text-center text-text-muted">
-                                        <Users className="w-10 h-10 mx-auto mb-3 opacity-20" />
-                                        Aucun utilisateur trouvé
-                                    </td>
-                                </tr>
-                            ) : users.map((user, index) => {
-                                const assignedCoach = user.memoiresAsStudent?.[0]?.accompagnateur;
-
-                                return (
-                                    <motion.tr
-                                        key={user.id}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: index * 0.02 }}
-                                        className="border-b border-border-light/50 hover:bg-bg-light/30 transition-colors"
+            <ResponsiveTable
+                loading={loading}
+                data={users}
+                primaryKey="id"
+                columns={[
+                    { key: 'user', label: 'Utilisateur' },
+                    { key: 'role', label: 'Rôle' },
+                    { key: 'university', label: 'Université', breakpoint: 'md' },
+                    { key: 'createdAt', label: 'Inscription', breakpoint: 'lg' },
+                    { key: 'coach', label: 'Accompagnateur', breakpoint: 'md' },
+                    { key: 'status', label: 'Statut', breakpoint: 'sm' }
+                ]}
+                renderDesktopRow={(user) => (
+                    <>
+                        <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
+                                    {user.firstName[0]}{user.lastName[0]}
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-sm text-primary">{user.firstName} {user.lastName}</div>
+                                    <div className="text-xs text-text-muted">{user.email}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td className="px-6 py-4">
+                            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${roleBadge[user.role]}`}>
+                                {roleLabel[user.role]}
+                            </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell">{user.university || '—'}</td>
+                        <td className="px-6 py-4 text-xs text-text-muted hidden lg:table-cell">
+                            {new Date(user.createdAt).toLocaleDateString('fr-FR')}
+                        </td>
+                        <td className="px-6 py-4 hidden md:table-cell">
+                            {user.role === 'STUDENT' ? (
+                                user.memoiresAsStudent?.[0]?.accompagnateur ? (
+                                    <div className="text-sm font-medium text-primary">
+                                        {user.memoiresAsStudent[0].accompagnateur.firstName} {user.memoiresAsStudent[0].accompagnateur.lastName}
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={() => setAssigningCoachFor(user)}
+                                        className="text-xs font-semibold text-accent bg-accent/10 hover:bg-accent/20 px-3 py-1.5 rounded-lg transition-colors"
                                     >
-                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
-                                                    {user.firstName[0]}{user.lastName[0]}
-                                                </div>
-                                                <div>
-                                                    <div className="font-semibold text-sm text-primary">{user.firstName} {user.lastName}</div>
-                                                    <div className="text-xs text-text-muted">{user.email}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${roleBadge[user.role]}`}>
-                                                {roleLabel[user.role]}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell">{user.university || '—'}</td>
-                                        <td className="px-6 py-4 text-xs text-text-muted hidden lg:table-cell">
-                                            {new Date(user.createdAt).toLocaleDateString('fr-FR')}
-                                        </td>
-                                        <td className="px-6 py-4 hidden md:table-cell">
-                                            {user.role === 'STUDENT' ? (
-                                                assignedCoach ? (
-                                                    <div className="text-sm font-medium text-primary">
-                                                        {assignedCoach.firstName} {assignedCoach.lastName}
-                                                    </div>
-                                                ) : (
-                                                    <button
-                                                        onClick={() => setAssigningCoachFor(user)}
-                                                        className="text-xs font-semibold text-accent bg-accent/10 hover:bg-accent/20 px-3 py-1.5 rounded-lg transition-colors"
-                                                    >
-                                                        Assigner
-                                                    </button>
-                                                )
-                                            ) : (
-                                                <span className="text-text-muted text-sm">—</span>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4 hidden sm:table-cell">
-                                            {user.isActive ? (
-                                                <span className="flex items-center gap-1.5 text-xs text-success font-medium"><UserCheck className="w-3.5 h-3.5" /> Actif</span>
-                                            ) : (
-                                                <span className="flex items-center gap-1.5 text-xs text-error font-medium"><UserX className="w-3.5 h-3.5" /> Inactif</span>
-                                            )}
-                                        </td>
-                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                            <div className="flex items-center justify-end gap-1">
-                                                {user.role === 'STUDENT' && assignedCoach && (
-                                                    <button
-                                                        onClick={() => setAssigningCoachFor(user)}
-                                                        className="p-2 rounded-lg hover:bg-bg-light text-text-secondary hover:text-accent transition-colors title='Changer de coach'"
-                                                    >
-                                                        <Users className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                                <button
-                                                    onClick={() => setEditingUser(user)}
-                                                    className="p-2 rounded-lg hover:bg-bg-light text-text-secondary hover:text-primary transition-colors"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </motion.tr>
+                                        Assigner
+                                    </button>
                                 )
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+                            ) : (
+                                <span className="text-text-muted text-sm">—</span>
+                            )}
+                        </td>
+                        <td className="px-6 py-4 hidden sm:table-cell">
+                            {user.isActive ? (
+                                <span className="flex items-center gap-1.5 text-xs text-success font-medium"><UserCheck className="w-3.5 h-3.5" /> Actif</span>
+                            ) : (
+                                <span className="flex items-center gap-1.5 text-xs text-error font-medium"><UserX className="w-3.5 h-3.5" /> Inactif</span>
+                            )}
+                        </td>
+                    </>
+                )}
+                renderMobileSummary={(user) => ({
+                    label: 'Nom',
+                    value: <div className="flex items-center gap-2">
+                        <span>{user.firstName} {user.lastName}</span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${roleBadge[user.role]}`}>{roleLabel[user.role]}</span>
+                    </div>
+                })}
+                renderMobileDetails={(user) => [
+                    { label: 'Email', value: user.email },
+                    { label: 'Université', value: user.university || '—' },
+                    { label: 'Inscription', value: new Date(user.createdAt).toLocaleDateString('fr-FR') },
+                    {
+                        label: 'Accompagnateur',
+                        value: user.role === 'STUDENT' ? (
+                            user.memoiresAsStudent?.[0]?.accompagnateur ? `${user.memoiresAsStudent[0].accompagnateur.firstName} ${user.memoiresAsStudent[0].accompagnateur.lastName}` : <button onClick={() => setAssigningCoachFor(user)} className="text-accent underline font-bold">Assigner</button>
+                        ) : '—'
+                    },
+                    {
+                        label: 'Statut',
+                        value: user.isActive ? <span className="text-success">Actif</span> : <span className="text-error">Inactif</span>
+                    }
+                ]}
+                renderActions={(user) => (
+                    <>
+                        {user.role === 'STUDENT' && user.memoiresAsStudent?.[0]?.accompagnateur && (
+                            <button
+                                onClick={() => setAssigningCoachFor(user)}
+                                className="p-2 sm:p-2 rounded-lg hover:bg-bg-light text-text-secondary hover:text-accent transition-colors bg-white sm:bg-transparent shadow-sm sm:shadow-none"
+                                title="Changer de coach"
+                            >
+                                <Users className="w-4 h-4" />
+                            </button>
+                        )}
+                        <button
+                            onClick={() => setEditingUser(user)}
+                            className="p-2 sm:p-2 rounded-lg hover:bg-bg-light text-text-secondary hover:text-primary transition-colors bg-white sm:bg-transparent shadow-sm sm:shadow-none"
+                        >
+                            <Edit className="w-4 h-4" />
+                        </button>
+                    </>
+                )}
+            />
 
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                    totalItems={totalUsers}
-                    itemsPerPage={5}
-                />
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={totalUsers}
+                itemsPerPage={5}
+            />
 
             <AnimatePresence>
                 {editingUser && (

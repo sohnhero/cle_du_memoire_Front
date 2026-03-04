@@ -26,7 +26,9 @@ export default function Pagination({
 
     const renderPageNumbers = () => {
         const pages = [];
-        const maxVisible = 5;
+        // Show fewer numbers on mobile to prevent overflow
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+        const maxVisible = isMobile ? 3 : 5;
 
         let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
         let end = Math.min(totalPages, start + maxVisible - 1);

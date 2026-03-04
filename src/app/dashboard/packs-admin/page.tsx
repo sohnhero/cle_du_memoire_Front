@@ -10,6 +10,7 @@ import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 import Pagination from '@/components/Pagination';
+import ResponsiveTable from '@/components/ResponsiveTable';
 
 const statusBadge: Record<string, string> = {
     PENDING: 'bg-warning/10 text-warning',
@@ -163,68 +164,86 @@ export default function AdminPacksPage() {
                                 </div>
                             ) : (
                                 <>
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left border-collapse">
-                                            <thead>
-                                                <tr className="bg-bg-light/50 border-b border-border-light text-text-secondary text-xs uppercase tracking-wider font-semibold">
-                                                    <th className="px-3 sm:px-6 py-3 sm:py-4">Étudiant</th>
-                                                    <th className="px-3 sm:px-6 py-3 sm:py-4">Pack</th>
-                                                    <th className="px-6 py-4 hidden md:table-cell">Date Souscription</th>
-                                                    <th className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">Montant Payé</th>
-                                                    <th className="px-3 sm:px-6 py-3 sm:py-4">Statut</th>
-                                                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {subscriptions.map((sub, idx) => (
-                                                    <motion.tr
-                                                        key={sub.id}
-                                                        initial={{ opacity: 0 }}
-                                                        animate={{ opacity: 1 }}
-                                                        transition={{ delay: idx * 0.02 }}
-                                                        className="border-b border-border-light hover:bg-bg-light/30 transition-colors"
-                                                    >
-                                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                                            <div className="flex items-center gap-3">
-                                                                <div className="w-9 h-9 rounded-xl bg-info/10 text-info flex items-center justify-center font-bold text-sm uppercase">
-                                                                    {sub.user?.firstName?.[0]}{sub.user?.lastName?.[0]}
-                                                                </div>
-                                                                <div>
-                                                                    <div className="font-semibold text-sm text-primary">{sub.user?.firstName} {sub.user?.lastName}</div>
-                                                                    <div className="text-xs text-text-muted">{sub.user?.email}</div>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                                            <div className="font-semibold text-sm text-primary">{sub.pack?.name}</div>
-                                                            <div className="text-xs text-text-muted">{sub.pack?.price.toLocaleString()} FCFA</div>
-                                                        </td>
-                                                        <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell">
-                                                            {new Date(sub.createdAt).toLocaleDateString('fr-FR')}
-                                                        </td>
-                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
-                                                            <span className="text-sm font-semibold text-primary">{sub.amountPaid?.toLocaleString()} FCFA</span>
-                                                        </td>
-                                                        <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                                            <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-lg ${statusBadge[sub.status] || 'bg-border text-text-secondary'}`}>
-                                                                {statusLabel[sub.status] || sub.status}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
-                                                            {sub.status === 'PENDING' || sub.status === 'PARTIAL' ? (
-                                                                <button onClick={() => handleOpenPayment(sub)} className="px-3 py-1.5 bg-success/10 text-success hover:bg-success/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto">
-                                                                    <CreditCard className="w-3.5 h-3.5" /> Encaisser
-                                                                </button>
-                                                            ) : (
-                                                                <span className="text-xs text-text-muted">—</span>
-                                                            )}
-                                                        </td>
-                                                    </motion.tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div className="p-4 border-t border-border-light">
+                                    <ResponsiveTable
+                                        loading={loading}
+                                        data={subscriptions}
+                                        primaryKey="id"
+                                        columns={[
+                                            { key: 'student', label: 'Étudiant' },
+                                            { key: 'pack', label: 'Pack' },
+                                            { key: 'date', label: 'Date Souscription', breakpoint: 'md' },
+                                            { key: 'amount', label: 'Montant Payé', breakpoint: 'sm' },
+                                            { key: 'status', label: 'Statut' },
+                                            { key: 'actions', label: 'Actions', className: 'text-right' }
+                                        ]}
+                                        renderDesktopRow={(sub) => (
+                                            <>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-9 h-9 rounded-xl bg-info/10 text-info flex items-center justify-center font-bold text-sm uppercase">
+                                                            {sub.user?.firstName?.[0]}{sub.user?.lastName?.[0]}
+                                                        </div>
+                                                        <div>
+                                                            <div className="font-semibold text-sm text-primary">{sub.user?.firstName} {sub.user?.lastName}</div>
+                                                            <div className="text-xs text-text-muted">{sub.user?.email}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="font-semibold text-sm text-primary">{sub.pack?.name}</div>
+                                                    <div className="text-xs text-text-muted">{sub.pack?.price.toLocaleString()} FCFA</div>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-text-secondary hidden md:table-cell">
+                                                    {new Date(sub.createdAt).toLocaleDateString('fr-FR')}
+                                                </td>
+                                                <td className="px-6 py-4 hidden sm:table-cell">
+                                                    <span className="text-sm font-semibold text-primary">{sub.amountPaid?.toLocaleString()} FCFA</span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-lg ${statusBadge[sub.status] || 'bg-border text-text-secondary'}`}>
+                                                        {statusLabel[sub.status] || sub.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    {sub.status === 'PENDING' || sub.status === 'PARTIAL' ? (
+                                                        <button onClick={() => handleOpenPayment(sub)} className="px-3 py-1.5 bg-success/10 text-success hover:bg-success/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto">
+                                                            <CreditCard className="w-3.5 h-3.5" /> Encaisser
+                                                        </button>
+                                                    ) : (
+                                                        <span className="text-xs text-text-muted">—</span>
+                                                    )}
+                                                </td>
+                                            </>
+                                        )}
+                                        renderMobileSummary={(sub) => ({
+                                            label: 'Étudiant',
+                                            value: (
+                                                <div className="flex items-center gap-2">
+                                                    <span>{sub.user?.firstName} {sub.user?.lastName}</span>
+                                                    <span className={`text-[9px] px-1.5 py-0.5 rounded-md ${statusBadge[sub.status]}`}>{statusLabel[sub.status]}</span>
+                                                </div>
+                                            )
+                                        })}
+                                        renderMobileDetails={(sub) => [
+                                            { label: 'Pack', value: `${sub.pack?.name} (${sub.pack?.price.toLocaleString()} FCFA)` },
+                                            { label: 'Email', value: sub.user?.email },
+                                            { label: 'Date', value: new Date(sub.createdAt).toLocaleDateString('fr-FR') },
+                                            { label: 'Payé', value: `${sub.amountPaid?.toLocaleString()} FCFA` }
+                                        ]}
+                                        renderActions={(sub) => (
+                                            (sub.status === 'PENDING' || sub.status === 'PARTIAL') && (
+                                                <button
+                                                    onClick={() => handleOpenPayment(sub)}
+                                                    className="p-2 rounded-lg hover:bg-bg-light text-success transition-colors bg-white shadow-sm sm:shadow-none sm:bg-transparent"
+                                                    title="Encaisser"
+                                                >
+                                                    <CreditCard className="w-4 h-4" />
+                                                </button>
+                                            )
+                                        )}
+                                    />
+
+                                    <div className="mt-4">
                                         <Pagination
                                             currentPage={currentPage}
                                             totalPages={totalPages}
