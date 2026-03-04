@@ -161,7 +161,6 @@ summary {
     border: 1px solid rgba(0, 0, 0, 0.06);
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
     transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    overflow: hidden;
   }
 
   .card-premium:hover {
