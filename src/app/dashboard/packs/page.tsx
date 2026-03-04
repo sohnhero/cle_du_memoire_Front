@@ -8,6 +8,8 @@ import {
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import ConfirmModal from '@/components/ConfirmModal';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function PacksPage() {
     const [packs, setPacks] = useState<any[]>([]);
@@ -17,6 +19,7 @@ export default function PacksPage() {
     const [localToast, setLocalToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [selectedSubForPay, setSelectedSubForPay] = useState<any>(null);
     const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+    const [pendingPackSwitch, setPendingPackSwitch] = useState<string | null>(null);
 
     useEffect(() => {
         loadData();
@@ -57,9 +60,13 @@ export default function PacksPage() {
         // Confirmation if switching
         const hasActiveOrPending = subscriptions.some(s => ['ACTIVE', 'PAID', 'PENDING', 'PARTIAL'].includes(s.status));
         if (hasActiveOrPending) {
-            const confirmed = window.confirm("Le passage à ce nouveau pack remplacera votre abonnement actuel. Souhaitez-vous continuer ?");
-            if (!confirmed) return;
+            setPendingPackSwitch(packId);
+            return;
         }
+        await doSubscribe(packId);
+    }
+
+    async function doSubscribe(packId: string) {
 
         setSubscribing(packId);
         try {
@@ -80,7 +87,7 @@ export default function PacksPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 text-accent animate-spin" />
+                <LoadingSpinner size="lg" />
             </div>
         );
     }
@@ -201,7 +208,7 @@ export default function PacksPage() {
                             <div className="mt-auto">
                                 {subscribing === pack.id ? (
                                     <div className="w-full py-2.5 rounded-xl font-semibold text-xs transition-all bg-primary/10 text-primary flex items-center justify-center gap-2">
-                                        <Loader2 className="w-4 h-4 animate-spin" /> Souscription...
+                                        <LoadingSpinner size="sm" className="inline-block mr-2" /> Souscription...
                                     </div>
                                 ) : isActive ? (
                                     <div className="w-full py-2.5 rounded-xl font-semibold text-xs transition-all bg-success text-white flex items-center justify-center gap-2 cursor-default shadow-sm">
@@ -255,6 +262,15 @@ export default function PacksPage() {
                     <p>Aucun pack disponible pour le moment.</p>
                 </div>
             )}
+            <ConfirmModal
+                isOpen={!!pendingPackSwitch}
+                onClose={() => setPendingPackSwitch(null)}
+                onConfirm={() => pendingPackSwitch && doSubscribe(pendingPackSwitch)}
+                title="Changer de pack"
+                message="Le passage à ce nouveau pack remplacera votre abonnement actuel. Souhaitez-vous continuer ?"
+                confirmText="Changer de pack"
+                variant="warning"
+            />
         </div>
     );
 }
@@ -371,7 +387,10 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                                 className="btn-primary w-full justify-center py-3 mt-2 disabled:opacity-40 text-sm"
                             >
                                 {loading ? (
-                                    <><CircleNotch className="w-4 h-4 animate-spin" weight="bold" /> Envoi en cours...</>
+                                    <>
+                                        <LoadingSpinner size="sm" light className="mr-2" />
+                                        Envoi en cours...
+                                    </>
                                 ) : (
                                     <><CreditCard className="w-4 h-4" weight="bold" /> Confirmer le paiement</>
                                 )}

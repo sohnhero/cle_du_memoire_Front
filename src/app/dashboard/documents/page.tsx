@@ -9,6 +9,7 @@ import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ComponentType<any> }> = {
     UPLOADED: { label: 'Envoyé', color: 'bg-info/10 text-info', icon: Upload },
@@ -229,10 +230,9 @@ export default function DocumentsPage() {
                 </button>
             </div>
 
-            {/* Documents List - Grouped by Category */}
             {loading ? (
                 <div className="flex justify-center items-center py-20">
-                    <div className="w-8 h-8 border-4 border-accent/30 border-t-accent rounded-full animate-spin" />
+                    <LoadingSpinner size="lg" />
                 </div>
             ) : Object.keys(groupedDocs).length === 0 ? (
                 <div className="card-premium p-12 text-center text-text-secondary">
@@ -393,7 +393,7 @@ function ReviewModal({ doc, onClose, onReviewSuccess }: { doc: any, onClose: () 
                         Annuler
                     </button>
                     <button onClick={handleSave} disabled={isSaving} className="btn-primary px-6 py-2.5 flex items-center gap-2">
-                        {isSaving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <ClipboardCheck className="w-4 h-4" />}
+                        {isSaving ? <LoadingSpinner size="sm" light /> : <ClipboardCheck className="w-4 h-4" />}
                         {isSaving ? 'Enregistrement...' : 'Valider l\'évaluation'}
                     </button>
                 </div>
@@ -480,7 +480,7 @@ function UploadModal({ onClose, onUploadSuccess }: { onClose: () => void, onUplo
                         Annuler
                     </button>
                     <button onClick={handleUpload} disabled={!file || isUploading} className="btn-primary px-8 py-3 flex items-center gap-2 text-sm">
-                        {isUploading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Upload className="w-4 h-4" />}
+                        {isUploading ? <LoadingSpinner size="sm" light /> : <Upload className="w-4 h-4" />}
                         {isUploading ? 'Envoi...' : 'Envoyer maintenant'}
                     </button>
                 </div>
@@ -574,7 +574,7 @@ function AiAssistantModal({ onClose }: { onClose: () => void }) {
                                 Annuler
                             </button>
                             <button onClick={handleAnalyze} disabled={!text.trim() || isAnalyzing} className="btn-primary px-6 py-2.5 flex items-center gap-2">
-                                {isAnalyzing ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                                {isAnalyzing ? <LoadingSpinner size="sm" light /> : <Sparkles className="w-4 h-4" />}
                                 {isAnalyzing ? 'Analyse en cours...' : 'Corriger le texte'}
                             </button>
                         </>

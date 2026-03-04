@@ -267,6 +267,13 @@ class ApiClient {
         return this.request<{ event: any }>(`/calendar/${id}/toggle`, { method: 'PATCH' });
     }
 
+    async updateEvent(id: string, data: any) {
+        return this.request<{ event: any }>(`/calendar/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        });
+    }
+
     async getNextEvent() {
         return this.request<{ event: any }>('/calendar/next');
     }
@@ -286,6 +293,13 @@ class ApiClient {
 
     async deleteResource(id: string) {
         return this.request<{ message: string }>(`/resources/${id}`, { method: 'DELETE' });
+    }
+
+    async updateResource(id: string, data: any) {
+        return this.request<{ resource: any }>(`/resources/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        });
     }
 
     // Export PDF

@@ -7,6 +7,7 @@ import {
 } from '@phosphor-icons/react';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const roleBadge: Record<string, string> = {
     STUDENT: 'bg-info/10 text-info',
@@ -59,7 +60,7 @@ export default function AdminUsersPage() {
                 </div>
                 <div className="flex gap-2">
                     <button onClick={loadUsers} className="p-3 rounded-xl border border-border bg-white hover:bg-bg-light transition-colors text-text-secondary shadow-sm">
-                        <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-accent' : ''}`} />
+                        {loading ? <LoadingSpinner size="sm" className="text-accent" /> : <RefreshCw className="w-4 h-4" />}
                     </button>
                     <button className="btn-primary py-3 px-6 text-sm">
                         <Plus className="w-4 h-4" /> Ajouter un utilisateur
@@ -109,7 +110,7 @@ export default function AdminUsersPage() {
                             {loading && users.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="px-6 py-12 text-center text-text-muted">
-                                        <div className="w-8 h-8 border-4 border-accent/20 border-t-accent rounded-full animate-spin mx-auto mb-4" />
+                                        <LoadingSpinner size="lg" className="mx-auto mb-4" />
                                         Chargement des données...
                                     </td>
                                 </tr>
@@ -312,7 +313,7 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
                             Annuler
                         </button>
                         <button type="submit" disabled={isSaving} className="btn-primary px-6 py-2.5 flex items-center gap-2">
-                            {isSaving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Edit className="w-4 h-4" />}
+                            {isSaving ? <LoadingSpinner size="sm" light /> : <Edit className="w-4 h-4" />}
                             {isSaving ? 'Enregistrement...' : 'Enregistrer'}
                         </button>
                     </div>
@@ -387,7 +388,7 @@ function AssignCoachModal({ student, coaches, onClose, onSuccess }: { student: a
                         Annuler
                     </button>
                     <button onClick={handleAssign} disabled={isSaving || !selectedCoachId} className="btn-primary px-6 py-2.5 flex items-center gap-2">
-                        {isSaving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Shield className="w-4 h-4" />}
+                        {isSaving ? <LoadingSpinner size="sm" light /> : <Shield className="w-4 h-4" />}
                         {isSaving ? 'Assignation...' : 'Assigner'}
                     </button>
                 </div>

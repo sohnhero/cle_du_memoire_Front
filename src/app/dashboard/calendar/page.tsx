@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import {
-    CalendarBlank as CalendarIcon, Clock, Plus, Trash as Trash2, CalendarBlank as CalendarDays, Warning as AlertTriangle, Video, X, CaretLeft as ChevronLeft, CaretRight as ChevronRight, CheckCircle as CheckCircle2, Circle, UserCircle, ArrowSquareOut
+    CalendarBlank as CalendarIcon, Clock, Plus, Trash as Trash2, CalendarBlank as CalendarDays, Warning as AlertTriangle, Video, X, CaretLeft as ChevronLeft, CaretRight as ChevronRight, CheckCircle as CheckCircle2, Circle, UserCircle, ArrowSquareOut, PencilSimple as Pencil
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { useAuth } from '@/context/AuthContext';
+import ConfirmModal from '@/components/ConfirmModal';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function CalendarPage() {
     const { user } = useAuth();
@@ -16,6 +18,8 @@ export default function CalendarPage() {
     const [loading, setLoading] = useState(true);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+    const [editingEvent, setEditingEvent] = useState<any>(null);
 
     // Calendar state
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -37,10 +41,10 @@ export default function CalendarPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Voulez-vous vraiment supprimer cet événement ?')) return;
         try {
             await api.deleteEvent(id);
             setEvents(events.filter(e => e.id !== id));
+            toast.success('Événement supprimé');
         } catch (error) {
             console.error(error);
             toast.error('Erreur lors de la suppression');
@@ -136,7 +140,7 @@ export default function CalendarPage() {
     const completedEvents = events.filter(e => e.isCompleted).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     if (!mounted || loading) {
-        return <div className="p-8 flex justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>;
+        return <div className="p-20 flex justify-center"><LoadingSpinner size="lg" /></div>;
     }
 
     return (
@@ -284,9 +288,14 @@ export default function CalendarPage() {
                                         )}
 
                                         {!event.isFromCoach && (
-                                            <button onClick={() => handleDelete(event.id)} className="p-2 text-text-muted hover:text-error sm:opacity-0 sm:group-hover:opacity-100 transition-all rounded-xl hover:bg-error/5">
-                                                <Trash2 className="w-5 h-5" />
-                                            </button>
+                                            <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
+                                                <button onClick={() => setEditingEvent(event)} className="p-2 text-text-muted hover:text-accent rounded-xl hover:bg-accent/5">
+                                                    <Pencil className="w-5 h-5" />
+                                                </button>
+                                                <button onClick={() => setDeleteConfirm(event.id)} className="p-2 text-text-muted hover:text-error rounded-xl hover:bg-error/5">
+                                                    <Trash2 className="w-5 h-5" />
+                                                </button>
+                                            </div>
                                         )}
                                     </motion.div>
                                 ))}
@@ -315,9 +324,16 @@ export default function CalendarPage() {
                                             <h3 className="font-bold text-primary/50 text-sm line-through decoration-primary/30">{event.title}</h3>
                                             <p className="text-xs text-text-muted">Complété le {new Date(event.updatedAt).toLocaleDateString('fr-FR')}</p>
                                         </div>
-                                        <button onClick={() => handleDelete(event.id)} className="p-2 text-text-muted hover:text-error opacity-0 group-hover:opacity-100 transition-all">
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
+                                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                                            {!event.isFromCoach && (
+                                                <button onClick={() => setEditingEvent(event)} className="p-2 text-text-muted hover:text-accent rounded-xl hover:bg-accent/5">
+                                                    <Pencil className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                            <button onClick={() => setDeleteConfirm(event.id)} className="p-2 text-text-muted hover:text-error rounded-xl hover:bg-error/5">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -328,7 +344,140 @@ export default function CalendarPage() {
 
             <AnimatePresence>
                 {isAddModalOpen && <AddEventModal onClose={() => setIsAddModalOpen(false)} onAdd={loadEvents} />}
+                {editingEvent && <EditEventModal event={editingEvent} onClose={() => setEditingEvent(null)} onUpdate={loadEvents} />}
             </AnimatePresence>
+
+            <ConfirmModal
+                isOpen={!!deleteConfirm}
+                onClose={() => setDeleteConfirm(null)}
+                onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)}
+                title="Supprimer l'événement"
+                message="Voulez-vous vraiment supprimer cet événement ? Cette action est irréversible."
+                confirmText="Supprimer"
+                variant="danger"
+            />
+        </div>
+    );
+}
+
+function EditEventModal({ event, onClose, onUpdate }: { event: any, onClose: () => void, onUpdate: () => void }) {
+    const { user } = useAuth();
+    const [title, setTitle] = useState(event.title);
+    const [description, setDescription] = useState(event.description || '');
+
+    // Parse date and time from event.date
+    const eventDate = new Date(event.date);
+    const dateStr = eventDate.toISOString().split('T')[0];
+    const timeStr = eventDate.toTimeString().substring(0, 5);
+
+    const [date, setDate] = useState(dateStr);
+    const [time, setTime] = useState(timeStr);
+    const [type, setType] = useState(event.type || 'REMINDER');
+    const [studentId, setStudentId] = useState(event.studentId || '');
+    const [students, setStudents] = useState<any[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const isCoach = user?.role === 'ACCOMPAGNATEUR' || user?.role === 'ADMIN';
+
+    useEffect(() => {
+        if (isCoach) {
+            api.getCoachStudents().then(res => setStudents(res.students || [])).catch(() => { });
+        }
+    }, [isCoach]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!title || !date || !time) return;
+        setIsSubmitting(true);
+        try {
+            const dateTime = new Date(`${date}T${time}`).toISOString();
+            await api.updateEvent(event.id, {
+                title,
+                description,
+                date: dateTime,
+                type,
+                ...(type === 'MEETING' && studentId ? { studentId } : { studentId: null }),
+            });
+            onUpdate();
+            onClose();
+            toast.success('Événement mis à jour !');
+        } catch (error) {
+            console.error(error);
+            toast.error("Erreur lors de la mise à jour");
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-md" onClick={onClose} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-white/20">
+                <div className="relative p-8">
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-2xl font-bold text-primary tracking-tight">Modifier la tâche</h3>
+                        <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Titre de la tâche</label>
+                            <input type="text" value={title} onChange={e => setTitle(e.target.value)} required className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all text-sm font-medium" />
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Type d'échéance</label>
+                            <select value={type} onChange={e => setType(e.target.value)} disabled={user?.role === 'STUDENT'} className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm font-semibold appearance-none cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed">
+                                <option value="REMINDER">📌 Rappel personnel</option>
+                                {user?.role !== 'STUDENT' && (
+                                    <>
+                                        <option value="DEADLINE">🚨 Échéance de rendu</option>
+                                        <option value="MEETING">👥 Réunion / Séance</option>
+                                    </>
+                                )}
+                            </select>
+                        </div>
+
+                        {type === 'MEETING' && isCoach && (
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Étudiant concerné</label>
+                                <select value={studentId} onChange={e => setStudentId(e.target.value)} required className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm font-semibold appearance-none cursor-pointer">
+                                    <option value="" disabled>Choisir un étudiant...</option>
+                                    {students.map(s => (
+                                        <option key={s.id} value={s.id}>{s.firstName} {s.lastName}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Date</label>
+                                <input type="date" value={date} onChange={e => setDate(e.target.value)} required className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm font-semibold" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Heure</label>
+                                <input type="time" value={time} onChange={e => setTime(e.target.value)} required className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm font-semibold" />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-primary/50 uppercase tracking-widest px-1">Notes</label>
+                            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} className="w-full px-5 py-3.5 rounded-2xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all text-sm font-medium resize-none" />
+                        </div>
+
+                        <div className="pt-4 grid grid-cols-2 gap-3">
+                            <button type="button" onClick={onClose} className="px-6 py-3.5 text-sm font-bold text-text-secondary hover:bg-bg-light rounded-2xl transition-colors">
+                                Annuler
+                            </button>
+                            <button type="submit" disabled={isSubmitting} className="btn-primary px-6 py-3.5 text-sm shadow-lg shadow-accent/20">
+                                {isSubmitting ? '...' : 'Mettre à jour'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </motion.div>
         </div>
     );
 }

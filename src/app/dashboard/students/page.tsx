@@ -8,6 +8,7 @@ import {
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const phasesList = [
     { id: 'TOPIC', label: 'Choix du sujet' },
@@ -113,7 +114,7 @@ export default function StudentsPage() {
             {/* Student List */}
             {loading ? (
                 <div className="flex justify-center py-20">
-                    <div className="w-8 h-8 border-4 border-accent/30 border-t-accent rounded-full animate-spin" />
+                    <LoadingSpinner size="lg" />
                 </div>
             ) : filteredMemoires.length === 0 ? (
                 <div className="card-premium p-12 text-center text-text-secondary">

@@ -8,6 +8,7 @@ import {
     User, EnvelopeSimple as Mail, Phone, Buildings as Building, BookOpen, ShieldCheck as Shield, Camera, FloppyDisk as Save, Lock, CircleNotch as Loader2, CheckCircle
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function ProfilePage() {
     const { user, login } = useAuth();
@@ -162,7 +163,7 @@ export default function ProfilePage() {
                         className="btn-primary py-2.5 px-5 text-sm"
                     >
                         {saving ? (
-                            <><Loader2 className="w-4 h-4 animate-spin" /> Sauvegarde...</>
+                            <><LoadingSpinner size="sm" light className="mr-2" /> Sauvegarde...</>
                         ) : editing ? (
                             <><Save className="w-4 h-4" /> Sauvegarder</>
                         ) : (
@@ -263,7 +264,7 @@ export default function ProfilePage() {
                             </div>
                         </div>
                         <button onClick={handleChangePassword} disabled={changingPw} className="btn-primary py-3 px-6 text-sm">
-                            {changingPw ? <><Loader2 className="w-4 h-4 animate-spin" /> Mise à jour...</> : <><Save className="w-4 h-4" /> Mettre à jour</>}
+                            {changingPw ? <><LoadingSpinner size="sm" light className="mr-2" /> Mise à jour...</> : <><Save className="w-4 h-4" /> Mettre à jour</>}
                         </button>
                     </motion.div>
                 )}

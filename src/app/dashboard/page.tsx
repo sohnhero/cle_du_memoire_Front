@@ -11,6 +11,7 @@ import {
     Eye, ArrowUpRight, CalendarBlank as Calendar, CaretRight as ChevronRight
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 // ==================== STATS CARD ====================
 function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
@@ -412,7 +413,7 @@ function AccompagnateurDashboard() {
 
                     {loading ? (
                         <div className="flex justify-center py-10">
-                            <div className="w-8 h-8 border-4 border-accent/30 border-t-accent rounded-full animate-spin" />
+                            <LoadingSpinner size="lg" />
                         </div>
                     ) : memoires.length === 0 ? (
                         <div className="text-center py-10 text-text-secondary">

@@ -9,6 +9,7 @@ import {
     ChatCircle as MessageCircle, PaperPlaneRight as Send, MagnifyingGlass as Search, DotsThreeVertical as MoreVertical, Phone, Video, Paperclip, Smiley as Smile, Check, Checks as CheckCheck, CaretLeft as ChevronLeft, FileText, X, Plus, UserPlus, Info
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function MessagesPage() {
     const { user } = useAuth();
@@ -194,7 +195,7 @@ export default function MessagesPage() {
                     <div className="flex-1 overflow-y-auto">
                         {loadingConvs ? (
                             <div className="flex justify-center p-8">
-                                <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                                <LoadingSpinner size="sm" />
                             </div>
                         ) : conversations.length === 0 && !tentativePartner ? (
                             <div className="text-center p-8 text-text-secondary">
@@ -306,7 +307,7 @@ export default function MessagesPage() {
                             <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 bg-bg-light/30">
                                 {loadingMessages ? (
                                     <div className="flex justify-center p-8">
-                                        <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                                        <LoadingSpinner size="sm" />
                                     </div>
                                 ) : messages.length === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center p-8">
@@ -485,7 +486,7 @@ function NewChatModal({ onClose, onSelectPartner }: { onClose: () => void, onSel
 
                 <div className="flex-1 overflow-y-auto p-2">
                     {loading ? (
-                        <div className="flex justify-center p-8"><div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" /></div>
+                        <div className="flex justify-center p-8"><LoadingSpinner size="sm" /></div>
                     ) : filteredPartners.length === 0 ? (
                         <div className="text-center p-8 text-text-muted text-sm italic">Aucun contact trouvé</div>
                     ) : (

@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import {
-    FileText, Download, Link as LinkIcon, Plus, Trash as Trash2, MagnifyingGlass as Search, BookOpen, ArrowSquareOut as ExternalLink, X, Upload
+    FileText, Download, Link as LinkIcon, Plus, Trash as Trash2, MagnifyingGlass as Search, BookOpen, ArrowSquareOut as ExternalLink, X, Upload, PencilSimple as Pencil
 } from '@phosphor-icons/react';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import { BrandIcon } from '@/components/BrandIcon';
 import { useAuth } from '@/context/AuthContext';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function ResourcesPage() {
     const { user } = useAuth();
@@ -17,6 +19,8 @@ export default function ResourcesPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('ALL');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [editingResource, setEditingResource] = useState<any>(null);
+    const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
     const categories = [
         { id: 'ALL', label: 'Tout' },
@@ -42,11 +46,13 @@ export default function ResourcesPage() {
         }
     };
 
+
+
     const handleDelete = async (id: string) => {
-        if (!confirm('Voulez-vous vraiment supprimer cette ressource ?')) return;
         try {
             await api.deleteResource(id);
             setResources(resources.filter(r => r.id !== id));
+            toast.success('Ressource supprimée');
         } catch (error) {
             console.error(error);
             toast.error('Erreur lors de la suppression');
@@ -117,7 +123,7 @@ export default function ResourcesPage() {
             </div>
 
             {loading ? (
-                <div className="p-12 flex justify-center"><div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin" /></div>
+                <div className="p-20 flex justify-center"><LoadingSpinner size="lg" /></div>
             ) : filteredResources.length === 0 ? (
                 <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-border-light">
                     <BrandIcon icon={BookOpen} size={64} className="mx-auto mb-3 opacity-30 grayscale" />
@@ -132,9 +138,14 @@ export default function ResourcesPage() {
                                     {getIcon(resource.fileType)}
                                 </div>
                                 {user?.role === 'ADMIN' && (
-                                    <button onClick={() => handleDelete(resource.id)} className="p-1.5 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors sm:opacity-0 sm:group-hover:opacity-100">
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+                                    <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                        <button onClick={() => setEditingResource(resource)} className="p-1.5 text-text-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
+                                            <Pencil className="w-4 h-4" />
+                                        </button>
+                                        <button onClick={() => setDeleteConfirm(resource.id)} className="p-1.5 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors">
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 )}
                             </div>
 
@@ -189,7 +200,97 @@ export default function ResourcesPage() {
 
             <AnimatePresence>
                 {isAddModalOpen && <AddResourceModal onClose={() => setIsAddModalOpen(false)} onAdd={loadResources} />}
+                {editingResource && <EditResourceModal resource={editingResource} onClose={() => setEditingResource(null)} onUpdate={loadResources} />}
+                <ConfirmModal
+                    isOpen={!!deleteConfirm}
+                    onClose={() => setDeleteConfirm(null)}
+                    onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)}
+                    title="Supprimer la ressource"
+                    message="Voulez-vous vraiment supprimer cette ressource ? Cette action est irréversible."
+                    confirmText="Supprimer"
+                    variant="danger"
+                />
             </AnimatePresence>
+        </div>
+    );
+}
+
+function EditResourceModal({ resource, onClose, onUpdate }: { resource: any, onClose: () => void, onUpdate: () => void }) {
+    const [title, setTitle] = useState(resource.title);
+    const [description, setDescription] = useState(resource.description || '');
+    const [category, setCategory] = useState(resource.category);
+    const [linkUrl, setLinkUrl] = useState(resource.fileUrl || '');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!title) return;
+        setIsSubmitting(true);
+        try {
+            await api.updateResource(resource.id, {
+                title,
+                description,
+                category,
+                linkUrl: resource.fileType === 'LINK' ? linkUrl : resource.fileUrl
+            });
+            onUpdate();
+            onClose();
+        } catch (error) {
+            console.error(error);
+            toast.error("Erreur lors de la modification");
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-bold text-primary">Modifier la ressource</h3>
+                    <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-primary mb-1.5">Titre</label>
+                        <input type="text" value={title} onChange={e => setTitle(e.target.value)} required className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm" />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-primary mb-1.5">Catégorie</label>
+                        <select value={category} onChange={e => setCategory(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm appearance-none cursor-pointer">
+                            <option value="GENERAL">Général</option>
+                            <option value="GUIDES">Guides méthodologiques</option>
+                            <option value="TEMPLATES">Templates (Gabarits)</option>
+                            <option value="EXEMPLES">Exemples de mémoire</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-primary mb-1.5">Description</label>
+                        <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm resize-none" />
+                    </div>
+
+                    {resource.fileType === 'LINK' && (
+                        <div>
+                            <label className="block text-sm font-semibold text-primary mb-1.5">URL du lien</label>
+                            <input type="url" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} required className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm" />
+                        </div>
+                    )}
+
+                    <div className="pt-4 flex justify-end gap-3">
+                        <button type="button" onClick={onClose} className="px-5 py-2.5 text-sm font-semibold text-text-secondary hover:bg-bg-light rounded-xl transition-colors">
+                            Annuler
+                        </button>
+                        <button type="submit" disabled={isSubmitting || !title} className="btn-primary px-6 py-2.5 text-sm">
+                            {isSubmitting ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                        </button>
+                    </div>
+                </form>
+            </motion.div>
         </div>
     );
 }

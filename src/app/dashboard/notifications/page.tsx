@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import {
     Bell, Checks as CheckCheck, ChatCircle as MessageCircle, Package, FileText, WarningCircle as AlertCircle, Info, CircleNotch as Loader2, Tray as Inbox
 } from '@phosphor-icons/react';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import { useRouter } from 'next/navigation';
 
 const TYPE_CONFIG: Record<string, { icon: React.ComponentType<any>; color: string }> = {
@@ -100,7 +101,7 @@ export default function NotificationsPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 text-accent animate-spin" />
+                <LoadingSpinner size="lg" />
             </div>
         );
     }
