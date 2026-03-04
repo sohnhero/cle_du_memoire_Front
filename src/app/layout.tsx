@@ -5,13 +5,60 @@ import { Toaster } from "react-hot-toast";
 import MaintenanceGuard from "@/components/MaintenanceGuard";
 
 export const metadata: Metadata = {
-  title: "Clé du Mémoire — Accompagnement académique premium au Sénégal",
-  description: "Clé du Mémoire accompagne les étudiants du supérieur au Sénégal dans la rédaction de leur mémoire. Coaching personnalisé, suivi professionnel, réussite garantie.",
-  keywords: ["mémoire", "sénégal", "accompagnement académique", "rédaction mémoire", "soutenance", "coaching étudiant"],
+  metadataBase: new URL("https://cle-du-memoire.com"), // Placeholder domain, needs actual one if exists
+  title: {
+    default: "Clé du Mémoire — Accompagnement académique premium au Sénégal",
+    template: "%s | Clé du Mémoire"
+  },
+  description: "Clé du Mémoire accompagne les étudiants du supérieur au Sénégal dans la rédaction de leur mémoire. Coaching personnalisé, suivi professionnel et réussite académique garantie.",
+  keywords: [
+    "mémoire de fin d'études", "accompagnement mémoire Sénégal", "coaching académique Dakar",
+    "rédaction mémoire", "aide soutenance", "correction mémoire Sénégal", "thèse Sénégal",
+    "UCAD mémoire", "coaching étudiant Sénégal", "Clé du Mémoire"
+  ],
+  authors: [{ name: "Clé du Mémoire Team" }],
+  creator: "Clé du Mémoire",
+  publisher: "Clé du Mémoire",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Clé du Mémoire — Votre clé vers la réussite académique",
-    description: "Plateforme d'accompagnement académique premium pour les étudiants du supérieur au Sénégal.",
+    description: "Plateforme d'accompagnement académique premium pour les étudiants du supérieur au Sénégal. Réussissez votre mémoire avec un expert dédié.",
+    url: "https://cle-du-memoire.com",
+    siteName: "Clé du Mémoire",
+    locale: "fr_FR",
     type: "website",
+    images: [
+      {
+        url: "/favicon.png", // Using the newly created icon
+        width: 800,
+        height: 800,
+        alt: "Logo Clé du Mémoire",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Clé du Mémoire — Accompagnement académique premium",
+    description: "Réussissez votre mémoire au Sénégal avec un accompagnement expert personnalisé.",
+    images: ["/favicon.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

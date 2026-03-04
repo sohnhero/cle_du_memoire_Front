@@ -9,8 +9,60 @@ import {
   Heart, ChartBar as BarChart3, PaperPlaneRight as Send, Quotes as Quote, ArrowRight, CheckCircle, Clock, EnvelopeSimple as Mail, MapPin, Phone, Lightning as Zap, Check, Sparkle as Sparkles,
   FacebookLogo, InstagramLogo, XLogo, TiktokLogo as TikTokLogo, LinkedinLogo, YoutubeLogo, ArrowUp
 } from '@phosphor-icons/react';
-import Logo from '@/components/Logo';
 import { BrandIcon } from '@/components/BrandIcon';
+
+// ==================== SEO STRUCTURED DATA ====================
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://cle-du-memoire.com/#organization",
+      "name": "Clé du Mémoire",
+      "url": "https://cle-du-memoire.com",
+      "logo": "https://cle-du-memoire.com/favicon.png",
+      "description": "Plateforme d'accompagnement académique premium pour la rédaction de mémoire au Sénégal.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dakar",
+        "addressCountry": "SN"
+      },
+      "sameAs": [
+        "https://linkedin.com/company/cle-du-memoire",
+        "https://instagram.com/cle_du_memoire"
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "name": "Coaching de mémoire Clé du Mémoire",
+      "image": "https://cle-du-memoire.com/hero-graduate.png",
+      "description": "Accompagnement personnalisé pour le choix du sujet, la rédaction et la soutenance de mémoires au Sénégal.",
+      "provider": { "@id": "https://cle-du-memoire.com/#organization" },
+      "priceRange": "$$"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Comment se déroule l'accompagnement ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'accompagnement est personnalisé et se déroule étape par étape, du choix du sujet à la préparation de la soutenance avec un coach dédié."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quels sont les tarifs pour un mémoire ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nous proposons plusieurs packs allant de 50 000 FCFA à 150 000 FCFA selon le niveau d'accompagnement souhaité."
+          }
+        }
+      ]
+    }
+  ]
+};
 
 const CustomFacebookIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 320 512" fill="currentColor" className={`w-5 h-5 origin-center ${className || ''}`} style={{ transform: 'scale(1.3) translateY(18%)' }}>
@@ -210,7 +262,7 @@ function Hero() {
         >
           <img
             src="/hero-graduate.png"
-            alt="Étudiante diplômée"
+            alt="Étudiante diplômée - Clé du Mémoire Sénégal"
             className="absolute bottom-0 right-[20%] h-[90%] w-auto object-contain object-bottom opacity-90 hover:opacity-100 scale-[1.2] transition-all duration-500"
           />
         </div>
@@ -1131,6 +1183,7 @@ function ScrollToTop() {
 
 // ==================== MAIN PAGE ====================
 import Loader from '@/components/Loader';
+import Logo from '@/components/Logo';
 
 export default function HomePage() {
   const [initialLoading, setInitialLoading] = useState(true);
@@ -1152,6 +1205,10 @@ export default function HomePage() {
       <div
         className={`transition-opacity duration-1000 ${initialLoading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <main>
           <Hero />
           <Services />
