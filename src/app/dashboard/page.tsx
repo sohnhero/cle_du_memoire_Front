@@ -385,29 +385,31 @@ function AccompagnateurDashboard() {
     };
 
     return (
-        <div className="space-y-8">
-            <div>
+        <div className="w-full max-w-full overflow-hidden space-y-6 sm:space-y-8 max-w-7xl mx-auto px-1 sm:px-0">
+            <div className="px-3 sm:px-0">
                 <h1 className="text-xl sm:text-2xl font-bold text-primary">Espace Accompagnateur</h1>
-                <p className="text-text-secondary mt-1 text-sm">Gérez vos étudiants et leurs progressions</p>
+                <p className="text-text-secondary mt-1 text-xs sm:text-sm font-medium">Gérez vos étudiants et leurs progressions</p>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 overflow-hidden">
-                <StatsCard icon={Users} label="Étudiants Suivis" value={memoires.length} color="primary" delay={0.1} />
-                <StatsCard icon={FileText} label="Documents en attente" value={pendingDocuments.length} color="warning" delay={0.2} />
-                <StatsCard icon={MessageCircle} label="Messages non lus" value={totalUnreadMessages} color="error" delay={0.3} />
-                <StatsCard icon={TrendingUp} label="Progression Moyenne" value={`${memoires.length > 0 ? Math.round(memoires.reduce((acc, m) => acc + m.progressPercent, 0) / memoires.length) : 0}%`} color="success" delay={0.4} />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 px-3 sm:px-0">
+                <StatsCard icon={Users} label="Étudiants" value={memoires.length} color="primary" delay={0.1} />
+                <StatsCard icon={FileText} label="À évaluer" value={pendingDocuments.length} color="warning" delay={0.2} />
+                <StatsCard icon={MessageCircle} label="Non lus" value={totalUnreadMessages} color="error" delay={0.3} />
+                <StatsCard icon={TrendingUp} label="Moyenne" value={`${memoires.length > 0 ? Math.round(memoires.reduce((acc, m) => acc + m.progressPercent, 0) / memoires.length) : 0}%`} color="success" delay={0.4} />
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 px-3 sm:px-0 overflow-hidden">
                 {/* Students List */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="lg:col-span-2 card-premium p-4 sm:p-6"
+                    className="lg:col-span-2 card-premium p-4 sm:p-6 shadow-sm border border-border/40 overflow-hidden"
                 >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                        <BrandIcon icon={Users} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
+                    <h3 className="text-base sm:text-lg font-bold text-primary mb-5 sm:mb-6 flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                            <BrandIcon icon={Users} size={32} className="!bg-accent/10 sm:scale-110 transition-transform shadow-sm" iconClassName="!text-accent" />
+                        </div>
                         Mes Étudiants
                     </h3>
 
@@ -420,29 +422,34 @@ function AccompagnateurDashboard() {
                             Aucun étudiant ne vous a encore été assigné.
                         </div>
                     ) : (
-                        <div className="space-y-3">
+                        <div className="space-y-3 sm:space-y-4">
                             {memoires.map((memoire) => {
                                 const studentName = `${memoire.student.firstName} ${memoire.student.lastName}`;
                                 return (
-                                    <div key={memoire.id} className="flex items-center gap-3 sm:gap-4 p-3 rounded-xl hover:bg-bg-light transition-colors cursor-pointer group" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
-                                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
-                                            {memoire.student.firstName[0]}{memoire.student.lastName[0]}
+                                    <div key={memoire.id} className="flex items-center gap-3 sm:gap-4 p-3 rounded-xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 cursor-pointer group min-w-0" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
+                                        <div className="relative flex-shrink-0">
+                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary flex items-center justify-center text-white text-[10px] sm:text-xs font-bold shadow-sm ring-2 ring-white">
+                                                {memoire.student.firstName?.[0]}{memoire.student.lastName?.[0]}
+                                            </div>
+                                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border border-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2">
-                                                <span className="font-semibold text-sm text-primary truncate group-hover:text-accent transition-colors">{studentName}</span>
-                                                <span className="px-2 py-0.5 rounded-md bg-success/10 text-success text-[10px] font-bold">Actif</span>
+                                            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                                                <span className="font-bold text-xs sm:text-sm text-primary truncate max-w-[140px] sm:max-w-none group-hover:text-accent transition-colors leading-tight">{studentName}</span>
+                                                <span className="px-1.5 py-0.5 rounded-md bg-success/10 text-success text-[8px] sm:text-[10px] font-bold uppercase tracking-wider shrink-0">Actif</span>
                                             </div>
-                                            <div className="text-xs text-text-muted truncate mt-0.5">{memoire.student.field || 'Filière inconnue'} — {getPhaseLabel(memoire.phase)}</div>
-                                            <div className="mt-2 h-1.5 bg-border rounded-full overflow-hidden sm:max-w-[200px]">
-                                                <div className="h-full bg-accent rounded-full" style={{ width: `${memoire.progressPercent}%` }} />
+                                            <div className="text-[9px] sm:text-xs text-text-muted truncate mt-0.5 font-medium">{memoire.student.field || 'Filière'} — {getPhaseLabel(memoire.phase)}</div>
+                                            <div className="mt-2 h-1.2 bg-bg-light rounded-full overflow-hidden sm:max-w-[240px] border border-border/10">
+                                                <div className="h-full bg-accent rounded-full transition-all duration-1000" style={{ width: `${memoire.progressPercent}%` }} />
                                             </div>
                                         </div>
-                                        <div className="text-right flex-shrink-0">
-                                            <div className="text-sm font-bold text-primary">{memoire.progressPercent}%</div>
-                                            <button className="text-[10px] font-medium text-text-muted hover:text-accent mt-1 transition-colors">Détails</button>
+                                        <div className="flex-shrink-0 flex flex-col items-end justify-center min-w-[35px] sm:min-w-[50px] ml-auto">
+                                            <div className="text-[11px] sm:text-sm font-extrabold text-primary leading-none">{memoire.progressPercent}%</div>
+                                            <div className="text-[8px] sm:text-[9px] font-bold text-text-muted mt-1 uppercase tracking-tight opacity-70 leading-none">Prog.</div>
                                         </div>
-                                        <Eye className="w-4 h-4 text-text-muted sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                                        <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg bg-bg-light text-text-muted opacity-0 group-hover:opacity-100 transition-all ml-1 flex-shrink-0">
+                                            <Eye className="w-4 h-4" />
+                                        </div>
                                     </div>
                                 );
                             })}
@@ -450,47 +457,49 @@ function AccompagnateurDashboard() {
                     )}
                 </motion.div>
 
-                {/* Pending Actions */}
+                {/* Required Actions */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="card-premium p-4 sm:p-6 flex flex-col h-full"
+                    className="card-premium p-4 sm:p-6 flex flex-col h-full shadow-sm border border-border/40 overflow-hidden"
                 >
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                        <BrandIcon icon={AlertTriangle} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
+                    <h3 className="text-base sm:text-lg font-bold text-primary mb-5 sm:mb-6 flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                            <BrandIcon icon={AlertTriangle} size={32} className="!bg-warning/10 sm:scale-110 transition-transform shadow-sm" iconClassName="!text-warning" />
+                        </div>
                         Actions Requises
                     </h3>
-                    <div className="space-y-3 flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+                    <div className="space-y-3.5 flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
                         {pendingDocuments.length === 0 && totalUnreadMessages === 0 ? (
-                            <div className="text-center py-6 text-text-secondary">
-                                Tout est à jour ! Aucune action requise.
+                            <div className="text-center py-6 text-text-secondary font-medium text-xs">
+                                Tout est à jour !
                             </div>
                         ) : (
                             <>
-                                {pendingDocuments.slice(0, 3).map((doc, i) => (
-                                    <div key={`doc-${doc.id}`} onClick={() => router.push('/dashboard/documents')} className="p-3 rounded-xl bg-bg-light hover:bg-warning/5 transition-colors cursor-pointer group">
-                                        <div className="flex items-start justify-between gap-2">
+                                {pendingDocuments.slice(0, 4).map((doc, i) => (
+                                    <div key={`doc-${doc.id}`} onClick={() => router.push('/dashboard/documents')} className="p-3 sm:p-3.5 rounded-xl bg-bg-light/50 border border-border/5 hover:bg-warning/5 hover:border-warning/20 transition-all cursor-pointer group min-w-0">
+                                        <div className="flex items-start justify-between gap-3 min-w-0">
                                             <div className="flex-1 min-w-0">
-                                                <div className="text-sm font-semibold text-primary truncate group-hover:text-warning transition-colors">Évaluer : {doc.filename}</div>
-                                                <div className="text-xs text-text-muted mt-0.5 truncate">
+                                                <div className="text-[11px] sm:text-sm font-bold text-primary truncate group-hover:text-warning transition-colors leading-tight break-all">Évaluer : {doc.filename}</div>
+                                                <div className="text-[10px] sm:text-xs text-text-muted mt-1 truncate font-medium">
                                                     De {doc.uploader?.firstName} {doc.uploader?.lastName}
                                                 </div>
                                             </div>
-                                            <div className="flex-shrink-0 text-[10px] font-bold text-warning bg-warning/10 px-2 py-0.5 rounded">Doc</div>
+                                            <div className="flex-shrink-0 text-[8px] sm:text-[9px] font-extrabold text-warning bg-warning/10 px-2 py-0.5 rounded-md border border-warning/20 uppercase tracking-tighter self-start">DOC</div>
                                         </div>
                                     </div>
                                 ))}
-                                {conversations.filter(c => c.unreadCount > 0).slice(0, 2).map((conv, i) => {
+                                {conversations.filter(c => c.unreadCount > 0).slice(0, 3).map((conv, i) => {
                                     const otherUser = conv.participant1Id === user?.id ? conv.participant2 : conv.participant1;
                                     return (
-                                        <div key={`conv-${conv.id}`} onClick={() => router.push('/dashboard/messages')} className="p-3 rounded-xl bg-bg-light hover:bg-error/5 transition-colors cursor-pointer group">
-                                            <div className="flex items-start justify-between gap-2">
+                                        <div key={`conv-${conv.id}`} onClick={() => router.push('/dashboard/messages')} className="p-3 sm:p-3.5 rounded-xl bg-bg-light/50 border border-border/5 border-border/5 hover:bg-error/5 hover:border-error/20 transition-all cursor-pointer group min-w-0">
+                                            <div className="flex items-start justify-between gap-3 min-w-0">
                                                 <div className="flex-1 min-w-0">
-                                                    <div className="text-sm font-semibold text-primary truncate group-hover:text-error transition-colors">Nouveau(x) message(s)</div>
-                                                    <div className="text-xs text-text-muted mt-0.5 truncate">De {otherUser?.firstName} ({conv.unreadCount} non lu)</div>
+                                                    <div className="text-[11px] sm:text-sm font-bold text-primary truncate group-hover:text-error transition-colors leading-tight">Messages non lus</div>
+                                                    <div className="text-[10px] sm:text-xs text-text-muted mt-1 truncate font-medium">De {otherUser?.firstName} ({conv.unreadCount})</div>
                                                 </div>
-                                                <div className="flex-shrink-0 text-[10px] font-bold text-error bg-error/10 px-2 py-0.5 rounded">Chat</div>
+                                                <div className="flex-shrink-0 text-[8px] sm:text-[9px] font-extrabold text-error bg-error/10 px-2 py-0.5 rounded-md border border-error/20 uppercase tracking-tighter self-start">CHAT</div>
                                             </div>
                                         </div>
                                     );
