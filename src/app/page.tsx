@@ -810,6 +810,8 @@ function Testimonials() {
     </div>
   );
 
+  const [isPaused, setIsPaused] = useState(false);
+
   return (
     <section id="testimonials" className="section bg-white relative overflow-hidden isolate perspective-[1000px]">
       <div className="max-w-6xl mx-auto px-6 mb-16">
@@ -833,9 +835,13 @@ function Testimonials() {
           drag="x"
           dragConstraints={{ left: -1000, right: 1000 }}
           whileTap={{ cursor: "grabbing" }}
-          className="flex w-max cursor-grab active:cursor-grabbing group hover:[animation-play-state:paused]"
+          className="flex w-max cursor-grab active:cursor-grabbing group"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
         >
-          <div className="flex w-max animate-[marquee_60s_linear_infinite] group-hover:[animation-play-state:paused] peer">
+          <div className={`flex w-max animate-[marquee_60s_linear_infinite] ${isPaused ? '[animation-play-state:paused]' : ''} peer`}>
             <div className="flex w-max shrink-0">
               {row1.map((t, index) => <TestimonialCard key={`r1-a-${index}`} t={t} />)}
             </div>
@@ -849,9 +855,13 @@ function Testimonials() {
           drag="x"
           dragConstraints={{ left: -1000, right: 1000 }}
           whileTap={{ cursor: "grabbing" }}
-          className="flex w-max cursor-grab active:cursor-grabbing group hover:[animation-play-state:paused]"
+          className="flex w-max cursor-grab active:cursor-grabbing group"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
         >
-          <div className="flex w-max animate-[marquee-reverse_60s_linear_infinite] group-hover:[animation-play-state:paused] peer">
+          <div className={`flex w-max animate-[marquee-reverse_60s_linear_infinite] ${isPaused ? '[animation-play-state:paused]' : ''} peer`}>
             <div className="flex w-max shrink-0">
               {row2.map((t, index) => <TestimonialCard key={`r2-a-${index}`} t={t} />)}
             </div>
