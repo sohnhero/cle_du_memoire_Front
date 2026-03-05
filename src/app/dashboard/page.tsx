@@ -127,7 +127,7 @@ function StudentDashboard() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="card-premium p-5 cursor-pointer hover:border-accent/30 transition-all flex flex-col h-full group"
+                        className="card-premium p-4 cursor-pointer hover:border-accent/30 transition-all flex flex-col h-full group"
                         onClick={() => router.push('/dashboard/memoire')}
                     >
                         <div className="flex justify-between items-start mb-5">
@@ -234,7 +234,7 @@ function StudentDashboard() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.55 }}
-                        className={`card-premium p-5 cursor-pointer overflow-hidden relative group ${nextEvent?.type === 'DEADLINE' ? 'border-error/20 bg-error/[0.01]' : 'hover:border-accent/30'}`}
+                        className={`card-premium p-4 cursor-pointer overflow-hidden relative group ${nextEvent?.type === 'DEADLINE' ? 'border-error/20 bg-error/[0.01]' : 'hover:border-accent/30'}`}
                         onClick={() => router.push('/dashboard/calendar')}
                     >
                         <div className="flex justify-between items-start mb-4">
@@ -276,7 +276,7 @@ function StudentDashboard() {
                             initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.7 }}
-                            className="card-premium p-5 group"
+                            className="card-premium p-4 group"
                         >
                             <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
@@ -313,7 +313,7 @@ function StudentDashboard() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
-                        className="card-premium p-5 group"
+                        className="card-premium p-4 group"
                     >
                         <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
@@ -412,7 +412,7 @@ function AccompagnateurDashboard() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="lg:col-span-2 card-premium p-5 group"
+                    className="lg:col-span-2 card-premium p-4 group"
                 >
                     <h3 className="text-base font-black text-primary mb-5 flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
@@ -470,7 +470,7 @@ function AccompagnateurDashboard() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="card-premium p-5 group"
+                    className="card-premium p-4 group"
                 >
                     <h3 className="text-base font-black text-primary mb-5 flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
@@ -598,7 +598,7 @@ function AdminDashboard() {
                             initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8 }}
-                            className="lg:col-span-2 card-premium p-5 group"
+                            className="lg:col-span-2 card-premium p-4 group"
                         >
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-base font-black text-primary flex items-center gap-3">
@@ -656,7 +656,7 @@ function AdminDashboard() {
                             initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.9 }}
-                            className="card-premium p-5 group"
+                            className="card-premium p-4 group"
                         >
                             <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">

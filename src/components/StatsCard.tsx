@@ -31,22 +31,22 @@ export function StatsCard({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay, duration: 0.4 }}
-            className={`card-premium p-5 flex items-center justify-between group overflow-hidden min-h-[140px] sm:min-h-[160px] ${className}`}
+            className={`card-premium p-4 flex items-center justify-between group overflow-hidden min-h-[100px] sm:min-h-[120px] ${className}`}
         >
             <div className="flex-1 min-w-0 flex flex-col h-full py-0.5">
-                <p className="text-[10px] sm:text-[11px] font-black text-text-muted uppercase tracking-widest mb-2 group-hover:text-primary transition-colors">
+                <p className="text-[10px] sm:text-[11px] font-black text-text-muted uppercase tracking-widest mb-1 group-hover:text-primary transition-colors">
                     {label}
                 </p>
 
                 <div className="flex-1 flex items-center">
-                    <h4 className={`text-xl sm:text-3xl font-black ${valueColor} tracking-tighter leading-none mb-1`}>
+                    <h4 className={`text-lg sm:text-2xl font-black ${valueColor} tracking-tighter leading-none mb-1`}>
                         {value}
                     </h4>
                 </div>
 
                 {change && (
                     <div className="mt-2 text-left">
-                        <span className="inline-flex items-center text-[9px] font-black text-success bg-success/5 px-2.5 py-1 rounded-lg border border-success/10 shadow-sm">
+                        <span className="inline-flex items-center text-[9px] font-black text-success bg-success/5 px-2 py-0.5 rounded-lg border border-success/10 shadow-sm">
                             <ArrowUpRight className="w-2.5 h-2.5 mr-1" weight="bold" />
                             {change}
                         </span>
@@ -54,14 +54,14 @@ export function StatsCard({
                 )}
             </div>
 
-            <div className="relative shrink-0 ml-2 sm:ml-4">
+            <div className="relative shrink-0 ml-2 sm:ml-3">
                 <BrandIcon
                     icon={icon}
-                    size={40}
-                    className={`${iconColor} transition-all group-hover:scale-110 group-hover:rotate-6 duration-500 shadow-md ring-2 ring-white/20 relative z-10 sm:!w-16 sm:!h-16`}
-                    iconClassName="sm:!size-8"
+                    size={32}
+                    className={`${iconColor} transition-all group-hover:scale-110 group-hover:rotate-6 duration-500 shadow-md ring-2 ring-white/20 relative z-10 sm:!w-12 sm:!h-12`}
+                    iconClassName="sm:!size-6"
                 />
-                <div className={`absolute -right-6 -bottom-6 w-24 h-24 ${iconColor}/10 rounded-full blur-3xl group-hover:opacity-100 transition-opacity opacity-50`} />
+                <div className={`absolute -right-6 -bottom-6 w-20 h-20 ${iconColor}/10 rounded-full blur-2xl group-hover:opacity-100 transition-opacity opacity-50`} />
             </div>
         </motion.div>
     );
