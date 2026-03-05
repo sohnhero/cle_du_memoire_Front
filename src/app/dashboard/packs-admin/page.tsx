@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Package, CheckCircle, MagnifyingGlass as Search, Faders as Filter, Plus, ShieldCheck as Shield, User, CreditCard, X, WarningCircle as AlertCircle, CircleNotch as Loader2
+    Package, CheckCircle, MagnifyingGlass as Search, Faders as Filter, Plus, ShieldCheck as Shield, User, CreditCard, X, WarningCircle as AlertCircle, CircleNotch as Loader2, PencilSimple, Trash, Sparkle as SparkleIcon
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
@@ -40,6 +40,10 @@ export default function AdminPacksPage() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedSubscription, setSelectedSubscription] = useState<any>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [packToEdit, setPackToEdit] = useState<any>(null);
+    const [packToDelete, setPackToDelete] = useState<any>(null);
+    const [isSeeding, setIsSeeding] = useState(false);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -95,17 +99,89 @@ export default function AdminPacksPage() {
         setIsPaymentModalOpen(true);
     };
 
+    const handleSeedPacks = async () => {
+        setIsSeeding(true);
+        const officialPacks = [
+            {
+                name: 'Pack Démarrage',
+                description: 'Pour bien démarrer votre mémoire',
+                price: 50000,
+                installment1: null,
+                installment2: null,
+                features: ['Choix du sujet pertinent et adapté', 'Problématique claire et précise', 'Plan détaillé et cohérent', 'Rédaction du contexte et introduction', 'Formulation des objectifs'],
+            },
+            {
+                name: 'Pack Rédaction',
+                description: 'Pour une rédaction de qualité',
+                price: 100000,
+                installment1: 75000,
+                installment2: 25000,
+                features: ['Suivi de la rédaction chapitre par chapitre', 'Lecture approfondie et vérification de cohérence', 'Correction orthographe et grammaire'],
+            },
+            {
+                name: 'Pack Soutenance',
+                description: 'Pour une soutenance professionnelle et réussie',
+                price: 65000,
+                installment1: null,
+                installment2: null,
+                features: ['PowerPoint esthétique et structuré', '5 séances de simulation de soutenance', 'Préparation aux questions du jury'],
+            },
+            {
+                name: 'Pack Complet',
+                description: 'Pour un accompagnement de A à Z',
+                price: 150000,
+                installment1: 100000,
+                installment2: 50000,
+                features: ['Tout le Pack Démarrage inclus', 'Suivi complet de la rédaction', 'Lecture approfondie et corrections complètes', 'PowerPoint professionnel', '5 séances de simulation soutenance'],
+            },
+        ];
+        try {
+            for (const pack of officialPacks) {
+                await api.createPack(pack);
+            }
+            toast.success('4 packs officiels créés avec succès !');
+            await loadData();
+        } catch (err: any) {
+            toast.error(err.message || 'Erreur lors de la création des packs');
+        } finally {
+            setIsSeeding(false);
+        }
+    };
+
+    const handleDeletePack = async (pack: any) => {
+        try {
+            await api.deletePack(pack.id);
+            toast.success(`Pack "${pack.name}" supprimé !`);
+            setPackToDelete(null);
+            await loadData();
+        } catch (err: any) {
+            toast.error(err.message || 'Erreur lors de la suppression');
+        }
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Gestion des Packs & Abonnements</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Gestion des Packs &amp; Abonnements</h1>
                     <p className="text-text-secondary mt-1 text-sm">Supervisez les forfaits et paiements des étudiants</p>
                 </div>
                 {activeTab === 'packs' && (
-                    <button onClick={() => setIsCreateModalOpen(true)} className="btn-primary py-3 px-6 text-sm">
-                        <Plus className="w-4 h-4" /> Ajouter un Pack
-                    </button>
+                    <div className="flex items-center gap-2 flex-wrap">
+                        {packs.length === 0 && (
+                            <button
+                                onClick={handleSeedPacks}
+                                disabled={isSeeding}
+                                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent/10 text-primary border border-accent/20 text-sm font-semibold hover:bg-accent/20 transition-colors disabled:opacity-50"
+                            >
+                                {isSeeding ? <Loader2 className="w-4 h-4 animate-spin" /> : <SparkleIcon className="w-4 h-4 text-accent" weight="fill" />}
+                                Pré-remplir les packs officiels
+                            </button>
+                        )}
+                        <button onClick={() => setIsCreateModalOpen(true)} className="btn-primary py-2.5 px-5 text-sm">
+                            <Plus className="w-4 h-4" /> Ajouter un Pack
+                        </button>
+                    </div>
                 )}
             </div>
 
@@ -266,43 +342,105 @@ export default function AdminPacksPage() {
                             <div className="w-8 h-8 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
                         </div>
                     ) : packs.length === 0 ? (
-                        <div className="col-span-full py-12 text-center text-text-muted card-premium">
-                            Aucun pack disponible.
-                        </div>
-                    ) : packs.map((pack, idx) => (
-                        <motion.div
-                            key={pack.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.05 }}
-                            className="card-premium p-4 sm:p-6"
-                        >
-                            <BrandIcon icon={Package} size={48} className="mb-4 shadow-sm" />
-                            <h3 className="text-lg font-bold text-primary">{pack.name}</h3>
-                            <p className="text-sm text-text-secondary mt-1 mb-3 line-clamp-2">{pack.description}</p>
-                            <div className="text-2xl font-extrabold text-primary mb-2">{pack.price} FCFA</div>
-
-                            <h4 className="text-xs font-bold text-text-secondary uppercase mb-2">Caractéristiques</h4>
-                            <ul className="space-y-1.5 mb-6 text-sm text-text-primary">
-                                {JSON.parse(pack.features || '[]').map((f: string, i: number) => (
-                                    <li key={i} className="flex items-start gap-2">
-                                        <CheckCircle className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                                        <span className="leading-tight">{f}</span>
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <button className="w-full py-2.5 rounded-xl border border-border font-semibold text-sm hover:bg-bg-light transition-colors text-text-secondary">
-                                Modifier le pack
+                        <div className="col-span-full py-12 text-center card-premium">
+                            <BrandIcon icon={Package} size={56} className="mx-auto mb-4 opacity-30 grayscale" />
+                            <p className="text-sm font-semibold text-text-secondary mb-5">Aucun pack créé pour le moment.</p>
+                            <button
+                                onClick={handleSeedPacks}
+                                disabled={isSeeding}
+                                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors disabled:opacity-50 shadow-md"
+                            >
+                                {isSeeding ? <Loader2 className="w-4 h-4 animate-spin" /> : <SparkleIcon className="w-4 h-4" weight="fill" />}
+                                Créer les 4 packs officiels
                             </button>
-                        </motion.div>
-                    ))}
+                        </div>
+                    ) : packs.map((pack, idx) => {
+                        let features: string[] = [];
+                        try { features = JSON.parse(pack.features || '[]'); } catch { }
+                        return (
+                            <motion.div
+                                key={pack.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="card-premium p-5 flex flex-col"
+                            >
+                                <div className="flex items-start justify-between mb-4">
+                                    <BrandIcon icon={Package} size={44} className="shadow-sm" />
+                                    <div className="flex items-center gap-1.5">
+                                        <button
+                                            onClick={() => { setPackToEdit(pack); setIsEditModalOpen(true); }}
+                                            className="p-2 rounded-xl hover:bg-bg-light transition-colors text-text-muted hover:text-primary"
+                                            title="Modifier"
+                                        >
+                                            <PencilSimple className="w-4 h-4" weight="bold" />
+                                        </button>
+                                        <button
+                                            onClick={() => setPackToDelete(pack)}
+                                            className="p-2 rounded-xl hover:bg-error/10 transition-colors text-text-muted hover:text-error"
+                                            title="Supprimer"
+                                        >
+                                            <Trash className="w-4 h-4" weight="bold" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <h3 className="text-base font-bold text-primary">{pack.name}</h3>
+                                <p className="text-xs text-text-secondary mt-0.5 mb-3">{pack.description}</p>
+                                <div className="text-xl font-extrabold text-primary mb-1">{pack.price.toLocaleString()} CFA</div>
+                                {pack.installment1 && pack.installment2 && (
+                                    <p className="text-[11px] font-medium text-info mb-3">En 2x : {pack.installment1.toLocaleString()} + {pack.installment2.toLocaleString()} CFA</p>
+                                )}
+
+                                <ul className="space-y-1.5 mt-auto pt-3 border-t border-border/10">
+                                    {features.map((f: string, i: number) => (
+                                        <li key={i} className="flex items-start gap-2 text-xs text-text-primary">
+                                            <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" />
+                                            <span className="leading-tight">{f}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             )}
+
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {packToDelete && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={() => setPackToDelete(null)} />
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+                            <div className="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center mx-auto mb-4">
+                                <Trash className="w-6 h-6 text-error" weight="bold" />
+                            </div>
+                            <h3 className="text-lg font-bold text-primary text-center mb-2">Supprimer le pack ?</h3>
+                            <p className="text-sm text-text-secondary text-center mb-6">
+                                Voulez-vous vraiment supprimer <strong>{packToDelete.name}</strong> ? Cette action est irréversible.
+                            </p>
+                            <div className="flex gap-3">
+                                <button onClick={() => setPackToDelete(null)} className="flex-1 py-2.5 rounded-xl font-medium text-text-secondary hover:bg-bg-light transition-colors text-sm">
+                                    Annuler
+                                </button>
+                                <button
+                                    onClick={() => handleDeletePack(packToDelete)}
+                                    className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-error text-white hover:bg-error/90 transition-colors shadow-sm"
+                                >
+                                    Supprimer
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <AnimatePresence>
                 {isCreateModalOpen && (
                     <CreatePackModal onClose={() => setIsCreateModalOpen(false)} onSuccess={loadData} />
+                )}
+                {isEditModalOpen && packToEdit && (
+                    <EditPackModal pack={packToEdit} onClose={() => { setIsEditModalOpen(false); setPackToEdit(null); }} onSuccess={loadData} />
                 )}
                 {isPaymentModalOpen && selectedSubscription && (
                     <PaymentModal
@@ -317,38 +455,46 @@ export default function AdminPacksPage() {
 }
 
 function CreatePackModal({ onClose, onSuccess }: { onClose: () => void, onSuccess: () => void }) {
+    const [paymentType, setPaymentType] = useState<'single' | 'two'>('single');
     const [formData, setFormData] = useState({
         name: '', description: '', price: 0,
-        features: '', // Comma separated for simplicity in UI
-        installment1: 0, installment2: 0
+        features: '',
+        installment1: 0, installment2: 0,
     });
     const [isSaving, setIsSaving] = useState(false);
+
+    const installmentSum = Number(formData.installment1) + Number(formData.installment2);
+    const installmentMismatch = paymentType === 'two' && formData.price > 0 && installmentSum !== Number(formData.price);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
         try {
             const dataToSubmit = {
-                ...formData,
+                name: formData.name,
+                description: formData.description,
                 price: Number(formData.price),
-                installment1: Number(formData.installment1) || null,
-                installment2: Number(formData.installment2) || null,
-                features: formData.features.split(',').map(f => f.trim()).filter(Boolean)
+                installment1: paymentType === 'two' ? Number(formData.installment1) || null : null,
+                installment2: paymentType === 'two' ? Number(formData.installment2) || null : null,
+                features: formData.features.split('\n').map(f => f.trim()).filter(Boolean),
             };
             await api.createPack(dataToSubmit);
+            toast.success('Pack créé avec succès !');
             onSuccess();
             onClose();
-        } catch (error) {
-            toast.error("Erreur lors de la création");
+        } catch (error: any) {
+            toast.error(error.message || 'Erreur lors de la création');
         } finally {
             setIsSaving(false);
         }
     };
 
+    const inputClass = "w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary outline-none focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all";
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6">
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-xl font-bold text-primary">Créer un nouveau Pack</h3>
                     <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
@@ -359,27 +505,183 @@ function CreatePackModal({ onClose, onSuccess }: { onClose: () => void, onSucces
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-semibold text-text-primary mb-1.5">Nom du Pack</label>
-                        <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary outline-none focus:border-accent" required />
+                        <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className={inputClass} placeholder="Ex: Pack Démarrage" required />
                     </div>
                     <div>
                         <label className="block text-sm font-semibold text-text-primary mb-1.5">Description</label>
-                        <textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary outline-none focus:border-accent resize-none min-h-[80px]" required />
+                        <textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className={`${inputClass} resize-none min-h-[70px]`} placeholder="Ex: Pour bien démarrer votre mémoire" required />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Prix (FCFA)</label>
-                        <input type="number" value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary outline-none focus:border-accent" required />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Caractéristiques (séparées par une virgule)</label>
-                        <textarea value={formData.features} onChange={e => setFormData({ ...formData, features: e.target.value })} placeholder="Ex: Accompagnement, 2 séances, Email prioritaire" className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary outline-none focus:border-accent resize-none min-h-[80px]" required />
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Prix total (CFA)</label>
+                        <input type="number" value={formData.price || ''} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} className={inputClass} placeholder="Ex: 50000" required min={1} />
                     </div>
 
-                    <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-border-light">
-                        <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl font-medium text-text-secondary hover:bg-bg-light transition-colors">
+                    {/* Payment type toggle */}
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-2">Modalités de paiement</label>
+                        <div className="grid grid-cols-2 gap-2">
+                            <button
+                                type="button"
+                                onClick={() => setPaymentType('single')}
+                                className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all text-sm font-semibold ${paymentType === 'single' ? 'border-accent bg-accent/5 text-primary' : 'border-border text-text-muted hover:border-accent/30'}`}
+                            >
+                                <span className="text-base">💳</span>
+                                Paiement unique
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setPaymentType('two')}
+                                className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all text-sm font-semibold ${paymentType === 'two' ? 'border-accent bg-accent/5 text-primary' : 'border-border text-text-muted hover:border-accent/30'}`}
+                            >
+                                <span className="text-base">✂️</span>
+                                2 tranches
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Installment fields - shown only for 2-payment packs */}
+                    {paymentType === 'two' && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="grid grid-cols-2 gap-3"
+                        >
+                            <div>
+                                <label className="block text-sm font-semibold text-text-primary mb-1.5">1ère tranche (CFA)</label>
+                                <input type="number" value={formData.installment1 || ''} onChange={e => setFormData({ ...formData, installment1: Number(e.target.value) })} className={inputClass} placeholder="Ex: 75000" required min={1} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-semibold text-text-primary mb-1.5">2ème tranche (CFA)</label>
+                                <input type="number" value={formData.installment2 || ''} onChange={e => setFormData({ ...formData, installment2: Number(e.target.value) })} className={inputClass} placeholder="Ex: 25000" required min={1} />
+                            </div>
+                            {installmentMismatch && (
+                                <p className="col-span-2 text-xs text-warning font-medium flex items-center gap-1.5">
+                                    <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                                    Les tranches ({installmentSum.toLocaleString()} CFA) ne correspondent pas au prix total ({Number(formData.price).toLocaleString()} CFA)
+                                </p>
+                            )}
+                        </motion.div>
+                    )}
+
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Caractéristiques <span className="text-text-muted font-normal">(une par ligne)</span></label>
+                        <textarea
+                            value={formData.features}
+                            onChange={e => setFormData({ ...formData, features: e.target.value })}
+                            placeholder={"Choix du sujet\nProblématique\nPlan détaillé"}
+                            className={`${inputClass} resize-none min-h-[120px] leading-relaxed`}
+                            required
+                        />
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-4 border-t border-border-light">
+                        <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl font-medium text-text-secondary hover:bg-bg-light transition-colors text-sm">
                             Annuler
                         </button>
-                        <button type="submit" disabled={isSaving} className="btn-primary px-6 py-2.5 flex items-center gap-2">
-                            {isSaving ? 'Création...' : 'Créer le Pack'}
+                        <button type="submit" disabled={isSaving} className="btn-primary px-6 py-2.5 text-sm flex items-center gap-2 disabled:opacity-50">
+                            {isSaving ? <><Loader2 className="w-4 h-4 animate-spin" /> Création...</> : 'Créer le Pack'}
+                        </button>
+                    </div>
+                </form>
+            </motion.div>
+        </div>
+    );
+}
+
+function EditPackModal({ pack, onClose, onSuccess }: { pack: any, onClose: () => void, onSuccess: () => void }) {
+    let initialFeatures: string[] = [];
+    try { initialFeatures = JSON.parse(pack.features || '[]'); } catch { }
+
+    const [formData, setFormData] = useState({
+        name: pack.name || '',
+        description: pack.description || '',
+        price: pack.price || 0,
+        installment1: pack.installment1 || 0,
+        installment2: pack.installment2 || 0,
+        features: initialFeatures.join('\n'),
+    });
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSaving(true);
+        try {
+            const dataToSubmit = {
+                name: formData.name,
+                description: formData.description,
+                price: Number(formData.price),
+                installment1: Number(formData.installment1) || null,
+                installment2: Number(formData.installment2) || null,
+                features: formData.features.split('\n').map(f => f.trim()).filter(Boolean),
+            };
+            await api.updatePack(pack.id, dataToSubmit);
+            toast.success('Pack mis à jour !');
+            onSuccess();
+            onClose();
+        } catch (err: any) {
+            toast.error(err.message || 'Erreur lors de la mise à jour');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const inputClass = "w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary outline-none focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all";
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 className="text-lg font-bold text-primary">Modifier le Pack</h3>
+                        <p className="text-xs text-text-muted mt-0.5">{pack.name}</p>
+                    </div>
+                    <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Nom du Pack</label>
+                        <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className={inputClass} required />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Description</label>
+                        <textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className={`${inputClass} resize-none min-h-[70px]`} required />
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                        <div className="col-span-3 sm:col-span-1">
+                            <label className="block text-sm font-semibold text-text-primary mb-1.5">Prix (CFA)</label>
+                            <input type="number" value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} className={inputClass} required />
+                        </div>
+                        <div className="col-span-3 sm:col-span-1">
+                            <label className="block text-sm font-semibold text-text-primary mb-1.5">1ère tranche</label>
+                            <input type="number" value={formData.installment1} onChange={e => setFormData({ ...formData, installment1: Number(e.target.value) })} placeholder="0 = non" className={inputClass} />
+                        </div>
+                        <div className="col-span-3 sm:col-span-1">
+                            <label className="block text-sm font-semibold text-text-primary mb-1.5">2ème tranche</label>
+                            <input type="number" value={formData.installment2} onChange={e => setFormData({ ...formData, installment2: Number(e.target.value) })} placeholder="0 = non" className={inputClass} />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5">Caractéristiques <span className="text-text-muted font-normal">(une par ligne)</span></label>
+                        <textarea
+                            value={formData.features}
+                            onChange={e => setFormData({ ...formData, features: e.target.value })}
+                            placeholder={"Choix du sujet\nProblématique\nPlan détaillé"}
+                            className={`${inputClass} resize-none min-h-[130px] leading-relaxed`}
+                            required
+                        />
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-4 border-t border-border-light">
+                        <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl font-medium text-text-secondary hover:bg-bg-light transition-colors text-sm">
+                            Annuler
+                        </button>
+                        <button type="submit" disabled={isSaving} className="btn-primary px-6 py-2.5 text-sm flex items-center gap-2 disabled:opacity-50">
+                            {isSaving ? <><Loader2 className="w-4 h-4 animate-spin" /> Enregistrement...</> : 'Enregistrer les modifications'}
                         </button>
                     </div>
                 </form>

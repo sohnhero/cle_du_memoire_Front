@@ -234,6 +234,17 @@ class ApiClient {
         });
     }
 
+    async updatePack(id: string, data: any) {
+        return this.request<{ pack: any }>(`/packs/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        });
+    }
+
+    async deletePack(id: string) {
+        return this.request<{ message: string }>(`/packs/${id}`, { method: 'DELETE' });
+    }
+
     // Memoires
     async getMyMemoire(page = 1, limit = 5, search = '') {
         let url = `/memoires?page=${page}&limit=${limit}`;

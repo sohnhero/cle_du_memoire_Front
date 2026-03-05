@@ -486,32 +486,31 @@ function PacksSection() {
     {
       name: 'Démarrage',
       price: '50 000',
-      period: 'FCFA',
-      description: 'Idéal pour bien démarrer votre mémoire',
+      period: 'CFA',
+      description: 'Pour bien démarrer votre mémoire',
       features: [
-        'Aide au choix du sujet',
-        'Formulation de la problématique',
-        'Élaboration du plan détaillé',
-        'Recherche bibliographique guidée',
-        '2 séances de coaching',
+        'Choix du sujet pertinent et adapté',
+        'Problématique claire et précise',
+        'Plan détaillé et cohérent',
+        'Rédaction du contexte et introduction',
+        'Formulation des objectifs',
       ],
+      installments: null,
       popular: false,
       dark: false,
     },
     {
       name: 'Complet',
       price: '150 000',
-      period: 'FCFA',
-      installments: '100 000 + 50 000 FCFA',
-      description: 'L\'accompagnement ultime, du début à la fin',
+      period: 'CFA',
+      installments: '100 000 + 50 000 CFA',
+      description: 'Pour un accompagnement de A à Z',
       features: [
-        'Tout le Pack Démarrage',
-        'Rédaction accompagnée complète',
-        'Préparation soutenance',
-        'Accompagnateur dédié',
-        'Coaching illimité',
-        'Priorité de traitement',
-        'Garantie satisfaction',
+        'Tout le Pack Démarrage inclus',
+        'Suivi complet de la rédaction',
+        'Lecture approfondie et corrections',
+        'PowerPoint professionnel',
+        '5 séances de simulation soutenance',
       ],
       popular: true,
       dark: true,
@@ -519,16 +518,13 @@ function PacksSection() {
     {
       name: 'Rédaction',
       price: '100 000',
-      period: 'FCFA',
-      installments: '75 000 + 25 000 FCFA',
-      description: 'Accompagnement complet de la rédaction',
+      period: 'CFA',
+      installments: '75 000 + 25 000 CFA',
+      description: 'Pour une rédaction de qualité',
       features: [
-        'Accompagnement rédactionnel complet',
-        'Relecture de chaque chapitre',
-        'Corrections et suggestions',
-        'Mise en forme académique',
-        '6 séances de coaching',
-        'Support WhatsApp illimité',
+        'Suivi de la rédaction chapitre par chapitre',
+        'Lecture approfondie et vérification',
+        'Correction orthographe et grammaire',
       ],
       popular: false,
       dark: false,
@@ -536,15 +532,14 @@ function PacksSection() {
     {
       name: 'Soutenance',
       price: '65 000',
-      period: 'FCFA',
-      description: 'Préparation intensive à la soutenance',
+      period: 'CFA',
+      description: 'Pour une soutenance professionnelle',
       features: [
-        'Préparation des slides',
-        'Simulation de soutenance',
-        'Coaching prise de parole',
-        'Anticipation des questions',
-        '3 séances de simulation',
+        'PowerPoint esthétique et structuré',
+        '5 séances de simulation soutenance',
+        'Préparation aux questions du jury',
       ],
+      installments: null,
       popular: false,
       dark: false,
     },
@@ -1118,7 +1113,7 @@ function Footer() {
           <div>
             <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-4">Nos Packs</h4>
             <ul className="space-y-2.5">
-              {['Pack Démarrage', 'Pack Rédaction', 'Pack Complet'].map((pack) => (
+              {['Pack Démarrage', 'Pack Rédaction', 'Pack Soutenance', 'Pack Complet'].map((pack) => (
                 <li key={pack}>
                   <a href="#packs" className="text-white/40 hover:text-white text-sm transition-colors">
                     {pack}
