@@ -10,6 +10,7 @@ import {
   FacebookLogo, InstagramLogo, XLogo, TiktokLogo as TikTokLogo, LinkedinLogo, YoutubeLogo, ArrowUp
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
+import { useGlobalSettings } from '@/hooks/useGlobalSettings';
 
 // ==================== SEO STRUCTURED DATA ====================
 const structuredData = {
@@ -79,6 +80,7 @@ const CustomLinkedinIcon = ({ className }: { className?: string }) => (
 
 // ==================== NAVBAR ====================
 function Navbar() {
+  const { settings } = useGlobalSettings();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -228,6 +230,7 @@ function Navbar() {
 
 // ==================== HERO ====================
 function Hero() {
+  const { settings } = useGlobalSettings();
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Dark background */}
@@ -840,6 +843,11 @@ function Testimonials() {
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
+          onTouchCancel={() => setIsPaused(false)}
+          onDragStart={() => setIsPaused(true)}
+          onDragEnd={() => setIsPaused(false)}
+          onPanStart={() => setIsPaused(true)}
+          onPanEnd={() => setIsPaused(false)}
         >
           <div className={`flex w-max animate-[marquee_60s_linear_infinite] ${isPaused ? '[animation-play-state:paused]' : ''} peer`}>
             <div className="flex w-max shrink-0">
@@ -860,6 +868,11 @@ function Testimonials() {
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
+          onTouchCancel={() => setIsPaused(false)}
+          onDragStart={() => setIsPaused(true)}
+          onDragEnd={() => setIsPaused(false)}
+          onPanStart={() => setIsPaused(true)}
+          onPanEnd={() => setIsPaused(false)}
         >
           <div className={`flex w-max animate-[marquee-reverse_60s_linear_infinite] ${isPaused ? '[animation-play-state:paused]' : ''} peer`}>
             <div className="flex w-max shrink-0">
@@ -949,6 +962,7 @@ function CTASection() {
 
 
 function Contact() {
+  const { settings } = useGlobalSettings();
   return (
     <section id="contact" className="section relative bg-bg-light overflow-hidden text-primary border-t border-border-light isolate perspective-[1000px] py-16 sm:py-24 lg:py-32">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
@@ -1053,9 +1067,9 @@ function Contact() {
 
             <div className="flex-1 space-y-3 sm:space-y-4">
               {[
-                { icon: Phone, label: 'Hotline:', value: '+221 77 470 74 13' },
-                { icon: MessageCircle, label: 'SMS / WhatsApp:', value: '+221 77 470 74 13' },
-                { icon: Mail, label: 'Email:', value: 'cledumemoire.sn@gmail.com' },
+                { icon: Phone, label: 'Hotline:', value: settings.contactPhone },
+                { icon: MessageCircle, label: 'SMS / WhatsApp:', value: settings.contactPhone },
+                { icon: Mail, label: 'Email:', value: settings.contactEmail },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3 sm:gap-5 bg-white/10 border border-white/5 rounded-xl sm:rounded-[1.25rem] p-4 sm:p-5">
                   <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white/70 shrink-0" strokeWidth={1.5} />
@@ -1071,14 +1085,20 @@ function Contact() {
               <div className="text-sm font-bold text-white mb-4 sm:mb-6">Connectez-vous avec nous</div>
               <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
                 {[
-                  { Icon: CustomFacebookIcon, href: "https://www.facebook.com/share/18QJwVU1eM/?mibextid=wwXIfr" },
-                  { Icon: InstagramLogo, href: "https://www.instagram.com/cle_du_memoire/" },
-                  { Icon: XLogo, href: "https://x.com/cledumemoire?s=11" },
-                  { Icon: TikTokLogo, href: "https://www.tiktok.com/@cledumemoire?_r=1&_t=ZS-94ItV1lkp2W" },
-                  { Icon: CustomLinkedinIcon, href: "https://www.linkedin.com/company/cledumemoire/posts/?feedView=all" },
-                  { Icon: YoutubeLogo, href: "https://youtube.com/@cledumemoire?si=v_Q-wtgq2gWtZR9-" },
+                  { Icon: CustomFacebookIcon, href: settings.facebookUrl },
+                  { Icon: InstagramLogo, href: settings.instagramUrl },
+                  { Icon: XLogo, href: settings.twitterUrl },
+                  { Icon: TikTokLogo, href: settings.tiktokUrl },
+                  { Icon: CustomLinkedinIcon, href: settings.linkedinUrl },
+                  { Icon: YoutubeLogo, href: settings.youtubeUrl },
                 ].map(({ Icon, href }, idx) => (
-                  <a key={idx} href={href} target="_blank" className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                  <a
+                    key={idx}
+                    href={href && href !== '#' ? href : undefined}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary relative overflow-hidden group hover:scale-105 transition-transform duration-300 ${!href || href === '#' ? 'pointer-events-none opacity-50' : ''}`}
+                  >
                     <div className="absolute inset-0 bg-accent transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
                     <Icon weight="fill" className="w-5 h-5 relative z-10" />
                   </a>
@@ -1095,6 +1115,7 @@ function Contact() {
 
 // ==================== FOOTER ====================
 function Footer() {
+  const { settings } = useGlobalSettings();
   return (
     <footer className="bg-primary text-white pt-16 pb-8">
       <div className="max-w-6xl mx-auto px-6">
@@ -1135,17 +1156,37 @@ function Footer() {
           <div>
             <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-4">Contact</h4>
             <ul className="space-y-2.5 text-sm text-white/40">
-              <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5" /> cledumemoire.sn@gmail.com</li>
-              <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> +221 77 470 74 13</li>
-              <li className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5" /> Dakar, Sénégal</li>
+              <li className="flex items-center gap-2 text-white/60"><Mail className="w-3.5 h-3.5" /> {settings.contactEmail}</li>
+              <li className="flex items-center gap-2 text-white/60"><Phone className="w-3.5 h-3.5" /> {settings.contactPhone}</li>
+              <li className="flex items-center gap-2 text-white/60"><MapPin className="w-3.5 h-3.5" /> {settings.contactAddress}</li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-white/[0.06] pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-white/20 text-xs">
-            © 2026 Clé du Mémoire. Tous droits réservés.
+          <p className="text-white/20 text-xs text-center sm:text-left">
+            © {new Date().getFullYear()} {settings.platformName}. Tous droits réservés.
           </p>
+          <div className="flex gap-4">
+            {[
+              { Icon: CustomFacebookIcon, href: settings.facebookUrl },
+              { Icon: InstagramLogo, href: settings.instagramUrl },
+              { Icon: XLogo, href: settings.twitterUrl },
+              { Icon: TikTokLogo, href: settings.tiktokUrl },
+              { Icon: CustomLinkedinIcon, href: settings.linkedinUrl },
+              { Icon: YoutubeLogo, href: settings.youtubeUrl },
+            ].map(({ Icon, href }, idx) => (
+              <a
+                key={idx}
+                href={href && href !== '#' ? href : undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`text-white/20 hover:text-white transition-colors ${!href || href === '#' ? 'pointer-events-none opacity-50' : ''}`}
+              >
+                <Icon weight="fill" className="w-5 h-5" />
+              </a>
+            ))}
+          </div>
           <div className="flex gap-6 text-xs text-white/20">
             <a href="#" className="hover:text-white/50 transition-colors">Mentions légales</a>
             <a href="#" className="hover:text-white/50 transition-colors">Confidentialité</a>

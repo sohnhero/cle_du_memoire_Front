@@ -362,6 +362,68 @@ export default function SettingsPage() {
                                         />
                                     </div>
                                 </div>
+                                <div>
+                                    <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Adresse de contact</label>
+                                    <input
+                                        value={getVal('contactAddress')}
+                                        onChange={e => setPlatform({ ...platform, contactAddress: e.target.value })}
+                                        className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm transition-all"
+                                    />
+                                </div>
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Facebook URL</label>
+                                        <input
+                                            value={getVal('facebookUrl')}
+                                            onChange={e => setPlatform({ ...platform, facebookUrl: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Instagram URL</label>
+                                        <input
+                                            value={getVal('instagramUrl')}
+                                            onChange={e => setPlatform({ ...platform, instagramUrl: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm transition-all"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">X (Twitter) URL</label>
+                                        <input
+                                            value={getVal('twitterUrl')}
+                                            onChange={e => setPlatform({ ...platform, twitterUrl: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">TikTok URL</label>
+                                        <input
+                                            value={getVal('tiktokUrl')}
+                                            onChange={e => setPlatform({ ...platform, tiktokUrl: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm transition-all"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">LinkedIn URL</label>
+                                        <input
+                                            value={getVal('linkedinUrl')}
+                                            onChange={e => setPlatform({ ...platform, linkedinUrl: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">YouTube URL</label>
+                                        <input
+                                            value={getVal('youtubeUrl')}
+                                            onChange={e => setPlatform({ ...platform, youtubeUrl: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm transition-all"
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="space-y-3">
