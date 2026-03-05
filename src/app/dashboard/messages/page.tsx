@@ -162,10 +162,10 @@ export default function MessagesPage() {
     const activeParticipant = tentativePartner || getOtherParticipant(currentConv);
 
     return (
-        <div className="h-[calc(100dvh-6.5rem)] sm:h-[calc(100vh-8rem)] -mt-2 sm:mt-0 overflow-hidden">
-            <div className="flex h-full rounded-2xl overflow-hidden border border-border-light bg-white shadow-sm relative">
+        <div className="h-[calc(100dvh-4rem)] sm:h-[calc(100vh-8rem)] -mx-4 sm:mx-0 -mt-6 sm:mt-0 overflow-hidden bg-white sm:bg-transparent">
+            <div className="flex h-full sm:rounded-2xl overflow-hidden sm:border border-border-light bg-white sm:shadow-sm relative">
                 {/* Conversations List */}
-                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${selectedConvId || tentativePartner ? 'hidden md:flex' : 'flex'} h-full`}>
+                <div className={`w-full md:w-80 lg:w-96 sm:border-r border-border-light flex flex-col ${selectedConvId || tentativePartner ? 'hidden md:flex' : 'flex'} h-full bg-white`}>
                     {/* Header */}
                     <div className="p-3 sm:p-4 border-b border-border-light bg-bg-light/30">
                         <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -272,12 +272,11 @@ export default function MessagesPage() {
                     </div>
                 </div>
 
-                {/* Chat Area */}
-                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'} h-full overflow-hidden`}>
+                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'} h-full overflow-hidden bg-white`}>
                     {activeParticipant ? (
                         <>
                             {/* Chat Header */}
-                            <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-4 border-b border-border-light bg-white shadow-sm z-10">
+                            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border-light bg-white z-10">
                                 <div className="flex items-center gap-2 sm:gap-3">
                                     <button onClick={() => { setSelectedConvId(null); setTentativePartner(null); }} className="md:hidden p-2 -ml-2 text-primary hover:bg-bg-light rounded-lg transition-colors flex-shrink-0">
                                         <ChevronLeft className="w-5 h-5 flex-shrink-0" />
@@ -320,10 +319,10 @@ export default function MessagesPage() {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                                             >
-                                                <div className={`max-w-[90%] sm:max-w-[75%] ${isMe
-                                                    ? 'bg-primary text-white rounded-2xl rounded-br-md shadow-md'
-                                                    : 'bg-white text-text-primary rounded-2xl rounded-bl-md shadow-sm border border-border-light'
-                                                    } px-3 py-2.5 sm:px-4 sm:py-3`}
+                                                <div className={`max-w-[88%] sm:max-w-[75%] ${isMe
+                                                    ? 'bg-primary text-white rounded-2xl rounded-br-none shadow-sm'
+                                                    : 'bg-white text-text-primary rounded-2xl rounded-bl-none shadow-sm border border-border-light'
+                                                    } px-3.5 py-2.5 sm:px-4 sm:py-3`}
                                                 >
                                                     {msg.attachmentUrl && (
                                                         <div className="mb-2">
@@ -357,7 +356,7 @@ export default function MessagesPage() {
                             </div>
 
                             {/* Input */}
-                            <div className="px-3 sm:px-6 py-3 sm:py-4 border-t border-border-light bg-white">
+                            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-border-light bg-white pb-safe">
                                 {attachment && (
                                     <div className="mb-3 flex items-center justify-between gap-2 bg-accent/10 border border-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-medium w-fit max-w-sm">
                                         <div className="flex items-center gap-2 truncate">
@@ -373,11 +372,11 @@ export default function MessagesPage() {
                                     </div>
                                 )}
                                 <div className="flex items-center gap-2 sm:gap-3 max-w-4xl mx-auto">
-                                    <button onClick={() => fileInputRef.current?.click()} className="p-1.5 sm:p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative flex-shrink-0">
-                                        <Paperclip className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+                                    <button onClick={() => fileInputRef.current?.click()} className="p-2 sm:p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative flex-shrink-0">
+                                        <Paperclip className="w-5 h-5" />
                                     </button>
                                     <input type="file" ref={fileInputRef} onChange={(e) => setAttachment(e.target.files?.[0] || null)} className="hidden" />
-                                    <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-xl px-3 sm:px-4 py-2 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
+                                    <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-2xl px-4 py-2 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
                                         <input
                                             type="text"
                                             value={newMessage}
