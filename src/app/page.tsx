@@ -915,8 +915,7 @@ function CTASection() {
         {/* Trust indicators */}
         <div className="mt-16 pt-16 border-t border-white/5 flex flex-wrap justify-center gap-10 opacity-40 grayscale pointer-events-none">
           <div className="text-sm font-bold tracking-tighter text-white">UCAD</div>
-          <div className="text-sm font-bold tracking-tighter text-white">ESP DAKAR</div>
-          <div className="text-sm font-bold tracking-tighter text-white">UGB ST-LOUIS</div>
+          <div className="text-sm font-bold tracking-tighter text-white">UGB</div>
           <div className="text-sm font-bold tracking-tighter text-white">ISM GROUP</div>
           <div className="text-sm font-bold tracking-tighter text-white">ESTM DAKAR</div>
           <div className="text-sm font-bold tracking-tighter text-white">CFPC</div>
