@@ -12,6 +12,7 @@ import { BrandIcon } from '@/components/BrandIcon';
 import { useAuth } from '@/context/AuthContext';
 import ConfirmModal from '@/components/ConfirmModal';
 import Pagination from '@/components/Pagination';
+import { FilePreviewModal } from '@/components/FilePreview';
 
 export default function ResourcesPage() {
     const { user } = useAuth();
@@ -22,6 +23,7 @@ export default function ResourcesPage() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editingResource, setEditingResource] = useState<any>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+    const [previewFile, setPreviewFile] = useState<{ url: string, extension: string, fileName: string } | null>(null);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -80,14 +82,23 @@ export default function ResourcesPage() {
         return <BrandIcon icon={icon} size={36} className="shadow-sm sm:!size-12" iconClassName="sm:!size-6" />;
     };
 
-    const handlePreview = (url: string) => {
-        if (!url) return;
+    const handlePreview = (resource: any) => {
+        if (!resource.fileUrl) return;
+        const url = resource.fileUrl;
         if (url.includes('localhost') || url.includes('127.0.0.1')) {
             window.open(url, '_blank');
             return;
         }
-        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}`;
-        window.open(viewerUrl, '_blank');
+
+        let extension = resource.fileUrl.split('.').pop() || '';
+        // Some robust checking for cloudinary urls without extension
+        if (extension.length > 5 || extension.includes('/')) {
+            if (resource.fileType.toLowerCase() === 'doc' || resource.fileType.toLowerCase() === 'docx') extension = 'docx';
+            else if (resource.fileType.toLowerCase() === 'pdf') extension = 'pdf';
+            else extension = 'pdf'; // fallback
+        }
+
+        setPreviewFile({ url, extension, fileName: resource.title });
     };
 
     return (
@@ -189,7 +200,7 @@ export default function ResourcesPage() {
                                     ) : (
                                         <>
                                             <button
-                                                onClick={() => handlePreview(resource.fileUrl)}
+                                                onClick={() => handlePreview(resource)}
                                                 className="flex-1 btn-secondary py-2 sm:py-2.5 px-3 sm:px-4 text-xs sm:text-sm flex justify-center items-center gap-1.5 sm:gap-2 bg-primary/5 text-primary border border-primary/10 hover:bg-primary hover:text-white transition-colors rounded-xl font-medium"
                                             >
                                                 <ExternalLink className="w-4 h-4" /> Voir
@@ -218,6 +229,14 @@ export default function ResourcesPage() {
                     />
                 </div>
             )}
+
+            <FilePreviewModal
+                isOpen={!!previewFile}
+                onClose={() => setPreviewFile(null)}
+                url={previewFile?.url || ''}
+                extension={previewFile?.extension || ''}
+                fileName={previewFile?.fileName}
+            />
 
             <AnimatePresence>
                 {isAddModalOpen && <AddResourceModal onClose={() => setIsAddModalOpen(false)} onAdd={loadResources} />}

@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
 import { StatsCard } from '@/components/StatsCard';
+import { FilePreviewModal } from '@/components/FilePreview';
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ComponentType<any> }> = {
     UPLOADED: { label: 'Envoyé', color: 'bg-info/10 text-info', icon: Upload },
@@ -88,7 +89,7 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
                 </div>
             </div>
             <div className={`flex items-center gap-2 mt-3 flex-wrap ${isLatest ? 'sm:pl-14' : 'sm:pl-12'}`}>
-                <button onClick={() => onPreview(doc.filePath)} className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-primary bg-primary/5 hover:bg-primary/10 transition-colors border border-transparent">
+                <button onClick={() => onPreview(doc)} className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-primary bg-primary/5 hover:bg-primary/10 transition-colors border border-transparent">
                     <Eye className="w-3 h-3" /> Voir
                 </button>
                 <button onClick={() => window.open(getFileUrl(doc.filePath), '_blank')} className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-info bg-info/5 hover:bg-info/10 transition-colors border border-transparent">
@@ -114,6 +115,7 @@ export default function DocumentsPage() {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const [reviewingDoc, setReviewingDoc] = useState<any>(null);
+    const [previewFile, setPreviewFile] = useState<{ url: string, extension: string, fileName: string } | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('ALL');
     const [activeStatus, setActiveStatus] = useState('ALL');
@@ -190,16 +192,15 @@ export default function DocumentsPage() {
         return `${baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
     };
 
-    const handlePreview = (path: string) => {
-        const fileUrl = getFileUrl(path);
+    const handlePreview = (doc: any) => {
+        const fileUrl = getFileUrl(doc.filePath);
         // If it's a local development url, external viewers won't work, fallback to direct open
         if (fileUrl.includes('localhost') || fileUrl.includes('127.0.0.1')) {
             window.open(fileUrl, '_blank');
             return;
         }
-        // Use Google Docs Viewer to render the file (PDF, DOCX) in the browser
-        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}`;
-        window.open(viewerUrl, '_blank');
+        const extension = doc.filePath.split('.').pop() || '';
+        setPreviewFile({ url: fileUrl, extension, fileName: doc.filename });
     };
 
     return (
@@ -352,6 +353,14 @@ export default function DocumentsPage() {
                     />
                 </div>
             )}
+
+            <FilePreviewModal
+                isOpen={!!previewFile}
+                onClose={() => setPreviewFile(null)}
+                url={previewFile?.url || ''}
+                extension={previewFile?.extension || ''}
+                fileName={previewFile?.fileName}
+            />
 
             <AnimatePresence>
                 {isUploadModalOpen && (
