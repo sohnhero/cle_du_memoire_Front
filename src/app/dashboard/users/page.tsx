@@ -23,6 +23,7 @@ export default function AdminUsersPage() {
     const [loading, setLoading] = useState(true);
     const [filterRole, setFilterRole] = useState('ALL');
     const [searchQuery, setSearchQuery] = useState('');
+    const [allCoaches, setAllCoaches] = useState<any[]>([]);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -49,8 +50,18 @@ export default function AdminUsersPage() {
         }
     };
 
+    const loadAllCoaches = async () => {
+        try {
+            const res = await api.getUsers(1, 100, '', 'ACCOMPAGNATEUR', true);
+            setAllCoaches(res.users || []);
+        } catch (error) {
+            console.error("Erreur de chargement des coachs", error);
+        }
+    };
+
     useEffect(() => {
         loadUsers();
+        loadAllCoaches();
     }, [currentPage, filterRole]);
 
     // Debounced search
@@ -62,7 +73,6 @@ export default function AdminUsersPage() {
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const coaches = users.filter(u => u.role === 'ACCOMPAGNATEUR' && u.isActive);
 
     return (
         <div className="space-y-6">
@@ -245,7 +255,7 @@ export default function AdminUsersPage() {
                 {assigningCoachFor && (
                     <AssignCoachModal
                         student={assigningCoachFor}
-                        coaches={coaches}
+                        coaches={allCoaches}
                         onClose={() => setAssigningCoachFor(null)}
                         onSuccess={loadUsers}
                     />

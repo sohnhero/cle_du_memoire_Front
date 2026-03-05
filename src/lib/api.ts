@@ -66,10 +66,11 @@ class ApiClient {
     }
 
     // Users
-    async getUsers(page = 1, limit = 5, search = '', role = 'ALL') {
+    async getUsers(page = 1, limit = 5, search = '', role = 'ALL', isActive?: boolean) {
         let url = `/users?page=${page}&limit=${limit}`;
         if (search) url += `&search=${encodeURIComponent(search)}`;
         if (role && role !== 'ALL') url += `&role=${role}`;
+        if (isActive !== undefined) url += `&isActive=${isActive}`;
         return this.request<{ users: any[]; total: number; page: number; totalPages: number }>(url);
     }
 
