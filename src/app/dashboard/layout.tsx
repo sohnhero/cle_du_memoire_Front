@@ -120,7 +120,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const navItems = navByRole[user.role] || [];
 
     return (
-        <div className="min-h-screen bg-bg-light flex">
+        <div className="h-[100dvh] bg-bg-light flex overflow-hidden">
             {/* Desktop Sidebar */}
             <motion.aside
                 initial={false}
@@ -319,7 +319,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* Main Content */}
             <div
-                className={`flex-1 flex flex-col h-[100dvh] lg:transition-[margin-left] lg:duration-300 ${sidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-[80px]'}`}
+                className={`flex-1 flex flex-col h-[100dvh] overflow-hidden lg:transition-[margin-left] lg:duration-300 ${sidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-[80px]'}`}
             >
                 {/* Top Header - Fixed */}
                 <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-black/[0.04] flex-shrink-0">
@@ -373,7 +373,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </header>
 
                 {/* Page Content - Scrollable */}
-                <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-4 md:p-8">
+                <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-4 md:p-8 overscroll-none">
                     <PaymentGate user={user}>
                         {children}
                     </PaymentGate>
