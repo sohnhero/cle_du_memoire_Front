@@ -165,7 +165,7 @@ export default function MessagesPage() {
         <div className="h-[calc(100dvh-6rem)] sm:h-[calc(100vh-8rem)] -mt-2 sm:mt-0">
             <div className="flex h-full rounded-2xl overflow-hidden border border-border-light bg-white shadow-sm relative">
                 {/* Conversations List */}
-                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'}`}>
+                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${selectedConvId || tentativePartner ? 'hidden md:flex' : 'flex'}`}>
                     {/* Header */}
                     <div className="p-3 sm:p-4 border-b border-border-light bg-bg-light/30">
                         <div className="flex items-center justify-between mb-3 sm:mb-4">

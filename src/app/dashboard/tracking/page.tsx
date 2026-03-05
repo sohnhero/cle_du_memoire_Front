@@ -14,6 +14,7 @@ import { BrandIcon } from '@/components/BrandIcon';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
 import UserAvatar from '@/components/UserAvatar';
+import { StatsCard } from '@/components/StatsCard';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
@@ -51,35 +52,6 @@ function ProgressBar({ value, color = 'bg-accent' }: { value: number; color?: st
     );
 }
 
-// ── Stats Card ──────────────────────────────────────────────────
-function StatCard({ icon: Icon, label, value, sub, color, delay = 0 }: {
-    icon: any; label: string; value: string | number; sub?: string; color: string; delay?: number;
-}) {
-    const colorMap: Record<string, string> = {
-        primary: 'bg-primary/10',
-        accent: 'bg-accent/10',
-        success: 'bg-success/10',
-        info: 'bg-info/10',
-        warning: 'bg-warning/10',
-    };
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay }}
-            className="card-premium p-4 sm:p-5 flex flex-col justify-between gap-3"
-        >
-            <div className={`w-10 h-10 rounded-xl ${colorMap[color]} flex items-center justify-center`}>
-                <Icon className={`w-5 h-5 text-${color}`} />
-            </div>
-            <div>
-                <div className="text-2xl font-extrabold text-primary">{value}</div>
-                <div className="text-xs font-semibold text-text-secondary mt-0.5">{label}</div>
-                {sub && <div className="text-[11px] text-text-muted mt-0.5">{sub}</div>}
-            </div>
-        </motion.div>
-    );
-}
 
 // ── Phase Distribution Bar ──────────────────────────────────────
 function PhaseDistribution({ phaseCounts, total }: { phaseCounts: any[]; total: number }) {
@@ -173,39 +145,32 @@ export default function TrackingPage() {
     const hasFilter = search || phaseFilter !== 'ALL' || coachFilter;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 px-1 sm:px-0 max-w-full overflow-x-hidden pb-8">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 px-3 sm:px-0">
                 <div>
-                    <h1 className="text-xl sm:text-2xl font-bold text-primary">Suivi Global des Mémoires</h1>
-                    <p className="text-text-secondary mt-0.5 text-sm">Progression de tous les étudiants en temps réel</p>
+                    <h1 className="text-xl sm:text-2xl font-black text-primary tracking-tight">Suivi Global des Mémoires</h1>
+                    <p className="text-text-secondary mt-1 text-[10px] sm:text-sm font-semibold italic">Progression de tous les étudiants en temps réel</p>
                 </div>
             </div>
 
             {/* Stats Row */}
             {stats && (
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-                    <StatCard icon={Users} label="Total Mémoires" value={stats.totalMemoires} color="primary" delay={0.05} />
-                    <StatCard icon={TrendingUp} label="Progression Moy." value={`${stats.avgProgress}%`} color="accent" delay={0.1} />
-                    <StatCard icon={CheckCircle} label="Finalisés" value={stats.completed} color="success" delay={0.15} />
-                    <StatCard icon={UserCircle} label="Avec Accomp." value={stats.withCoach} color="info" delay={0.2} />
-                    <StatCard icon={AlertTriangle} label="Sans Accomp." value={stats.withoutCoach} sub="Nécessite assignation" color="warning" delay={0.25} />
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 px-2 sm:px-0">
+                    <StatsCard label="Total" value={stats.totalMemoires} icon={Users} delay={0.05} />
+                    <StatsCard label="Prog. Moy." value={`${stats.avgProgress}%`} icon={TrendingUp} delay={0.1} />
+                    <StatsCard label="Finalisés" value={stats.completed} icon={CheckCircle} delay={0.15} />
+                    <StatsCard label="Coachés" value={stats.withCoach} icon={UserCircle} delay={0.2} />
+                    <StatsCard label="Sans Coach" value={stats.withoutCoach} icon={AlertTriangle} delay={0.25} iconColor="bg-warning" />
                 </div>
             )}
 
-            <div className="grid lg:grid-cols-3 gap-6">
-                {/* Left: Phase Distribution */}
-                <div className="lg:col-span-1">
-                    {stats && (
-                        <PhaseDistribution phaseCounts={stats.phaseCounts || []} total={stats.totalMemoires} />
-                    )}
-                </div>
-
-                {/* Right: Table */}
-                <div className="lg:col-span-2 space-y-4">
+            <div className="grid lg:grid-cols-3 gap-6 px-2 sm:px-0">
+                {/* Right (Main Content): Table - Moved up on mobile */}
+                <div className="lg:col-span-2 order-1 lg:order-2 space-y-4 px-3 sm:px-0">
                     {/* Filters */}
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <div className="flex-1 flex items-center gap-2 bg-white rounded-xl border border-border px-3 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-accent/10 focus-within:border-accent transition-all">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                        <div className="flex-1 flex items-center gap-2 bg-white rounded-xl border border-border px-3 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-accent/10 focus-within:border-accent transition-all min-w-0">
                             <Search className="w-4 h-4 text-text-muted flex-shrink-0" />
                             <input
                                 type="text"
@@ -262,86 +227,83 @@ export default function TrackingPage() {
                                     const urgentDays = days !== null && days < 30;
 
                                     return (
-                                        <motion.div
+                                        <div
                                             key={m.id}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: idx * 0.04 }}
-                                            className="p-4 hover:bg-bg-light/50 transition-colors group"
+                                            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 hover:bg-bg-light transition-all border-b border-border/5 group relative"
                                         >
-                                            <div className="flex items-start gap-3">
-                                                {/* Avatar */}
-                                                <UserAvatar user={m.student} size="lg" className="shadow-sm uppercase" />
+                                            <div className="flex items-center gap-3 w-full sm:w-auto">
+                                                <div className="relative shrink-0">
+                                                    <UserAvatar user={m.student} size="xl" className="shadow-sm uppercase ring-2 ring-white" />
+                                                    {m.accompagnateur && <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border border-white" />}
+                                                </div>
+                                                <div className="min-w-0 flex-1 sm:hidden">
+                                                    <div className="font-bold text-sm text-primary truncate">{m.student?.firstName} {m.student?.lastName}</div>
+                                                    <div className={`text-[9px] font-bold uppercase ${ph.color} w-fit px-1.5 py-0.5 rounded`}>{ph.label}</div>
+                                                </div>
+                                            </div>
 
-                                                {/* Content */}
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center justify-between gap-2 mb-1">
-                                                        <div>
-                                                            <span className="font-semibold text-sm text-primary">
-                                                                {m.student?.firstName} {m.student?.lastName}
-                                                            </span>
-                                                            {m.student?.field && (
-                                                                <span className="ml-2 text-xs text-text-muted">{m.student.field}</span>
-                                                            )}
+                                            <div className="flex-1 min-w-0 w-full">
+                                                <div className="hidden sm:flex items-center gap-2 mb-1">
+                                                    <span className="font-bold text-sm text-primary truncate hover:text-accent transition-colors cursor-pointer" onClick={() => setSelected(m)}>
+                                                        {m.student?.firstName} {m.student?.lastName}
+                                                    </span>
+                                                    <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-lg ${ph.color} tracking-wider`}>
+                                                        {ph.label}
+                                                    </span>
+                                                </div>
+
+                                                <p className="text-[11px] sm:text-xs text-text-secondary line-clamp-2 sm:line-clamp-1 mb-2 sm:mb-2 group-hover:text-primary transition-colors pr-8 sm:pr-0">
+                                                    « {m.title} »
+                                                </p>
+
+                                                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                                                    <div className="flex-1 flex items-center gap-2 min-w-0">
+                                                        <div className="flex-1 h-1.5 bg-bg-light rounded-full overflow-hidden border border-border/10">
+                                                            <div
+                                                                className={`h-full rounded-full transition-all duration-1000 ${m.progressPercent >= 80 ? 'bg-success' : m.progressPercent >= 40 ? 'bg-accent' : 'bg-warning'}`}
+                                                                style={{ width: `${m.progressPercent}%` }}
+                                                            />
                                                         </div>
-                                                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-lg ${ph.color}`}>
-                                                            {ph.label}
-                                                        </span>
+                                                        <span className="text-[10px] sm:text-[11px] font-bold text-primary min-w-[28px]">{m.progressPercent}%</span>
                                                     </div>
 
-                                                    <p className="text-xs text-text-secondary truncate mb-2 italic">
-                                                        « {m.title} »
-                                                    </p>
-
-                                                    {/* Progress */}
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <ProgressBar
-                                                            value={m.progressPercent}
-                                                            color={m.progressPercent >= 80 ? 'bg-success' : m.progressPercent >= 40 ? 'bg-accent' : 'bg-warning'}
-                                                        />
-                                                        <span className="text-xs font-bold text-primary w-10 text-right flex-shrink-0">
-                                                            {m.progressPercent}%
-                                                        </span>
-                                                    </div>
-
-                                                    {/* Meta row */}
-                                                    <div className="flex items-center gap-3 flex-wrap">
+                                                    <div className="flex items-center gap-x-3 gap-y-1 sm:gap-3 flex-wrap sm:flex-nowrap">
                                                         {m.accompagnateur ? (
-                                                            <span className="flex items-center gap-1 text-[11px] text-success font-medium">
-                                                                <UserCircle className="w-3.5 h-3.5" />
-                                                                {m.accompagnateur.firstName} {m.accompagnateur.lastName}
+                                                            <span className="flex items-center gap-1 text-[9px] sm:text-[10px] text-success font-bold whitespace-nowrap">
+                                                                <UserCircle className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                                                                <span className="truncate max-w-[80px] sm:max-w-none">{m.accompagnateur.firstName}</span>
                                                             </span>
                                                         ) : (
-                                                            <span className="flex items-center gap-1 text-[11px] text-warning font-medium">
-                                                                <AlertTriangle className="w-3.5 h-3.5" />
-                                                                Sans accompagnateur
+                                                            <span className="flex items-center gap-1 text-[9px] sm:text-[10px] text-warning font-bold whitespace-nowrap">
+                                                                <AlertTriangle className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                                                                Sans coach
                                                             </span>
                                                         )}
 
-                                                        <span className="flex items-center gap-1 text-[11px] text-text-muted">
-                                                            <FileText className="w-3.5 h-3.5" />
-                                                            {docsApproved}/{docsTotal} docs validés
+                                                        <span className="flex items-center gap-1 text-[9px] sm:text-[10px] text-text-muted font-bold whitespace-nowrap">
+                                                            <FileText className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                                                            {docsTotal} docs
                                                         </span>
 
                                                         {days !== null && (
-                                                            <span className={`flex items-center gap-1 text-[11px] font-medium ${urgentDays ? 'text-error' : 'text-text-muted'}`}>
-                                                                <Calendar className="w-3.5 h-3.5" />
-                                                                {days > 0 ? `J-${days}` : 'Dépassé'}
+                                                            <span className={`flex items-center gap-1 text-[9px] sm:text-[10px] font-bold whitespace-nowrap ${urgentDays ? 'text-error animate-pulse' : 'text-text-muted'}`}>
+                                                                <Calendar className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                                                                J-{days}
                                                             </span>
                                                         )}
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                {/* View button */}
+                                            <div className="absolute top-4 right-4 sm:static flex items-center gap-1">
                                                 <button
                                                     onClick={() => setSelected(m)}
-                                                    className="p-2 rounded-xl border border-transparent hover:border-border hover:bg-white transition-all text-text-muted hover:text-primary opacity-0 group-hover:opacity-100"
-                                                    title="Voir le détail"
+                                                    className="p-2 rounded-xl bg-bg-light hover:bg-primary hover:text-white transition-all text-text-muted shadow-sm lg:opacity-0 lg:group-hover:opacity-100"
                                                 >
                                                     <Eye className="w-4 h-4" />
                                                 </button>
                                             </div>
-                                        </motion.div>
+                                        </div>
                                     );
                                 })}
                                 <div className="border-t border-border-light bg-bg-light/30">
@@ -356,6 +318,13 @@ export default function TrackingPage() {
                             </div>
                         )}
                     </div>
+                </div>
+
+                {/* Left (Sidebar): Phase Distribution - Moved down on mobile */}
+                <div className="lg:col-span-1 order-2 lg:order-1">
+                    {stats && (
+                        <PhaseDistribution phaseCounts={stats.phaseCounts || []} total={stats.totalMemoires} />
+                    )}
                 </div>
             </div>
 

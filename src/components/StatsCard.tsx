@@ -31,7 +31,7 @@ export function StatsCard({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay, duration: 0.4 }}
-            className={`card-premium p-4 flex items-center justify-between group overflow-hidden min-h-[100px] sm:min-h-[120px] ${className}`}
+            className={`card-premium p-3 sm:p-4 flex items-center justify-between group overflow-hidden min-h-[90px] sm:min-h-[120px] ${className}`}
         >
             <div className="flex-1 min-w-0 flex flex-col h-full py-0.5">
                 <p className="text-[10px] sm:text-[11px] font-black text-text-muted uppercase tracking-widest mb-1 group-hover:text-primary transition-colors">
