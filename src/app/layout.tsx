@@ -1,8 +1,23 @@
 import type { Metadata } from "next";
+import { Poppins, Sora } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import MaintenanceGuard from "@/components/MaintenanceGuard";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-sora",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.cledumemoire.com"),
@@ -36,7 +51,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/favicon.png", // Using the newly created icon
+        url: "/favicon.png",
         width: 800,
         height: 800,
         alt: "Logo Clé du Mémoire",
@@ -68,15 +83,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
-      <body>
+    <html lang="fr" className={`scroll-smooth ${poppins.variable} ${sora.variable}`} suppressHydrationWarning>
+      <body className={poppins.className}>
         <AuthProvider>
           <MaintenanceGuard>
             {children}
           </MaintenanceGuard>
         </AuthProvider>
-        <Toaster position="top-right" toastOptions={{ duration: 3000, style: { borderRadius: '12px', background: '#1a1a2e', color: '#fff', fontSize: '14px', fontWeight: '500' } }} />
+        <Toaster position="top-right" toastOptions={{ duration: 3000, style: { borderRadius: '12px', background: '#1a1a2e', color: '#fff', fontSize: '14px', fontWeight: '500', fontFamily: 'var(--font-poppins)' } }} />
       </body>
     </html>
   );
 }
+
+
