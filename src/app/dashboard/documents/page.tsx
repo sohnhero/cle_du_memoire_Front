@@ -3,14 +3,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    FileText, Upload, Download, Eye, Clock, CheckCircle, Warning as AlertTriangle, MagnifyingGlass as Search, Faders as Filter, DotsThreeVertical as MoreVertical, X, ClipboardText as ClipboardCheck, Sparkle as Sparkles, MagicWand as Wand2, ChatCircle as MessageCircle, CaretDown, CaretUp
+    FileText, Upload, Download, Eye, Clock, CheckCircle, Warning as AlertTriangle, MagnifyingGlass as Search, Faders as Filter, DotsThreeVertical as MoreVertical, X, ClipboardText as ClipboardCheck, Sparkle as Sparkles, MagicWand as Wand2, ChatCircle as MessageCircle, CaretDown, CaretUp, Users, TrendUp
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
+import { StatsCard } from '@/components/StatsCard';
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ComponentType<any> }> = {
     UPLOADED: { label: 'Envoyé', color: 'bg-info/10 text-info', icon: Upload },
@@ -40,10 +42,12 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
         <motion.div
             initial={{ opacity: 0, x: isLatest ? 0 : -10 }}
             animate={{ opacity: 1, x: 0 }}
-            className={`card-premium transition-all ${isLatest ? 'p-5 shadow-sm border-l-4 border-l-primary' : 'p-4 bg-bg-light/40 border-dashed opacity-80 hover:opacity-100 hover:bg-white'}`}
+            className={`card-premium transition-all ${isLatest ? 'p-4 shadow-sm border-l-4 border-l-primary' : 'p-3 bg-bg-light/40 border-dashed opacity-80 hover:opacity-100 hover:bg-white'}`}
         >
-            <div className="flex items-start gap-3 sm:gap-4">
-                <BrandIcon icon={FileText} size={isLatest ? 40 : 36} className="shadow-sm flex-shrink-0" />
+            <div className="flex items-start gap-3">
+                <div className={`shrink-0 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 ${isLatest ? 'w-11 h-11' : 'w-9 h-9'}`}>
+                    <FileText className={isLatest ? 'w-6 h-6' : 'w-5 h-5'} weight="fill" />
+                </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                         <div className="min-w-0">
@@ -83,19 +87,19 @@ function DocumentCard({ doc, isLatest, userRole, onPreview, onReview, getFileUrl
                     )}
                 </div>
             </div>
-            <div className={`flex items-center gap-2 mt-3 flex-wrap ${isLatest ? 'sm:pl-16' : 'sm:pl-14'}`}>
-                <button onClick={() => onPreview(doc.filePath)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold text-primary bg-primary/5 hover:bg-primary/10 transition-colors border border-transparent hover:border-primary/10">
+            <div className={`flex items-center gap-2 mt-3 flex-wrap ${isLatest ? 'sm:pl-14' : 'sm:pl-12'}`}>
+                <button onClick={() => onPreview(doc.filePath)} className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-primary bg-primary/5 hover:bg-primary/10 transition-colors border border-transparent">
                     <Eye className="w-3 h-3" /> Voir
                 </button>
-                <button onClick={() => window.open(getFileUrl(doc.filePath), '_blank')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold text-info bg-info/5 hover:bg-info/10 transition-colors border border-transparent hover:border-info/10">
+                <button onClick={() => window.open(getFileUrl(doc.filePath), '_blank')} className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-info bg-info/5 hover:bg-info/10 transition-colors border border-transparent">
                     <Download className="w-3 h-3" /> Télécharger
                 </button>
                 {userRole !== 'STUDENT' && isLatest && (
                     <button
                         onClick={onReview}
-                        className="sm:ml-auto flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[10px] font-bold text-white bg-accent hover:bg-accent-light shadow-md hover:shadow-lg transition-all"
+                        className="sm:ml-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-white bg-accent hover:bg-accent-light shadow-md hover:shadow-lg transition-all"
                     >
-                        <ClipboardCheck className="w-3 h-3" /> Évaluer
+                        <ClipboardCheck className="w-3.5 h-3.5" /> Évaluer
                     </button>
                 )}
             </div>
@@ -146,10 +150,14 @@ export default function DocumentsPage() {
             setTotalPages(res.totalPages || 1);
             setTotalDocs(res.total || 0);
 
-            // For stats, we might need a separate endpoint or compute from what we have
-            // Since stats are for the whole collection, we'll just keep them as is or update if the API provides them
-            // For now, let's just use the total from the response
-            setStats(prev => ({ ...prev, total: res.total || 0 }));
+            // Calculate stats from the current page/total if API doesn't provide them
+            // In a real app, these would come from the backend
+            setStats({
+                total: res.total || 0,
+                approved: (res.documents || []).filter((d: any) => d.status === 'APPROVED').length,
+                underReview: (res.documents || []).filter((d: any) => d.status === 'UNDER_REVIEW').length,
+                revision: (res.documents || []).filter((d: any) => d.status === 'REVISION_NEEDED').length,
+            });
         } catch (error) {
             console.error("Failed to fetch documents", error);
             toast.error("Erreur de chargement des documents");
@@ -214,18 +222,11 @@ export default function DocumentsPage() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                    { label: 'Total', value: stats.total, color: 'text-primary' },
-                    { label: 'Approuvés', value: stats.approved, color: 'text-success' },
-                    { label: 'En revue', value: stats.underReview, color: 'text-warning' },
-                    { label: 'À réviser', value: stats.revision, color: 'text-error' },
-                ].map((stat) => (
-                    <div key={stat.label} className="card-premium p-4 text-center">
-                        <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-                        <div className="text-xs text-text-muted mt-1">{stat.label}</div>
-                    </div>
-                ))}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <StatsCard label="Total" value={loading ? '…' : stats.total} icon={FileText} delay={0.1} />
+                <StatsCard label="Approuvés" value={loading ? '…' : stats.approved} icon={CheckCircle} delay={0.2} valueColor="text-success" />
+                <StatsCard label="En revue" value={loading ? '…' : stats.underReview} icon={Clock} delay={0.3} valueColor="text-warning" />
+                <StatsCard label="À réviser" value={loading ? '…' : stats.revision} icon={AlertTriangle} delay={0.4} valueColor="text-error" />
             </div>
 
             {/* Formatting & Controls */}
@@ -278,15 +279,15 @@ export default function DocumentsPage() {
                         const history = docs.slice(1);
 
                         return (
-                            <div key={catId} className="bg-white rounded-2xl border border-border shadow-sm p-4 transition-all hover:border-border-hover">
-                                <div className="flex items-center justify-between mb-5 pb-3 border-b border-border/50">
+                            <div key={catId} className="bg-white rounded-2xl border border-border/60 shadow-sm p-4 transition-all hover:border-accent/20 group">
+                                <div className="flex items-center justify-between mb-4 pb-3 border-b border-border/10">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary shadow-inner">
-                                            <category.icon className="w-5 h-5" weight="duotone" />
+                                        <div className="w-10 h-10 rounded-xl bg-accent/5 flex items-center justify-center text-accent ring-4 ring-accent/5 group-hover:scale-110 transition-transform">
+                                            <category.icon className="w-5 h-5" weight="fill" />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-primary text-base">{category.label}</h3>
-                                            <div className="text-xs font-medium text-text-muted mt-0.5">{docs.length} document{docs.length > 1 ? 's' : ''} versionné{docs.length > 1 ? 's' : ''}</div>
+                                            <h3 className="font-black text-primary text-sm uppercase tracking-tight">{category.label}</h3>
+                                            <div className="text-[10px] font-bold text-text-muted mt-0.5 uppercase tracking-wider">{docs.length} document{docs.length > 1 ? 's' : ''} enregistré{docs.length > 1 ? 's' : ''}</div>
                                         </div>
                                     </div>
                                 </div>

@@ -158,16 +158,16 @@ summary {
   .card-premium {
     background: white;
     border-radius: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
   }
 
   .card-premium:hover {
-    box-shadow:
-      0 10px 40px rgba(0, 0, 0, 0.06),
-      0 5px 15px rgba(0, 0, 0, 0.02);
-    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
     border-color: rgba(0, 0, 0, 0.08);
   }
 

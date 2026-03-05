@@ -94,58 +94,64 @@ export default function MemoirePage() {
             </div>
 
             {/* Header Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-5 sm:p-8 bg-primary/5">
-                <div className="flex flex-col lg:flex-row gap-8">
-                    <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-4">
-                            <BrandIcon icon={BookOpen} size={48} className="shadow-sm" />
-                            <div>
-                                <h2 className="text-base sm:text-lg font-bold text-primary">{memoire.title}</h2>
-                                <p className="text-xs sm:text-sm text-text-secondary">{user?.field || 'Filière non renseignée'} — {user?.university || 'Université non renseignée'}</p>
-                                <div className="mt-3 flex flex-wrap gap-2">
-                                    {user?.studyLevel && (
-                                        <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
-                                            Niveau: {user.studyLevel}
-                                        </span>
-                                    )}
+            <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="card-premium p-6 sm:p-7 bg-primary overflow-hidden relative group">
+                {/* Decorative background circle */}
+                <div className="absolute -right-12 -top-12 w-64 h-64 bg-accent/10 rounded-full blur-3xl group-hover:bg-accent/20 transition-colors duration-700" />
+
+                <div className="relative flex flex-col lg:flex-row gap-8 items-center">
+                    <div className="flex-1 w-full text-center lg:text-left">
+                        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 mb-6">
+                            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20 ring-4 ring-white/10 shrink-0">
+                                <BookOpen className="w-8 h-8" weight="fill" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight mb-2">
+                                    {memoire.title}
+                                </h2>
+                                <div className="flex flex-wrap justify-center lg:justify-start gap-3 mt-4">
+                                    <span className="inline-flex items-center text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-white/10 text-white uppercase tracking-widest border border-white/10">
+                                        Niveau: {user?.studyLevel}
+                                    </span>
                                     {user?.targetDefenseDate && (
-                                        <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
-                                            Soutenance prévue: {new Date(user.targetDefenseDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                        <span className="inline-flex items-center text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-accent text-primary uppercase tracking-widest border border-accent/20">
+                                            Soutenance en {new Date(user.targetDefenseDate).getFullYear()}
                                         </span>
                                     )}
                                 </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4 mt-6">
-                            <div className="text-center p-3 rounded-xl bg-white border border-border-light shadow-sm">
-                                <div className="text-2xl font-bold text-success">{completedPhases}</div>
-                                <div className="text-xs text-text-muted mt-1">Étapes terminées</div>
+
+                        <div className="grid grid-cols-3 gap-3">
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <div className="text-xl font-black text-success">{completedPhases}</div>
+                                <div className="text-[10px] font-bold text-white/50 uppercase tracking-tighter">Terminées</div>
                             </div>
-                            <div className="text-center p-3 rounded-xl bg-white border border-border-light shadow-sm">
-                                <div className="text-2xl font-bold text-accent">1</div>
-                                <div className="text-xs text-text-muted mt-1">En cours</div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <div className="text-xl font-black text-accent">1</div>
+                                <div className="text-[10px] font-bold text-white/50 uppercase tracking-tighter">En cours</div>
                             </div>
-                            <div className="text-center p-3 rounded-xl bg-white border border-border-light shadow-sm">
-                                <div className="text-2xl font-bold text-text-muted">{phases.length - completedPhases - 1}</div>
-                                <div className="text-xs text-text-muted mt-1">Restantes</div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <div className="text-xl font-black text-white/30">{phases.length - completedPhases - 1}</div>
+                                <div className="text-[10px] font-bold text-white/50 uppercase tracking-tighter">Attente</div>
                             </div>
                         </div>
                     </div>
-                    <div className="w-full lg:w-64 flex flex-col items-center justify-center">
+
+                    <div className="shrink-0 relative">
                         <div className="relative w-36 h-36">
-                            <svg className="w-36 h-36 -rotate-90" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="#E5E7EB" strokeWidth="8" />
+                            <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="6" />
                                 <motion.circle
-                                    cx="50" cy="50" r="40" fill="none" stroke="#F9B700" strokeWidth="8" strokeLinecap="round"
-                                    initial={{ strokeDasharray: '0 251.2' }}
-                                    animate={{ strokeDasharray: `${progress * 2.512} 251.2` }}
+                                    cx="50" cy="50" r="42" fill="none" stroke="#F9B700" strokeWidth="6" strokeLinecap="round"
+                                    initial={{ strokeDasharray: '0 264' }}
+                                    animate={{ strokeDasharray: `${progress * 2.64} 264` }}
                                     transition={{ duration: 1.5, ease: 'easeOut' }}
                                 />
                             </svg>
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="text-center">
-                                    <div className="text-3xl font-extrabold text-primary">{progress}%</div>
-                                    <div className="text-xs text-text-muted">Complété</div>
+                                    <div className="text-3xl font-black text-white tracking-tighter">{progress}%</div>
+                                    <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">Global</div>
                                 </div>
                             </div>
                         </div>
@@ -167,9 +173,11 @@ export default function MemoirePage() {
             </AnimatePresence>
 
             {/* Timeline */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-5 sm:p-8">
-                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-3">
-                    <BrandIcon icon={TrendingUp} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card-premium p-6 sm:p-7">
+                <h3 className="text-base font-black text-primary mb-6 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20">
+                        <TrendingUp className="w-5 h-5" weight="fill" />
+                    </div>
                     Progression Détaillée
                 </h3>
                 <div className="relative">
@@ -185,7 +193,7 @@ export default function MemoirePage() {
                                 transition={{ delay: 0.3 + index * 0.05 }}
                                 className={`relative flex items-start gap-4 p-4 rounded-xl transition-colors ${phase.status === 'current' ? 'bg-accent/5' : 'hover:bg-bg-light'}`}
                             >
-                                <div className={`relative z-10 w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${phase.status === 'done'
+                                <div className={`relative z-10 w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm ${phase.status === 'done'
                                     ? 'bg-success text-white'
                                     : phase.status === 'current'
                                         ? 'bg-accent text-primary ring-4 ring-accent/20'
@@ -220,9 +228,11 @@ export default function MemoirePage() {
 
             {/* Accompagnateur Notes */}
             {memoire.notes && (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="card-premium p-6">
-                    <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                        <BrandIcon icon={MessageCircle} size={36} className="!bg-info/10 shadow-sm" iconClassName="!text-info" />
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="card-premium p-6">
+                    <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20">
+                            <MessageCircle className="w-5 h-5" weight="fill" />
+                        </div>
                         Notes de l'Accompagnateur
                     </h3>
                     <div className="p-4 rounded-xl bg-info/5 border border-info/10">

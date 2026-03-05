@@ -449,7 +449,7 @@ export default function SettingsPage() {
                             href={action.href}
                             className="w-full flex items-center gap-4 p-4 rounded-xl bg-bg-light hover:bg-white hover:shadow-sm border border-transparent hover:border-border-light transition-all group text-left"
                         >
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${action.color}`}>
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${action.color}`}>
                                 <action.icon className="w-5 h-5" />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -466,7 +466,7 @@ export default function SettingsPage() {
                         onClick={handleExportData}
                         className="w-full flex items-center gap-3 p-4 rounded-xl bg-bg-light hover:bg-primary/5 border border-dashed border-border hover:border-primary/30 transition-all text-left group"
                     >
-                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                             <Save className="w-5 h-5 text-primary" />
                         </div>
                         <div className="flex-1">

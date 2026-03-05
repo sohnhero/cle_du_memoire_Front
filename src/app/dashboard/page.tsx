@@ -8,47 +8,14 @@ import { api } from '@/lib/api';
 import {
     Package, BookOpen, FileText, ChatCircle as MessageCircle, TrendUp as TrendingUp, Users,
     Clock, Warning as AlertTriangle, CheckCircle, ChartBar as BarChart3, Pulse as Activity, ShieldCheck as Shield,
-    Eye, ArrowUpRight, CalendarBlank as Calendar, CaretRight as ChevronRight
+    SignOut as LogoutIcon, UserCircle, Gear, MagnifyingGlass as Search, Bell,
+    Eye, ArrowUpRight, CalendarBlank as CalendarIcon, CaretRight as ChevronRight,
+    Plus, FilePlus, SignIn as LogIn, User
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
+import { StatsCard } from '@/components/StatsCard';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
-// ==================== STATS CARD ====================
-function StatsCard({ icon: Icon, label, value, change, color, delay = 0 }: {
-    icon: any; label: string; value: string | number;
-    change?: string; color: string; delay?: number;
-}) {
-    const colorMap: Record<string, string> = {
-        accent: 'bg-accent/10 text-accent',
-        info: 'bg-info/10 text-info',
-        success: 'bg-success/10 text-success',
-        primary: 'bg-primary/10 text-primary',
-        warning: 'bg-warning/10 text-warning',
-        error: 'bg-error/10 text-error',
-    };
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay }}
-            className={`card-premium p-3 sm:p-6 hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden min-w-0`}
-        >
-            <div className="flex items-start justify-between w-full">
-                <BrandIcon icon={Icon} size={36} className={`shadow-sm ${colorMap[color].split(' ')[0].replace('bg-', 'shadow-').replace('/10', '/20')}`} />
-                {change && (
-                    <p className="text-[10px] sm:text-xs font-bold text-success flex items-center gap-1 bg-success/10 px-2 py-1 rounded-full whitespace-nowrap">
-                        <ArrowUpRight className="w-3 h-3" /> {change}
-                    </p>
-                )}
-            </div>
-            <div className="mt-3 sm:mt-4 min-w-0">
-                <p className="text-xl sm:text-3xl font-extrabold text-primary mb-1 truncate">{value}</p>
-                <p className="text-[11px] sm:text-sm font-medium text-text-secondary truncate">{label}</p>
-            </div>
-        </motion.div>
-    );
-}
 
 // ==================== STUDENT DASHBOARD ====================
 function StudentDashboard() {
@@ -108,20 +75,48 @@ function StudentDashboard() {
     const progress = phaseBasedProgress > 0 ? phaseBasedProgress : (memoire?.progressPercent || 0);
 
     return (
-        <div className="space-y-8">
-            <div>
-                <h1 className="text-2xl font-bold text-primary">Mon Tableau de Bord</h1>
-                <p className="text-text-secondary mt-1">
-                    Bienvenue, {user?.firstName} 👋 {user?.studyLevel && <span className="inline-flex items-center mx-2 text-xs font-bold px-2 py-0.5 rounded-full bg-accent/10 text-accent">{user.studyLevel}</span>}
-                </p>
+        <div className="space-y-6">
+            <div className="flex justify-between items-end pb-2 border-b border-border/10">
+                <div>
+                    <h1 className="text-2xl font-black text-primary tracking-tight">Mon Espace</h1>
+                    <p className="text-text-secondary text-xs font-semibold mt-1">
+                        Ravi de vous revoir, <span className="text-accent">{user?.firstName}</span> 👋
+                    </p>
+                </div>
+                {user?.studyLevel && (
+                    <span className="hidden sm:inline-flex items-center text-[10px] font-black px-2.5 py-1 rounded-lg bg-primary text-white uppercase tracking-wider shadow-sm">
+                        {user.studyLevel}
+                    </span>
+                )}
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatsCard icon={Package} label="Packs Actifs" value={loading ? '…' : stats.activePacks} color="accent" delay={0.1} />
-                <StatsCard icon={FileText} label="Documents" value={loading ? '…' : stats.documents} color="info" delay={0.2} />
-                <StatsCard icon={MessageCircle} label="Messages non lus" value={loading ? '…' : stats.unreadMessages} change={stats.unreadMessages > 0 ? `${stats.unreadMessages} nouveau${stats.unreadMessages > 1 ? 'x' : ''}` : undefined} color="success" delay={0.3} />
-                <StatsCard icon={TrendingUp} label="Progression" value={`${progress}%`} color="primary" delay={0.4} />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+                <StatsCard
+                    label="Mes Packs"
+                    value={loading ? '…' : stats.activePacks}
+                    icon={Package}
+                    delay={0.1}
+                />
+                <StatsCard
+                    label="Documents"
+                    value={loading ? '…' : stats.documents}
+                    icon={FileText}
+                    delay={0.2}
+                />
+                <StatsCard
+                    label="Conversations"
+                    value={loading ? '…' : (stats.unreadMessages > 0 ? `${stats.unreadMessages} non lus` : stats.unreadMessages)}
+                    icon={MessageCircle}
+                    delay={0.3}
+                    valueColor={stats.unreadMessages > 0 ? "text-accent" : "text-primary"}
+                />
+                <StatsCard
+                    label="Progression"
+                    value={loading ? '…' : (memoire ? `${progress}%` : '0%')}
+                    icon={TrendingUp}
+                    delay={0.4}
+                />
             </div>
 
             {/* Main Content Grid */}
@@ -129,16 +124,18 @@ function StudentDashboard() {
                 {/* Left Column: Progress Card */}
                 <div className="space-y-6">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="card-premium p-6 cursor-pointer hover:border-accent/30 transition-colors flex flex-col h-full"
+                        className="card-premium p-5 cursor-pointer hover:border-accent/30 transition-all flex flex-col h-full group"
                         onClick={() => router.push('/dashboard/memoire')}
                     >
-                        <div className="flex justify-between items-start mb-6">
-                            <h3 className="text-lg font-bold text-primary flex items-center gap-3">
-                                <BrandIcon icon={BookOpen} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
-                                Progression du Mémoire
+                        <div className="flex justify-between items-start mb-5">
+                            <h3 className="text-base font-black text-primary flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent ring-4 ring-accent/5 group-hover:scale-110 transition-transform">
+                                    <BookOpen className="w-5 h-5" weight="fill" />
+                                </div>
+                                Suivi du Mémoire
                             </h3>
                             {user?.targetDefenseDate && (
                                 <div className="text-right">
@@ -208,13 +205,13 @@ function StudentDashboard() {
                                 </div>
 
                                 {/* Current Phase Highlight */}
-                                <div className="mt-6 flex items-center justify-between p-4 rounded-xl bg-accent/5 border border-accent/10 hover:bg-accent/10 transition-colors">
+                                <div className="mt-6 flex items-center justify-between p-4 rounded-2xl bg-accent/5 border border-accent/10 hover:bg-accent/10 transition-colors">
                                     <div>
                                         <span className="text-xs font-bold text-accent uppercase tracking-wider block mb-1">Phase Actuelle</span>
                                         <span className="text-sm font-semibold text-primary">{phasesList[currentPhaseIndex]?.label || 'Démarrage'}</span>
                                     </div>
-                                    <div className="w-10 h-10 rounded-full bg-accent/10 text-accent flex items-center justify-center">
-                                        <TrendingUp className="w-5 h-5" />
+                                    <div className="w-10 h-10 rounded-full bg-primary text-white shadow-sm shadow-primary/20 flex items-center justify-center">
+                                        <TrendingUp className="w-5 h-5" weight="fill" />
                                     </div>
                                 </div>
 
@@ -234,17 +231,19 @@ function StudentDashboard() {
                 <div className="space-y-6">
                     {/* Next Deadline Card */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.55 }}
-                        className={`card-premium p-6 cursor-pointer overflow-hidden relative group ${nextEvent?.type === 'DEADLINE' ? 'border-error/20 bg-error/[0.02]' : 'hover:border-accent/30'}`}
+                        className={`card-premium p-5 cursor-pointer overflow-hidden relative group ${nextEvent?.type === 'DEADLINE' ? 'border-error/20 bg-error/[0.01]' : 'hover:border-accent/30'}`}
                         onClick={() => router.push('/dashboard/calendar')}
                     >
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-3">
+                            <h3 className="text-[11px] font-black text-primary uppercase tracking-wider flex items-center gap-2">
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-primary text-white shadow-sm shadow-primary/20 transition-transform group-hover:scale-110`}>
+                                    <Clock className="w-4 h-4" weight="fill" />
+                                </div>
                                 Prochaine Échéance
                             </h3>
-                            <BrandIcon icon={Clock} size={36} className={`shadow-sm ${nextEvent?.type === 'DEADLINE' ? '!bg-error/10' : '!bg-accent/10'}`} iconClassName={nextEvent?.type === 'DEADLINE' ? '!text-error' : '!text-accent'} />
                         </div>
 
                         {nextEvent ? (
@@ -269,25 +268,27 @@ function StudentDashboard() {
                         )}
 
                         {/* Decorative background icon */}
-                        <Calendar className="absolute -bottom-4 -right-4 w-24 h-24 text-primary/[0.03] group-hover:text-accent/[0.05] transition-colors" />
+                        <CalendarIcon className="absolute -bottom-4 -right-4 w-24 h-24 text-primary/[0.03] group-hover:text-accent/[0.05] transition-colors" />
                     </motion.div>
 
                     {memoire?.accompagnateur && (
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.7 }}
-                            className="card-premium p-6"
+                            className="card-premium p-5 group"
                         >
-                            <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                                <BrandIcon icon={Users} size={36} className="!bg-info/10 shadow-sm" iconClassName="!text-info" />
+                            <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
+                                    <Users className="w-5 h-5" weight="fill" />
+                                </div>
                                 Accompagnateur
                             </h3>
                             <div className="flex items-center gap-3">
                                 {memoire.accompagnateur.avatar ? (
-                                    <img src={memoire.accompagnateur.avatar} alt="Avatar" className="w-12 h-12 rounded-xl object-cover shadow-sm" />
+                                    <img src={memoire.accompagnateur.avatar} alt="Avatar" className="w-12 h-12 rounded-2xl object-cover shadow-sm" />
                                 ) : (
-                                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold">
+                                    <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white font-bold">
                                         {memoire.accompagnateur.firstName[0]}{memoire.accompagnateur.lastName[0]}
                                     </div>
                                 )}
@@ -299,7 +300,7 @@ function StudentDashboard() {
                                     </div>
                                 </div>
                             </div>
-                            <button onClick={() => router.push('/dashboard/messages')} className="w-full mt-4 py-2.5 rounded-xl bg-primary/5 text-primary text-sm font-semibold hover:bg-primary hover:text-white transition-all">
+                            <button onClick={() => router.push('/dashboard/messages')} className="w-full mt-4 py-2.5 rounded-2xl bg-primary/5 text-primary text-sm font-semibold hover:bg-primary hover:text-white transition-all">
                                 Envoyer un message
                             </button>
                         </motion.div>
@@ -309,13 +310,15 @@ function StudentDashboard() {
                 {/* Right Column: Actions Rapides */}
                 <div className="space-y-6">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
-                        className="card-premium p-6"
+                        className="card-premium p-5 group"
                     >
-                        <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-3">
-                            <BrandIcon icon={Activity} size={36} className="!bg-primary/10 shadow-sm" iconClassName="!text-primary" />
+                        <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
+                                <Activity className="w-5 h-5" weight="fill" />
+                            </div>
                             Actions Rapides
                         </h3>
                         <div className="space-y-3">
@@ -325,9 +328,9 @@ function StudentDashboard() {
                                 { label: 'Voir ma progression', icon: TrendingUp, color: 'bg-success', href: '/dashboard/memoire' },
                                 { label: 'Mes packs', icon: Package, color: 'bg-primary', href: '/dashboard/packs' },
                             ].map((action) => (
-                                <button key={action.label} onClick={() => router.push(action.href)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-bg-light transition-colors text-left group">
-                                    <div className={`w-10 h-10 rounded-xl ${action.color}/10 flex items-center justify-center flex-shrink-0`}>
-                                        <action.icon className={`w-5 h-5 ${action.color.replace('bg-', 'text-')}`} />
+                                <button key={action.label} onClick={() => router.push(action.href)} className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-bg-light transition-colors text-left group">
+                                    <div className={`w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0 shadow-sm shadow-primary/10`}>
+                                        <action.icon className={`w-5 h-5 text-white`} weight="fill" />
                                     </div>
                                     <span className="text-sm font-medium text-text-primary group-hover:text-primary">{action.label}</span>
                                 </button>
@@ -385,30 +388,35 @@ function AccompagnateurDashboard() {
     };
 
     return (
-        <div className="w-full max-w-full overflow-hidden space-y-6 sm:space-y-8 max-w-7xl mx-auto px-1 sm:px-0">
-            <div className="px-3 sm:px-0">
-                <h1 className="text-xl sm:text-2xl font-bold text-primary">Espace Accompagnateur</h1>
-                <p className="text-text-secondary mt-1 text-xs sm:text-sm font-medium">Gérez vos étudiants et leurs progressions</p>
+        <div className="w-full max-w-full overflow-hidden space-y-6 max-w-7xl mx-auto px-1 sm:px-0">
+            <div className="px-3 sm:px-0 flex justify-between items-end pb-2 border-b border-border/10">
+                <div>
+                    <h1 className="text-2xl font-black text-primary tracking-tight">Accompagnement</h1>
+                    <p className="text-text-secondary mt-1 text-xs font-semibold">Gérez vos étudiants et leurs progressions</p>
+                </div>
+                <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold text-text-muted bg-white px-3 py-1 rounded-lg border border-border/50">
+                    <span className="w-2 h-2 rounded-full bg-success"></span> Coach Certifié
+                </div>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 px-3 sm:px-0">
-                <StatsCard icon={Users} label="Étudiants" value={memoires.length} color="primary" delay={0.1} />
-                <StatsCard icon={FileText} label="À évaluer" value={pendingDocuments.length} color="warning" delay={0.2} />
-                <StatsCard icon={MessageCircle} label="Non lus" value={totalUnreadMessages} color="error" delay={0.3} />
-                <StatsCard icon={TrendingUp} label="Moyenne" value={`${memoires.length > 0 ? Math.round(memoires.reduce((acc, m) => acc + m.progressPercent, 0) / memoires.length) : 0}%`} color="success" delay={0.4} />
+                <StatsCard label="Étudiants" value={loading ? '…' : memoires.length} icon={Users} delay={0.1} />
+                <StatsCard label="À évaluer" value={loading ? '…' : pendingDocuments.length} icon={FileText} delay={0.2} />
+                <StatsCard label="Messages non lus" value={loading ? '…' : totalUnreadMessages} icon={MessageCircle} delay={0.3} valueColor={totalUnreadMessages > 0 ? "text-accent" : "text-primary"} />
+                <StatsCard label="Progression moyenne" value={loading ? '…' : `${memoires.length > 0 ? Math.round(memoires.reduce((acc, m) => acc + m.progressPercent, 0) / memoires.length) : 0}%`} icon={TrendingUp} delay={0.4} />
             </div>
 
             <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 px-3 sm:px-0 overflow-hidden">
                 {/* Students List */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="lg:col-span-2 card-premium p-4 sm:p-6 shadow-sm border border-border/40 overflow-hidden"
+                    className="lg:col-span-2 card-premium p-5 group"
                 >
-                    <h3 className="text-base sm:text-lg font-bold text-primary mb-5 sm:mb-6 flex items-center gap-3">
-                        <div className="flex-shrink-0">
-                            <BrandIcon icon={Users} size={32} className="!bg-accent/10 sm:scale-110 transition-transform shadow-sm" iconClassName="!text-accent" />
+                    <h3 className="text-base font-black text-primary mb-5 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
+                            <Users className="w-5 h-5" weight="fill" />
                         </div>
                         Mes Étudiants
                     </h3>
@@ -426,9 +434,9 @@ function AccompagnateurDashboard() {
                             {memoires.map((memoire) => {
                                 const studentName = `${memoire.student.firstName} ${memoire.student.lastName}`;
                                 return (
-                                    <div key={memoire.id} className="flex items-center gap-3 sm:gap-4 p-3 rounded-xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 cursor-pointer group min-w-0" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
+                                    <div key={memoire.id} className="flex items-center gap-3 sm:gap-4 p-3 rounded-2xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 cursor-pointer group min-w-0" onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}>
                                         <div className="relative flex-shrink-0">
-                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary flex items-center justify-center text-white text-[10px] sm:text-xs font-bold shadow-sm ring-2 ring-white">
+                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary flex items-center justify-center text-white text-[10px] sm:text-xs font-bold shadow-sm ring-2 ring-white">
                                                 {memoire.student.firstName?.[0]}{memoire.student.lastName?.[0]}
                                             </div>
                                             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border border-white" />
@@ -447,7 +455,7 @@ function AccompagnateurDashboard() {
                                             <div className="text-[11px] sm:text-sm font-extrabold text-primary leading-none">{memoire.progressPercent}%</div>
                                             <div className="text-[8px] sm:text-[9px] font-bold text-text-muted mt-1 uppercase tracking-tight opacity-70 leading-none">Prog.</div>
                                         </div>
-                                        <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg bg-bg-light text-text-muted opacity-0 group-hover:opacity-100 transition-all ml-1 flex-shrink-0">
+                                        <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full bg-bg-light text-text-muted opacity-0 group-hover:opacity-100 transition-all ml-1 flex-shrink-0">
                                             <Eye className="w-4 h-4" />
                                         </div>
                                     </div>
@@ -459,14 +467,14 @@ function AccompagnateurDashboard() {
 
                 {/* Required Actions */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="card-premium p-4 sm:p-6 flex flex-col h-full shadow-sm border border-border/40 overflow-hidden"
+                    className="card-premium p-5 group"
                 >
-                    <h3 className="text-base sm:text-lg font-bold text-primary mb-5 sm:mb-6 flex items-center gap-3">
-                        <div className="flex-shrink-0">
-                            <BrandIcon icon={AlertTriangle} size={32} className="!bg-warning/10 sm:scale-110 transition-transform shadow-sm" iconClassName="!text-warning" />
+                    <h3 className="text-base font-black text-primary mb-5 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
+                            <AlertTriangle className="w-5 h-5" weight="fill" />
                         </div>
                         Actions Requises
                     </h3>
@@ -478,7 +486,7 @@ function AccompagnateurDashboard() {
                         ) : (
                             <>
                                 {pendingDocuments.slice(0, 4).map((doc, i) => (
-                                    <div key={`doc-${doc.id}`} onClick={() => router.push('/dashboard/documents')} className="p-3 sm:p-3.5 rounded-xl bg-bg-light/50 border border-border/5 hover:bg-warning/5 hover:border-warning/20 transition-all cursor-pointer group min-w-0">
+                                    <div key={`doc-${doc.id}`} onClick={() => router.push('/dashboard/documents')} className="p-3 sm:p-3.5 rounded-2xl bg-bg-light/50 border border-border/5 hover:bg-warning/5 hover:border-warning/20 transition-all cursor-pointer group min-w-0">
                                         <div className="flex items-start justify-between gap-3 min-w-0">
                                             <div className="flex-1 min-w-0">
                                                 <div className="text-[11px] sm:text-sm font-bold text-primary truncate group-hover:text-warning transition-colors leading-tight break-all">Évaluer : {doc.filename}</div>
@@ -493,7 +501,7 @@ function AccompagnateurDashboard() {
                                 {conversations.filter(c => c.unreadCount > 0).slice(0, 3).map((conv, i) => {
                                     const otherUser = conv.participant1Id === user?.id ? conv.participant2 : conv.participant1;
                                     return (
-                                        <div key={`conv-${conv.id}`} onClick={() => router.push('/dashboard/messages')} className="p-3 sm:p-3.5 rounded-xl bg-bg-light/50 border border-border/5 border-border/5 hover:bg-error/5 hover:border-error/20 transition-all cursor-pointer group min-w-0">
+                                        <div key={`conv-${conv.id}`} onClick={() => router.push('/dashboard/messages')} className="p-3 sm:p-3.5 rounded-2xl bg-bg-light/50 border border-border/5 border-border/5 hover:bg-error/5 hover:border-error/20 transition-all cursor-pointer group min-w-0">
                                             <div className="flex items-start justify-between gap-3 min-w-0">
                                                 <div className="flex-1 min-w-0">
                                                     <div className="text-[11px] sm:text-sm font-bold text-primary truncate group-hover:text-error transition-colors leading-tight">Messages non lus</div>
@@ -531,14 +539,14 @@ function AdminDashboard() {
     }, []);
 
     const actionConfig: Record<string, { icon: any; color: string; bg: string; badge: string }> = {
-        LOGIN: { icon: ChevronRight, color: 'text-success', bg: 'bg-success/10', badge: 'Connexion' },
+        LOGIN: { icon: LogIn, color: 'text-success', bg: 'bg-success/10', badge: 'Connexion' },
         LOGOUT: { icon: Clock, color: 'text-text-muted', bg: 'bg-border/20', badge: 'Déconnexion' },
         UPLOAD: { icon: FileText, color: 'text-info', bg: 'bg-info/10', badge: 'Document' },
-        REVIEW: { icon: CheckCircle, color: 'text-success', bg: 'bg-success/10', badge: 'Révision' },
-        REGISTER: { icon: Users, color: 'text-primary', bg: 'bg-primary/10', badge: 'Inscription' },
+        REVIEW: { icon: Shield, color: 'text-accent', bg: 'bg-accent/10', badge: 'Révision' },
+        REGISTER: { icon: User, color: 'text-primary', bg: 'bg-primary/10', badge: 'Inscription' },
         MESSAGE: { icon: MessageCircle, color: 'text-info', bg: 'bg-info/10', badge: 'Message' },
         LOGIN_FAILED: { icon: AlertTriangle, color: 'text-error', bg: 'bg-error/10', badge: 'Échec' },
-        USER_UPDATE: { icon: Users, color: 'text-warning', bg: 'bg-warning/10', badge: 'Modif' },
+        USER_UPDATE: { icon: User, color: 'text-warning', bg: 'bg-warning/10', badge: 'Modif' },
         DOCUMENT_UPDATE: { icon: FileText, color: 'text-warning', bg: 'bg-warning/10', badge: 'Modif Doc' },
     };
 
@@ -554,10 +562,15 @@ function AdminDashboard() {
     }
 
     return (
-        <div className="space-y-8">
-            <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-primary">Administration</h1>
-                <p className="text-text-secondary mt-1 text-sm">Vue d'ensemble de la plateforme</p>
+        <div className="space-y-6">
+            <div className="flex justify-between items-end pb-2 border-b border-border/10">
+                <div>
+                    <h1 className="text-2xl font-black text-primary tracking-tight">Administration</h1>
+                    <p className="text-text-secondary mt-1 text-xs font-semibold">Performance et gestion de la plateforme</p>
+                </div>
+                <div className="hidden sm:flex items-center gap-2 text-[10px] font-black text-accent bg-accent/5 px-3 py-1.5 rounded-lg border border-accent/10 uppercase tracking-widest">
+                    <Shield className="w-3.5 h-3.5" weight="fill" /> Super Admin
+                </div>
             </div>
 
             {loading ? (
@@ -567,33 +580,35 @@ function AdminDashboard() {
             ) : (
                 <>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                        <StatsCard icon={Users} label="Utilisateurs" value={stats?.totalUsers ?? '—'} color="primary" delay={0.1} />
-                        <StatsCard icon={Package} label="Abonnements actifs" value={stats?.activeSubscriptions ?? '—'} color="accent" delay={0.2} />
-                        <StatsCard icon={FileText} label="Documents" value={stats?.totalDocuments ?? '—'} color="info" delay={0.3} />
-                        <StatsCard icon={MessageCircle} label="Messages" value={stats?.totalMessages ?? '—'} color="success" delay={0.4} />
+                        <StatsCard label="Utilisateurs" value={stats?.totalUsers ?? '—'} icon={Users} delay={0.1} />
+                        <StatsCard label="Abonnements actifs" value={stats?.activeSubscriptions ?? '—'} icon={Package} delay={0.2} />
+                        <StatsCard label="Documents" value={stats?.totalDocuments ?? '—'} icon={FileText} delay={0.3} />
+                        <StatsCard label="Messages" value={stats?.totalMessages ?? '—'} icon={MessageCircle} delay={0.4} />
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                        <StatsCard icon={Users} label="Étudiants" value={stats?.totalStudents ?? '—'} color="info" delay={0.5} />
-                        <StatsCard icon={BookOpen} label="Accompagnateurs" value={stats?.totalAccompagnateurs ?? '—'} color="success" delay={0.6} />
-                        <StatsCard icon={Shield} label="Packs total" value={stats?.totalPacks ?? '—'} color="accent" delay={0.7} />
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <StatsCard label="Étudiants" value={stats?.totalStudents ?? '—'} icon={Users} delay={0.5} />
+                        <StatsCard label="Accompagnateurs" value={stats?.totalAccompagnateurs ?? '—'} icon={BookOpen} delay={0.6} />
+                        <StatsCard label="Packs total" value={stats?.totalPacks ?? '—'} icon={Shield} delay={0.7} className="col-span-2 sm:col-span-1" />
                     </div>
 
                     <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
                         {/* Recent Activity */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8 }}
-                            className="lg:col-span-2 card-premium p-4 sm:p-6"
+                            className="lg:col-span-2 card-premium p-5 group"
                         >
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-primary flex items-center gap-3">
-                                    <BrandIcon icon={Activity} size={36} className="!bg-accent/10 shadow-sm" iconClassName="!text-accent" />
+                                <h3 className="text-base font-black text-primary flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
+                                        <Activity className="w-5 h-5" weight="fill" />
+                                    </div>
                                     Activité Récente
                                 </h3>
-                                <button onClick={() => router.push('/dashboard/logs')} className="text-xs font-semibold text-accent hover:underline">
-                                    Voir les logs →
+                                <button onClick={() => router.push('/dashboard/logs')} className="text-xs font-black text-accent uppercase tracking-wider hover:underline">
+                                    Journal complet →
                                 </button>
                             </div>
 
@@ -608,8 +623,8 @@ function AdminDashboard() {
                                             const Icon = cfg.icon;
                                             return (
                                                 <div key={item.id || i} className="flex gap-4">
-                                                    <div className={`w-[54px] h-[54px] rounded-2xl flex items-center justify-center shrink-0 border border-white shadow-sm ${cfg.bg}`}>
-                                                        <Icon className={`w-5 h-5 ${cfg.color}`} />
+                                                    <div className={`w-[54px] h-[54px] rounded-full flex items-center justify-center shrink-0 border border-white shadow-sm shadow-primary/10 bg-primary ring-4 ring-primary/5`}>
+                                                        <Icon className={`w-5 h-5 text-white`} weight="fill" />
                                                     </div>
                                                     <div className="flex-1 pb-1 flex items-center justify-between gap-2 min-w-0">
                                                         <div className="min-w-0">
@@ -638,13 +653,15 @@ function AdminDashboard() {
 
                         {/* Quick Links Panel */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.9 }}
-                            className="card-premium p-4 sm:p-6 flex flex-col gap-4"
+                            className="card-premium p-5 group"
                         >
-                            <h3 className="text-lg font-bold text-primary flex items-center gap-3">
-                                <BrandIcon icon={BarChart3} size={36} className="!bg-warning/10 shadow-sm" iconClassName="!text-warning" />
+                            <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
+                                    <BarChart3 className="w-5 h-5" weight="fill" />
+                                </div>
                                 Accès Rapides
                             </h3>
                             <div className="space-y-2">
@@ -654,15 +671,15 @@ function AdminDashboard() {
                                     { label: 'Documents soumis', icon: FileText, href: '/dashboard/documents', color: 'text-info', bg: 'bg-info/10' },
                                     { label: 'Ressources pédagogiques', icon: BookOpen, href: '/dashboard/resources', color: 'text-success', bg: 'bg-success/10' },
                                     { label: 'Journaux d\'activité', icon: Activity, href: '/dashboard/logs', color: 'text-warning', bg: 'bg-warning/10' },
-                                    { label: 'Calendrier & événements', icon: Calendar, href: '/dashboard/calendar', color: 'text-primary', bg: 'bg-primary/10' },
+                                    { label: 'Calendrier & événements', icon: CalendarIcon, href: '/dashboard/calendar', color: 'text-primary', bg: 'bg-primary/10' },
                                 ].map(item => (
                                     <button
                                         key={item.href}
                                         onClick={() => router.push(item.href)}
                                         className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-bg-light transition-colors text-left group"
                                     >
-                                        <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center flex-shrink-0`}>
-                                            <item.icon className={`w-4.5 h-4.5 ${item.color}`} />
+                                        <div className={`w-9 h-9 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-sm shadow-primary/10`}>
+                                            <item.icon className={`w-4.5 h-4.5 text-white`} weight="fill" />
                                         </div>
                                         <span className="text-sm font-medium text-text-primary group-hover:text-primary transition-colors">{item.label}</span>
                                         <ChevronRight className="w-4 h-4 text-text-muted ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />

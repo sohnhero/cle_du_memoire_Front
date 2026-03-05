@@ -8,9 +8,9 @@ import {
 import { BrandIcon } from '@/components/BrandIcon';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import LoadingSpinner from '@/components/LoadingSpinner';
-
+import { StatsCard } from '@/components/StatsCard';
 import Pagination from '@/components/Pagination';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const phasesList = [
     { id: 'TOPIC', label: 'Choix du sujet' },
@@ -87,27 +87,33 @@ export default function StudentsPage() {
 
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                {[
-                    { label: 'Total', value: stats.total, icon: Users, branded: true },
-                    { label: 'En bonne voie', value: stats.onTrack, icon: TrendingUp, branded: true },
-                    { label: 'En retard', value: stats.delayed, icon: AlertTriangle, branded: true },
-                    { label: 'Terminés', value: stats.completed, icon: CheckCircle, branded: true },
-                ].map((stat) => {
-                    return (
-                        <motion.div
-                            key={stat.label}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="card-premium p-3 sm:p-6 flex flex-col justify-between overflow-hidden min-w-0"
-                        >
-                            <BrandIcon icon={stat.icon} size={36} className={stat.branded ? 'shadow-sm' : 'shadow-sm bg-info/10 text-info'} iconClassName={stat.branded ? undefined : '!text-info'} />
-                            <div className="mt-3 sm:mt-4 min-w-0">
-                                <p className="text-xl sm:text-3xl font-extrabold text-primary mb-1 truncate">{stat.value}</p>
-                                <p className="text-[11px] sm:text-sm font-medium text-text-secondary truncate">{stat.label}</p>
-                            </div>
-                        </motion.div>
-                    );
-                })}
+                <StatsCard
+                    label="Total Etudiants"
+                    value={loading ? '…' : stats.total}
+                    icon={Users}
+                    delay={0.1}
+                />
+                <StatsCard
+                    label="En bonne voie"
+                    value={loading ? '…' : stats.onTrack}
+                    icon={TrendingUp}
+                    delay={0.2}
+                    valueColor="text-success"
+                />
+                <StatsCard
+                    label="En retard"
+                    value={loading ? '…' : stats.delayed}
+                    icon={AlertTriangle}
+                    delay={0.3}
+                    valueColor="text-warning"
+                />
+                <StatsCard
+                    label="Terminés"
+                    value={loading ? '…' : stats.completed}
+                    icon={CheckCircle}
+                    delay={0.4}
+                    valueColor="text-info"
+                />
             </div>
 
             {/* Search */}
@@ -150,10 +156,10 @@ export default function StudentsPage() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: index * 0.03 }}
-                                    className="flex items-center gap-3 sm:gap-4 p-3 rounded-xl hover:bg-bg-light transition-colors cursor-pointer group"
+                                    className="flex items-center gap-3 sm:gap-4 p-3 rounded-2xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 cursor-pointer group min-w-0"
                                     onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm uppercase">
+                                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm uppercase">
                                         {student.firstName[0]}{student.lastName[0]}
                                     </div>
                                     <div className="flex-1 min-w-0">

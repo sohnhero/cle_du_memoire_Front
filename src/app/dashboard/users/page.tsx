@@ -131,7 +131,7 @@ export default function AdminUsersPage() {
                     <>
                         <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
+                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
                                     {user.firstName[0]}{user.lastName[0]}
                                 </div>
                                 <div>

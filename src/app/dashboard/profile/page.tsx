@@ -133,13 +133,13 @@ export default function ProfilePage() {
                 <div className="flex flex-col sm:flex-row items-start gap-6">
                     <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                         {user.avatar ? (
-                            <img src={user.avatar} alt="Avatar" className="w-24 h-24 rounded-2xl object-cover shadow-lg" />
+                            <img src={user.avatar} alt="Avatar" className="w-24 h-24 rounded-full object-cover shadow-lg" />
                         ) : (
-                            <div className="w-24 h-24 rounded-2xl bg-primary flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                            <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                                 {user.firstName[0]}{user.lastName[0]}
                             </div>
                         )}
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                             <Camera className="w-6 h-6 text-white" />
                         </div>
                         <input type="file" ref={fileInputRef} onChange={handleAvatarUpload} accept="image/*" className="hidden" />

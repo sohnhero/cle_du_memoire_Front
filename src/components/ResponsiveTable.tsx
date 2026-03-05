@@ -69,17 +69,17 @@ export default function ResponsiveTable<T>({
             <div className="hidden sm:block overflow-x-auto card-premium overflow-hidden !p-0">
                 <table className="w-full text-left">
                     <thead>
-                        <tr className="border-b border-border-light bg-bg-light/50">
+                        <tr className="border-b border-border/10 bg-bg-light/30">
                             {columns.map(col => (
                                 <th
                                     key={col.key}
-                                    className={`px-6 py-4 text-xs font-semibold text-text-secondary uppercase tracking-wider ${col.breakpoint ? `hidden ${col.breakpoint}:table-cell` : ''} ${col.className || ''}`}
+                                    className={`px-6 py-3.5 text-[10px] font-black text-text-muted uppercase tracking-widest ${col.breakpoint ? `hidden ${col.breakpoint}:table-cell` : ''} ${col.className || ''}`}
                                 >
                                     {col.label}
                                 </th>
                             ))}
                             {renderActions && (
-                                <th className="px-6 py-4 text-right text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                                <th className="px-6 py-3.5 text-right text-[10px] font-black text-text-muted uppercase tracking-widest">
                                     Actions
                                 </th>
                             )}
@@ -119,18 +119,16 @@ export default function ResponsiveTable<T>({
                     return (
                         <div key={id} className="bg-white rounded-xl border border-border shadow-sm overflow-hidden transition-all">
                             {/* Card Header (Always visible) */}
-                            <div className="p-4 flex items-center gap-4">
+                            <div className="p-3.5 flex items-center gap-3">
                                 <button
                                     onClick={() => toggleRow(id)}
-                                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isExpanded ? 'bg-primary text-white shadow-md shadow-primary/20' : 'bg-info/10 text-info'}`}
+                                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isExpanded ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-primary/5 text-primary border border-primary/10'}`}
                                 >
-                                    {isExpanded ? <CaretUp weight="bold" /> : <CaretDown weight="bold" />}
+                                    {isExpanded ? <CaretUp weight="bold" className="w-4 h-4" /> : <CaretDown weight="bold" className="w-4 h-4" />}
                                 </button>
                                 <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between">
-                                        <div className="text-xs font-bold text-text-muted uppercase tracking-tighter mb-0.5">{summary.label}</div>
-                                    </div>
-                                    <div className="text-sm font-bold text-primary truncate">
+                                    <div className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-0.5">{summary.label}</div>
+                                    <div className="text-sm font-black text-primary truncate leading-tight">
                                         {summary.value}
                                     </div>
                                 </div>
@@ -145,11 +143,11 @@ export default function ResponsiveTable<T>({
                                         exit={{ height: 0, opacity: 0 }}
                                         className="overflow-hidden bg-bg-light/30 border-t border-border-light"
                                     >
-                                        <div className="p-4 space-y-3">
+                                        <div className="p-4 space-y-3.5">
                                             {details.map((detail, dIdx) => (
                                                 <div key={dIdx} className="flex justify-between items-start gap-4">
-                                                    <div className="text-xs font-bold text-text-muted uppercase tracking-tighter">{detail.label}</div>
-                                                    <div className="text-sm font-semibold text-primary text-right flex-1">{detail.value}</div>
+                                                    <div className="text-[10px] font-black text-text-muted uppercase tracking-widest leading-relaxed">{detail.label}</div>
+                                                    <div className="text-sm font-bold text-primary text-right flex-1">{detail.value}</div>
                                                 </div>
                                             ))}
                                             {renderActions && (

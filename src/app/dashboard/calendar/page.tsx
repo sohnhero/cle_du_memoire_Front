@@ -161,18 +161,21 @@ export default function CalendarPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Left Column: Calendar Widget */}
                 <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
-                    <div className="card-premium p-6 overflow-hidden">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-bold text-primary capitalize">{monthNames[month]} {years}</h3>
-                            <div className="flex gap-2">
-                                <button onClick={prevMonth} className="p-1.5 hover:bg-bg-light rounded-lg transition-colors border border-border-light"><ChevronLeft className="w-4 h-4" /></button>
-                                <button onClick={nextMonth} className="p-1.5 hover:bg-bg-light rounded-lg transition-colors border border-border-light"><ChevronRight className="w-4 h-4" /></button>
+                    <div className="card-premium p-5 overflow-hidden">
+                        <div className="flex items-center justify-between mb-5 px-1">
+                            <h3 className="text-sm font-black text-primary capitalize tracking-tight flex items-center gap-2">
+                                <CalendarDays className="w-5 h-5 text-accent" weight="fill" />
+                                {monthNames[month]} {years}
+                            </h3>
+                            <div className="flex gap-1.5">
+                                <button onClick={prevMonth} className="p-1.5 hover:bg-bg-light rounded-lg transition-colors border border-border/10 text-text-secondary"><ChevronLeft className="w-3.5 h-3.5" /></button>
+                                <button onClick={nextMonth} className="p-1.5 hover:bg-bg-light rounded-lg transition-colors border border-border/10 text-text-secondary"><ChevronRight className="w-3.5 h-3.5" /></button>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-7 gap-1 mb-2 text-center">
                             {['lu', 'ma', 'me', 'je', 've', 'sa', 'di'].map(d => (
-                                <span key={d} className="text-[10px] font-bold uppercase text-text-muted tracking-widest">{d}</span>
+                                <span key={d} className="text-[10px] font-black uppercase text-text-muted tracking-widest">{d}</span>
                             ))}
                         </div>
 
@@ -189,13 +192,13 @@ export default function CalendarPage() {
 
                                 return (
                                     <div key={dayNum}
-                                        className={`aspect-square flex flex-col items-center justify-center rounded-xl text-sm relative transition-all
-                                            ${isToday ? 'bg-primary text-white font-bold shadow-md' : 'text-text-primary hover:bg-bg-light/80'}
-                                            ${hasEvents && !isToday ? 'font-semibold' : ''}
+                                        className={`aspect-square flex flex-col items-center justify-center rounded-xl text-xs sm:text-sm relative transition-all
+                                            ${isToday ? 'bg-primary text-white font-black shadow-lg shadow-primary/20 scale-105 z-10' : 'text-primary font-bold hover:bg-bg-light'}
+                                            ${hasEvents && !isToday ? 'text-accent' : ''}
                                         `}>
                                         {dayNum}
                                         {hasEvents && (
-                                            <div className={`absolute bottom-1 w-1 h-1 rounded-full ${hasUrgent ? 'bg-error' : 'bg-accent'}`} />
+                                            <div className={`absolute bottom-1 w-1 h-1 rounded-full ${hasUrgent ? 'bg-error animate-pulse' : isToday ? 'bg-white' : 'bg-accent'}`} />
                                         )}
                                     </div>
                                 );
@@ -215,9 +218,11 @@ export default function CalendarPage() {
                     {/* Upcoming */}
                     <section>
                         <div className="flex items-center gap-3 mb-6">
-                            <BrandIcon icon={Clock} size={32} className="shadow-sm" />
-                            <h2 className="text-xl font-bold text-primary">Prochaines échéances</h2>
-                            <span className="px-2 py-0.5 rounded-full bg-bg-light border border-border text-xs font-bold text-text-secondary">
+                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20">
+                                <Clock className="w-5 h-5" weight="fill" />
+                            </div>
+                            <h2 className="text-xl font-black text-primary tracking-tight">Prochaines échéances</h2>
+                            <span className="px-2.5 py-1 rounded-lg bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-sm">
                                 {upcomingEvents.length}
                             </span>
                         </div>
@@ -233,14 +238,14 @@ export default function CalendarPage() {
                                     <motion.div
                                         layout
                                         key={event.id}
-                                        className={`card-premium p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 transition-all group ${getEventStatusStyle(event)}`}
+                                        className={`card-premium p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 transition-all group ${getEventStatusStyle(event)} hover:border-accent/30`}
                                     >
                                         <button
                                             onClick={() => toggleEvent(event.id)}
-                                            className="flex-shrink-0 hover:scale-110 transition-transform"
+                                            className="flex-shrink-0 hover:scale-110 transition-transform p-1"
                                             disabled={event.isFromCoach}
                                         >
-                                            <Circle className="w-6 h-6 text-border-dark group-hover:text-accent" />
+                                            <Circle className="w-5 h-5 text-border-dark group-hover:text-accent" weight="bold" />
                                         </button>
 
                                         <div className="flex-1 min-w-0">
@@ -307,9 +312,11 @@ export default function CalendarPage() {
                     {completedEvents.length > 0 && (
                         <section>
                             <div className="flex items-center gap-3 mb-6">
-                                <BrandIcon icon={CheckCircle2} size={32} className="shadow-sm grayscale opacity-80" />
-                                <h2 className="text-xl font-bold text-primary">Terminées</h2>
-                                <span className="px-2 py-0.5 rounded-full bg-bg-light border border-border text-xs font-bold text-text-secondary">
+                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20">
+                                    <CheckCircle2 className="w-5 h-5" weight="fill" />
+                                </div>
+                                <h2 className="text-xl font-black text-primary tracking-tight">Terminées</h2>
+                                <span className="px-2.5 py-1 rounded-lg bg-bg-light border border-border text-[10px] font-black text-text-muted uppercase tracking-widest shadow-sm">
                                     {completedEvents.length}
                                 </span>
                             </div>

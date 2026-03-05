@@ -77,7 +77,7 @@ export default function ResourcesPage() {
 
     const getIcon = (type: string) => {
         const icon = type === 'LINK' ? LinkIcon : FileText;
-        return <BrandIcon icon={icon} size={36} className="shadow-sm" />;
+        return <BrandIcon icon={icon} size={36} className="shadow-sm sm:!size-12" iconClassName="sm:!size-6" />;
     };
 
     const handlePreview = (url: string) => {

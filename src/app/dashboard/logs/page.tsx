@@ -141,7 +141,7 @@ export default function LogsPage() {
                                 <>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-2">
-                                            <div className={`w-8 h-8 rounded-lg ${actionConfig.color} flex items-center justify-center`}>
+                                            <div className={`w-8 h-8 rounded-full ${actionConfig.color} flex items-center justify-center shrink-0`}>
                                                 <ActionIcon className="w-4 h-4" />
                                             </div>
                                             <span className="text-xs font-mono text-text-primary uppercase">{log.action}</span>
