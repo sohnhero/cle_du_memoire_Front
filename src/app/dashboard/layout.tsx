@@ -319,10 +319,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* Main Content */}
             <div
-                className={`flex-1 flex flex-col h-screen lg:transition-[margin-left] lg:duration-300 ${sidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-[80px]'}`}
+                className={`flex-1 flex flex-col h-[100dvh] lg:transition-[margin-left] lg:duration-300 ${sidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-[80px]'}`}
             >
                 {/* Top Header - Fixed */}
-                <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl border-b border-black/[0.04] flex-shrink-0">
+                <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-black/[0.04] flex-shrink-0">
                     <div className="flex items-center justify-between px-4 sm:px-8 h-16 sm:h-20">
                         <div className="flex items-center gap-4">
                             <button onClick={() => setMobileSidebarOpen(true)} className="lg:hidden text-primary p-2">
