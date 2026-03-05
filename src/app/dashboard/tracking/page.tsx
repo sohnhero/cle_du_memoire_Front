@@ -515,7 +515,11 @@ export default function TrackingPage() {
                                 {/* Actions */}
                                 <div className="flex flex-col gap-2 pt-2">
                                     <button
-                                        onClick={() => router.push(`/dashboard/users`)}
+                                        onClick={() => {
+                                            if (selected.student?.id) {
+                                                router.push(`/dashboard/users/${selected.student.id}`);
+                                            }
+                                        }}
                                         className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors"
                                     >
                                         <ArrowUpRight className="w-4 h-4" />

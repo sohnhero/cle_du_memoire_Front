@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X
+    Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X, Eye
 } from '@phosphor-icons/react';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
 import ResponsiveTable from '@/components/ResponsiveTable';
+import { useRouter } from 'next/navigation';
 
 const roleBadge: Record<string, string> = {
     STUDENT: 'bg-info/10 text-info',
@@ -19,6 +20,7 @@ const roleBadge: Record<string, string> = {
 const roleLabel: Record<string, string> = { STUDENT: 'Étudiant', ACCOMPAGNATEUR: 'Accompagnateur', ADMIN: 'Admin' };
 
 export default function AdminUsersPage() {
+    const router = useRouter();
     const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [filterRole, setFilterRole] = useState('ALL');
@@ -200,6 +202,13 @@ export default function AdminUsersPage() {
                 ]}
                 renderActions={(user) => (
                     <>
+                        <button
+                            onClick={() => router.push(`/dashboard/users/${user.id}`)}
+                            className="p-2 sm:p-2 rounded-lg hover:bg-bg-light text-text-secondary hover:text-accent transition-colors bg-white sm:bg-transparent shadow-sm sm:shadow-none"
+                            title="Voir le profil"
+                        >
+                            <Eye className="w-4 h-4" />
+                        </button>
                         {user.role === 'STUDENT' && user.memoiresAsStudent?.[0]?.accompagnateur && (
                             <button
                                 onClick={() => setAssigningCoachFor(user)}

@@ -74,6 +74,10 @@ class ApiClient {
         return this.request<{ users: any[]; total: number; page: number; totalPages: number }>(url);
     }
 
+    async getUserById(id: string) {
+        return this.request<{ user: any }>(`/users/${id}`);
+    }
+
     async updateUser(id: string, data: any) {
         return this.request<{ user: any }>(`/users/${id}`, {
             method: 'PATCH',
