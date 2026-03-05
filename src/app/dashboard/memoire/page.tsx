@@ -114,7 +114,7 @@ export default function MemoirePage() {
                                     </span>
                                     {user?.targetDefenseDate && (
                                         <span className="inline-flex items-center text-[10px] font-black px-2.5 py-1.5 rounded-lg bg-accent text-primary uppercase tracking-widest border border-accent/20">
-                                            Soutenance en {new Date(user.targetDefenseDate).getFullYear()}
+                                            Soutenance le {new Date(user.targetDefenseDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                                         </span>
                                     )}
                                 </div>
