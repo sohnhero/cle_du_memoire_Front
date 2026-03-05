@@ -7,7 +7,7 @@ import MaintenanceGuard from "@/components/MaintenanceGuard";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.cledumemoire.com"),
   title: {
-    default: "Clé du Mémoire — Accompagnement académique premium au Sénégal",
+    default: "Clé du Mémoire",
     template: "%s | Clé du Mémoire"
   },
   description: "Clé du Mémoire accompagne les étudiants du supérieur au Sénégal dans la rédaction de leur mémoire. Coaching personnalisé, suivi professionnel et réussite académique garantie.",

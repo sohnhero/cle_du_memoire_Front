@@ -2,15 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
+    // Temporarily deactivated as per user request
+    return NextResponse.next();
+
+    /* 
     const user = "user";
     const password = "12345";
-
-    // If the credentials are not set in the environment variables, we don't protect the site.
-    // This ensures that local development continues to work seamlessly without forcing auth
-    // if you haven't set the variables locally.
-    if (!user || !password) {
-        return NextResponse.next();
-    }
 
     const basicAuth = req.headers.get('authorization');
 
@@ -29,9 +26,9 @@ export function middleware(req: NextRequest) {
             'WWW-Authenticate': 'Basic realm="Secure Area"',
         },
     });
+    */
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
     matcher: [
         /*
