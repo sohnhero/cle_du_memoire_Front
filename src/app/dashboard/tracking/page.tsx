@@ -13,6 +13,7 @@ import { api } from '@/lib/api';
 import { BrandIcon } from '@/components/BrandIcon';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
+import UserAvatar from '@/components/UserAvatar';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
@@ -270,9 +271,7 @@ export default function TrackingPage() {
                                         >
                                             <div className="flex items-start gap-3">
                                                 {/* Avatar */}
-                                                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 uppercase shadow-sm">
-                                                    {m.student?.firstName?.[0]}{m.student?.lastName?.[0]}
-                                                </div>
+                                                <UserAvatar user={m.student} size="lg" className="shadow-sm uppercase" />
 
                                                 {/* Content */}
                                                 <div className="flex-1 min-w-0">
@@ -389,9 +388,7 @@ export default function TrackingPage() {
                             <div className="p-6 space-y-6 flex-1">
                                 {/* Student Info */}
                                 <div className="flex items-start gap-4">
-                                    <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-white text-xl font-bold flex-shrink-0 uppercase shadow-sm">
-                                        {selected.student?.firstName?.[0]}{selected.student?.lastName?.[0]}
-                                    </div>
+                                    <UserAvatar user={selected.student} size="xl" className="shadow-sm uppercase" />
                                     <div className="flex-1 min-w-0">
                                         <div className="font-bold text-lg text-primary">{selected.student?.firstName} {selected.student?.lastName}</div>
                                         <div className="text-sm text-text-muted">{selected.student?.email}</div>
@@ -444,9 +441,7 @@ export default function TrackingPage() {
                                     <div className="text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Accompagnateur</div>
                                     {selected.accompagnateur ? (
                                         <div className="flex items-center gap-3">
-                                            <div className="w-9 h-9 rounded-xl bg-success/10 text-success flex items-center justify-center font-bold text-sm uppercase">
-                                                {selected.accompagnateur.firstName[0]}{selected.accompagnateur.lastName[0]}
-                                            </div>
+                                            <UserAvatar user={selected.accompagnateur} size="lg" className="uppercase" />
                                             <div>
                                                 <div className="text-sm font-semibold text-primary">{selected.accompagnateur.firstName} {selected.accompagnateur.lastName}</div>
                                                 <div className="text-xs text-success">Assigné</div>

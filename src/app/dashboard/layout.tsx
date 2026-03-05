@@ -14,6 +14,7 @@ import { BrandIcon } from '@/components/BrandIcon';
 import Logo from '@/components/Logo';
 import Loader from '@/components/Loader';
 import PaymentGate from '@/components/PaymentGate';
+import UserAvatar from '@/components/UserAvatar';
 import { api } from '@/lib/api';
 
 interface NavItem {
@@ -337,13 +338,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                     onClick={() => setShowUserMenu(!showUserMenu)}
                                     className="flex items-center gap-3 pl-3 pr-4 py-2.5 rounded-2xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 group"
                                 >
-                                    {user.avatar ? (
-                                        <img src={user.avatar} alt="Avatar" className="w-9 h-9 rounded-xl object-cover shadow-sm" />
-                                    ) : (
-                                        <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-bold shadow-sm">
-                                            {user.firstName[0]}{user.lastName[0]}
-                                        </div>
-                                    )}
+                                    <UserAvatar user={user} size="lg" className="shadow-sm" />
                                     <div className="hidden sm:block text-left">
                                         <div className="text-sm font-semibold text-primary">{user.firstName} {user.lastName}</div>
                                         <div className="text-xs text-text-muted">{roleLabels[user.role]}</div>

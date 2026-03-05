@@ -12,6 +12,7 @@ import { api } from '@/lib/api';
 import { useRouter, useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import UserAvatar from '@/components/UserAvatar';
 
 const PHASES: Record<string, string> = {
     TOPIC: 'Choix du Sujet',
@@ -148,9 +149,7 @@ export default function UserProfilePage() {
             <div className="card-premium p-6">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
                     {/* Avatar */}
-                    <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center text-white text-3xl font-bold flex-shrink-0 uppercase shadow-md">
-                        {user.firstName?.[0]}{user.lastName?.[0]}
-                    </div>
+                    <UserAvatar user={user} size="xxl" className="shadow-md" />
 
                     <div className="flex-1 min-w-0">
                         <h1 className="text-2xl font-bold text-primary">{user.firstName} {user.lastName}</h1>
@@ -246,9 +245,7 @@ export default function UserProfilePage() {
                     <SectionCard title="Accompagnateur">
                         {memoire?.accompagnateur ? (
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-success/10 text-success flex items-center justify-center font-bold text-sm uppercase">
-                                    {memoire.accompagnateur.firstName[0]}{memoire.accompagnateur.lastName[0]}
-                                </div>
+                                <UserAvatar user={memoire.accompagnateur} size="lg" className="uppercase shadow-sm" />
                                 <div>
                                     <div className="text-sm font-semibold text-primary">{memoire.accompagnateur.firstName} {memoire.accompagnateur.lastName}</div>
                                     <div className="text-xs text-text-muted">{memoire.accompagnateur.email}</div>
@@ -277,9 +274,9 @@ export default function UserProfilePage() {
                                         <div className="text-xs text-text-muted">{subscription.pack?.price?.toLocaleString()} CFA</div>
                                     </div>
                                     <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${subscription.status === 'ACTIVE' ? 'bg-success/10 text-success' :
-                                            subscription.status === 'PARTIAL' ? 'bg-warning/10 text-warning' :
-                                                subscription.status === 'PENDING' ? 'bg-info/10 text-info' :
-                                                    'bg-error/10 text-error'
+                                        subscription.status === 'PARTIAL' ? 'bg-warning/10 text-warning' :
+                                            subscription.status === 'PENDING' ? 'bg-info/10 text-info' :
+                                                'bg-error/10 text-error'
                                         }`}>
                                         {subscription.status === 'ACTIVE' ? 'Actif' :
                                             subscription.status === 'PARTIAL' ? 'Partiel' :

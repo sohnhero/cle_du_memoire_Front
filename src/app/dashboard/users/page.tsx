@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Pagination from '@/components/Pagination';
 import ResponsiveTable from '@/components/ResponsiveTable';
+import UserAvatar from '@/components/UserAvatar';
 import { useRouter } from 'next/navigation';
 
 const roleBadge: Record<string, string> = {
@@ -133,9 +134,7 @@ export default function AdminUsersPage() {
                     <>
                         <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm">
-                                    {user.firstName[0]}{user.lastName[0]}
-                                </div>
+                                <UserAvatar user={user} size="lg" className="shadow-sm" />
                                 <div>
                                     <div className="font-semibold text-sm text-primary">{user.firstName} {user.lastName}</div>
                                     <div className="text-xs text-text-muted">{user.email}</div>

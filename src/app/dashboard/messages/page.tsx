@@ -10,6 +10,7 @@ import {
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import UserAvatar from '@/components/UserAvatar';
 
 export default function MessagesPage() {
     const { user } = useAuth();
@@ -215,9 +216,7 @@ export default function MessagesPage() {
                                         className="w-full flex items-start gap-3 p-4 bg-accent/5 border-l-2 border-l-accent border-b border-border-light/50 text-left"
                                     >
                                         <div className="relative flex-shrink-0">
-                                            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
-                                                {tentativePartner.firstName[0]}{tentativePartner.lastName[0]}
-                                            </div>
+                                            <UserAvatar user={tentativePartner} size="xl" />
                                             <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-warning rounded-full border-2 border-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -243,9 +242,7 @@ export default function MessagesPage() {
                                                 }`}
                                         >
                                             <div className="relative flex-shrink-0">
-                                                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
-                                                    {other.firstName[0]}{other.lastName[0]}
-                                                </div>
+                                                <UserAvatar user={other} size="xl" />
                                                 <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-white" />
                                             </div>
                                             <div className="flex-1 min-w-0">
@@ -286,9 +283,7 @@ export default function MessagesPage() {
                                         <ChevronLeft className="w-5 h-5" />
                                     </button>
                                     <div className="relative">
-                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs sm:text-sm">
-                                            {activeParticipant.firstName[0]}{activeParticipant.lastName[0]}
-                                        </div>
+                                        <UserAvatar user={activeParticipant} size="lg" />
                                         <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-success rounded-full border-2 border-white" />
                                     </div>
                                     <div className="min-w-0">
@@ -496,9 +491,7 @@ function NewChatModal({ onClose, onSelectPartner }: { onClose: () => void, onSel
                                 onClick={() => onSelectPartner(p)}
                                 className="w-full flex items-center gap-3 p-3 hover:bg-bg-light rounded-xl transition-colors text-left group"
                             >
-                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
-                                    {p.firstName[0]}{p.lastName[0]}
-                                </div>
+                                <UserAvatar user={p} size="lg" className="shadow-sm group-hover:scale-105 transition-transform" />
                                 <div className="flex-1 min-w-0">
                                     <div className="font-semibold text-sm text-primary">{p.firstName} {p.lastName}</div>
                                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${roleBadge[p.role]}`}>

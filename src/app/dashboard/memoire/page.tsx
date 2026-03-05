@@ -6,6 +6,7 @@ import {
     BookOpen, CheckCircle, Clock, Target, TrendUp as TrendingUp, WarningCircle as AlertCircle, ChatCircle as MessageCircle, X
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
+import UserAvatar from '@/components/UserAvatar';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import { AnimatePresence } from 'framer-motion';
@@ -241,9 +242,7 @@ export default function MemoirePage() {
                         </p>
                         {memoire.accompagnateur && (
                             <div className="flex items-center gap-2 mt-3 text-xs text-text-muted">
-                                <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-[10px]">
-                                    {memoire.accompagnateur.firstName[0]}{memoire.accompagnateur.lastName[0]}
-                                </div>
+                                <UserAvatar user={memoire.accompagnateur} size="sm" className="shadow-sm" />
                                 {memoire.accompagnateur.firstName} {memoire.accompagnateur.lastName}
                             </div>
                         )}

@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { StatsCard } from '@/components/StatsCard';
 import Pagination from '@/components/Pagination';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import UserAvatar from '@/components/UserAvatar';
 
 const phasesList = [
     { id: 'TOPIC', label: 'Choix du sujet' },
@@ -159,9 +160,7 @@ export default function StudentsPage() {
                                     className="flex items-center gap-3 sm:gap-4 p-3 rounded-2xl hover:bg-bg-light transition-all border border-transparent hover:border-border/50 cursor-pointer group min-w-0"
                                     onClick={() => router.push(`/dashboard/memoire/${memoire.id}`)}
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm uppercase">
-                                        {student.firstName[0]}{student.lastName[0]}
-                                    </div>
+                                    <UserAvatar user={student} size="lg" className="shadow-sm uppercase" />
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
                                             <span className="font-semibold text-sm text-primary truncate group-hover:text-accent transition-colors">{studentName}</span>

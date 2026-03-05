@@ -9,6 +9,7 @@ import {
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import UserAvatar from '@/components/UserAvatar';
 
 export default function ProfilePage() {
     const { user, login } = useAuth();
@@ -132,13 +133,7 @@ export default function ProfilePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium p-8">
                 <div className="flex flex-col sm:flex-row items-start gap-6">
                     <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                        {user.avatar ? (
-                            <img src={user.avatar} alt="Avatar" className="w-24 h-24 rounded-full object-cover shadow-lg" />
-                        ) : (
-                            <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center text-white text-3xl font-bold shadow-lg">
-                                {user.firstName[0]}{user.lastName[0]}
-                            </div>
-                        )}
+                        <UserAvatar user={user} size="xxl" className="shadow-lg" />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                             <Camera className="w-6 h-6 text-white" />
                         </div>
