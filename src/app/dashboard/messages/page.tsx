@@ -162,10 +162,10 @@ export default function MessagesPage() {
     const activeParticipant = tentativePartner || getOtherParticipant(currentConv);
 
     return (
-        <div className="h-[calc(100dvh-6rem)] sm:h-[calc(100vh-8rem)] -mt-2 sm:mt-0">
+        <div className="h-[calc(100dvh-6.5rem)] sm:h-[calc(100vh-8rem)] -mt-2 sm:mt-0 overflow-hidden">
             <div className="flex h-full rounded-2xl overflow-hidden border border-border-light bg-white shadow-sm relative">
                 {/* Conversations List */}
-                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${selectedConvId || tentativePartner ? 'hidden md:flex' : 'flex'}`}>
+                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${selectedConvId || tentativePartner ? 'hidden md:flex' : 'flex'} h-full`}>
                     {/* Header */}
                     <div className="p-3 sm:p-4 border-b border-border-light bg-bg-light/30">
                         <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -273,14 +273,14 @@ export default function MessagesPage() {
                 </div>
 
                 {/* Chat Area */}
-                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'}`}>
+                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'} h-full overflow-hidden`}>
                     {activeParticipant ? (
                         <>
                             {/* Chat Header */}
                             <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-4 border-b border-border-light bg-white shadow-sm z-10">
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <button onClick={() => { setSelectedConvId(null); setTentativePartner(null); }} className="md:hidden p-1.5 -ml-1 text-primary hover:bg-bg-light rounded-lg transition-colors">
-                                        <ChevronLeft className="w-5 h-5" />
+                                    <button onClick={() => { setSelectedConvId(null); setTentativePartner(null); }} className="md:hidden p-2 -ml-2 text-primary hover:bg-bg-light rounded-lg transition-colors flex-shrink-0">
+                                        <ChevronLeft className="w-5 h-5 flex-shrink-0" />
                                     </button>
                                     <div className="relative">
                                         <UserAvatar user={activeParticipant} size="lg" />
@@ -291,10 +291,10 @@ export default function MessagesPage() {
                                         <div className="text-[10px] sm:text-xs text-text-muted">{selectedConvId ? 'En ligne' : 'Prêt à discuter'}</div>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-0.5 sm:gap-1">
-                                    <button className="p-2 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
-                                    <button className="p-2 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Video className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
-                                    <button className="p-2 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><MoreVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
+                                <div className="flex items-center gap-0.5">
+                                    <button className="p-1.5 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
+                                    <button className="p-1.5 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><Video className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
+                                    <button className="p-1.5 sm:p-2.5 rounded-xl hover:bg-bg-light text-text-secondary transition-colors"><MoreVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
                                 </div>
                             </div>
 
@@ -320,10 +320,10 @@ export default function MessagesPage() {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                                             >
-                                                <div className={`max-w-[85%] sm:max-w-[75%] ${isMe
+                                                <div className={`max-w-[90%] sm:max-w-[75%] ${isMe
                                                     ? 'bg-primary text-white rounded-2xl rounded-br-md shadow-md'
                                                     : 'bg-white text-text-primary rounded-2xl rounded-bl-md shadow-sm border border-border-light'
-                                                    } px-4 py-3`}
+                                                    } px-3 py-2.5 sm:px-4 sm:py-3`}
                                                 >
                                                     {msg.attachmentUrl && (
                                                         <div className="mb-2">
@@ -339,7 +339,7 @@ export default function MessagesPage() {
                                                             )}
                                                         </div>
                                                     )}
-                                                    {msg.content && <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
+                                                    {msg.content && <p className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
                                                     <div className={`flex items-center gap-1 mt-1.5 ${isMe ? 'justify-end' : 'justify-start'}`}>
                                                         <span className={`text-[10px] uppercase font-semibold ${isMe ? 'text-white/50' : 'text-text-muted'}`}>
                                                             {new Date(msg.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
@@ -373,8 +373,8 @@ export default function MessagesPage() {
                                     </div>
                                 )}
                                 <div className="flex items-center gap-2 sm:gap-3 max-w-4xl mx-auto">
-                                    <button onClick={() => fileInputRef.current?.click()} className="p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative">
-                                        <Paperclip className="w-5 h-5 sm:w-5 sm:h-5" />
+                                    <button onClick={() => fileInputRef.current?.click()} className="p-1.5 sm:p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative flex-shrink-0">
+                                        <Paperclip className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
                                     </button>
                                     <input type="file" ref={fileInputRef} onChange={(e) => setAttachment(e.target.files?.[0] || null)} className="hidden" />
                                     <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-xl px-3 sm:px-4 py-2 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
@@ -393,7 +393,7 @@ export default function MessagesPage() {
                                     <button
                                         onClick={handleSendMessage}
                                         disabled={!newMessage.trim() && !attachment}
-                                        className={`p-2.5 sm:p-3 rounded-xl transition-all ${newMessage.trim() || attachment
+                                        className={`p-2 sm:p-3 rounded-xl transition-all flex-shrink-0 ${newMessage.trim() || attachment
                                             ? 'bg-accent text-primary hover:bg-accent-dark shadow-lg shadow-accent/20'
                                             : 'bg-bg-light text-text-muted cursor-not-allowed'
                                             }`}
