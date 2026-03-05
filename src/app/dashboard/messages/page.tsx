@@ -162,29 +162,29 @@ export default function MessagesPage() {
     const activeParticipant = tentativePartner || getOtherParticipant(currentConv);
 
     return (
-        <div className="h-[calc(100dvh-4rem)] sm:h-[calc(100vh-8rem)] -mx-4 sm:mx-0 -mt-6 sm:mt-0 overflow-hidden bg-white sm:bg-transparent">
-            <div className="flex h-full sm:rounded-2xl overflow-hidden sm:border border-border-light bg-white sm:shadow-sm relative">
+        <div className="h-[calc(100dvh-4rem)] sm:h-[calc(100vh-8rem)] -m-3 sm:m-0 overflow-hidden flex flex-col bg-white sm:bg-transparent">
+            <div className="flex-1 flex overflow-hidden sm:rounded-2xl sm:border sm:border-border-light sm:bg-white sm:shadow-sm relative">
                 {/* Conversations List */}
-                <div className={`w-full md:w-80 lg:w-96 sm:border-r border-border-light flex flex-col ${selectedConvId || tentativePartner ? 'hidden md:flex' : 'flex'} h-full bg-white`}>
+                <div className={`w-full md:w-80 lg:w-96 border-r border-border-light flex flex-col ${selectedConvId || tentativePartner ? 'hidden md:flex' : 'flex'} h-full bg-white`}>
                     {/* Header */}
                     <div className="p-3 sm:p-4 border-b border-border-light bg-bg-light/30">
-                        <div className="flex items-center justify-between mb-3 sm:mb-4">
-                            <h2 className="text-base sm:text-lg font-bold text-primary flex items-center gap-2">
-                                <MessageCircle className="w-5 h-5 text-accent" />
+                        <div className="flex items-center justify-between mb-2 sm:mb-4">
+                            <h2 className="text-sm sm:text-lg font-bold text-primary flex items-center gap-2">
+                                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
                                 Messages
                             </h2>
-                            <span className="text-[10px] sm:text-xs bg-accent/10 text-accent px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-semibold">
+                            <span className="text-[9px] sm:text-xs bg-accent/10 text-accent px-2 py-0.5 rounded-full font-semibold">
                                 {conversations.reduce((acc, c) => acc + (c.unreadCount || 0), 0)} non lus
                             </span>
                         </div>
-                        <div className="flex gap-2">
-                            <div className="flex-1 flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-border-light shadow-sm">
-                                <Search className="w-4 h-4 text-text-muted" />
-                                <input type="text" placeholder="Rechercher..." className="bg-transparent text-xs sm:text-sm outline-none flex-1 text-text-primary" />
+                        <div className="flex gap-1.5 sm:gap-2">
+                            <div className="flex-1 flex items-center gap-2 bg-white rounded-lg sm:rounded-xl px-2.5 py-1.5 sm:px-3 sm:py-2 border border-border-light shadow-sm">
+                                <Search className="w-3.5 h-3.5 text-text-muted" />
+                                <input type="text" placeholder="Rechercher..." className="bg-transparent text-[11px] sm:text-sm outline-none flex-1 text-text-primary" />
                             </div>
                             <button
                                 onClick={() => setIsNewChatModalOpen(true)}
-                                className="p-2 sm:p-2.5 bg-accent text-primary rounded-xl hover:bg-accent-dark shadow-sm transition-all"
+                                className="p-1.5 sm:p-2.5 bg-accent text-primary rounded-lg sm:rounded-xl hover:bg-accent-dark shadow-sm transition-all"
                                 title="Nouvelle discussion"
                             >
                                 <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -200,10 +200,10 @@ export default function MessagesPage() {
                             </div>
                         ) : conversations.length === 0 && !tentativePartner ? (
                             <div className="text-center p-8 text-text-secondary">
-                                <p className="text-sm">Aucune conversation trouvée.</p>
+                                <p className="text-xs sm:text-sm">Aucune conversation trouvée.</p>
                                 <button
                                     onClick={() => setIsNewChatModalOpen(true)}
-                                    className="mt-4 text-xs text-accent font-bold hover:underline"
+                                    className="mt-4 text-[10px] sm:text-xs text-accent font-bold hover:underline"
                                 >
                                     Démarrer une discussion
                                 </button>
@@ -213,20 +213,20 @@ export default function MessagesPage() {
                                 {tentativePartner && (
                                     <button
                                         onClick={() => { setSelectedConvId(null); setTentativePartner(tentativePartner); setShowMobileConv(false); }}
-                                        className="w-full flex items-start gap-3 p-4 bg-accent/5 border-l-2 border-l-accent border-b border-border-light/50 text-left"
+                                        className="w-full flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-accent/5 border-l-2 border-l-accent border-b border-border-light/50 text-left"
                                     >
                                         <div className="relative flex-shrink-0">
-                                            <UserAvatar user={tentativePartner} size="xl" />
-                                            <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-warning rounded-full border-2 border-white" />
+                                            <UserAvatar user={tentativePartner} size="lg" sm-size="xl" />
+                                            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 bg-warning rounded-full border-2 border-white" />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between">
-                                                <span className="font-semibold text-sm text-primary truncate">{tentativePartner.firstName} {tentativePartner.lastName}</span>
+                                                <span className="font-semibold text-xs sm:text-sm text-primary truncate">{tentativePartner.firstName} {tentativePartner.lastName}</span>
                                             </div>
-                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${roleBadge[tentativePartner.role]} mt-0.5 inline-block`}>
+                                            <span className={`text-[8px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full ${roleBadge[tentativePartner.role]} mt-0.5 inline-block`}>
                                                 {formatRole(tentativePartner.role)}
                                             </span>
-                                            <p className="text-xs text-accent mt-1 italic">Nouvelle discussion...</p>
+                                            <p className="text-[10px] sm:text-xs text-accent mt-0.5 italic">Nouvelle discussion...</p>
                                         </div>
                                     </button>
                                 )}
@@ -238,29 +238,29 @@ export default function MessagesPage() {
                                         <button
                                             key={conv.id}
                                             onClick={() => { setSelectedConvId(conv.id); setTentativePartner(null); }}
-                                            className={`w-full flex items-start gap-3 p-4 hover:bg-bg-light transition-colors text-left border-b border-border-light/50 ${selectedConvId === conv.id ? 'bg-accent/5 border-l-2 border-l-accent' : ''
+                                            className={`w-full flex items-start gap-2 sm:gap-3 p-3 sm:p-4 hover:bg-bg-light transition-colors text-left border-b border-border-light/50 ${selectedConvId === conv.id ? 'bg-accent/5 border-l-2 border-l-accent' : ''
                                                 }`}
                                         >
                                             <div className="relative flex-shrink-0">
-                                                <UserAvatar user={other} size="xl" />
-                                                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-white" />
+                                                <UserAvatar user={other} size="lg" sm-size="xl" />
+                                                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 bg-success rounded-full border-2 border-white" />
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between">
-                                                    <span className="font-semibold text-sm text-primary truncate">{other.firstName} {other.lastName}</span>
-                                                    <span className="text-xs text-text-muted flex-shrink-0">
+                                                    <span className="font-semibold text-xs sm:text-sm text-primary truncate">{other.firstName} {other.lastName}</span>
+                                                    <span className="text-[10px] text-text-muted flex-shrink-0">
                                                         {conv.lastMessageAt ? new Date(conv.lastMessageAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : ''}
                                                     </span>
                                                 </div>
-                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${roleBadge[other.role]} mt-0.5 inline-block`}>
+                                                <span className={`text-[8px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full ${roleBadge[other.role]} mt-0.5 inline-block`}>
                                                     {formatRole(other.role)}
                                                 </span>
-                                                <p className="text-xs text-text-secondary mt-1 truncate">
+                                                <p className="text-[11px] sm:text-xs text-text-secondary mt-0.5 truncate">
                                                     {conv.messages?.[0]?.content || "Nouvelle conversation"}
                                                 </p>
                                             </div>
                                             {conv.unreadCount > 0 && (
-                                                <span className="w-5 h-5 bg-accent text-primary rounded-full text-xs flex items-center justify-center font-bold flex-shrink-0 mt-1">
+                                                <span className="w-4 h-4 bg-accent text-primary rounded-full text-[9px] flex items-center justify-center font-bold flex-shrink-0 mt-1">
                                                     {conv.unreadCount}
                                                 </span>
                                             )}
@@ -272,22 +272,23 @@ export default function MessagesPage() {
                     </div>
                 </div>
 
-                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'} h-full overflow-hidden bg-white`}>
+                {/* Chat Area */}
+                <div className={`flex-1 flex flex-col ${!(selectedConvId || tentativePartner) ? 'hidden md:flex' : 'flex'} h-full overflow-hidden bg-bg-light/10`}>
                     {activeParticipant ? (
                         <>
                             {/* Chat Header */}
-                            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border-light bg-white z-10">
+                            <div className="flex items-center justify-between px-3 sm:px-6 py-2 sm:py-4 border-b border-border-light bg-white shadow-sm z-10">
                                 <div className="flex items-center gap-2 sm:gap-3">
                                     <button onClick={() => { setSelectedConvId(null); setTentativePartner(null); }} className="md:hidden p-2 -ml-2 text-primary hover:bg-bg-light rounded-lg transition-colors flex-shrink-0">
                                         <ChevronLeft className="w-5 h-5 flex-shrink-0" />
                                     </button>
                                     <div className="relative">
-                                        <UserAvatar user={activeParticipant} size="lg" />
-                                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-success rounded-full border-2 border-white" />
+                                        <UserAvatar user={activeParticipant} size="md" sm-size="lg" />
+                                        <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-3 sm:h-3 bg-success rounded-full border-2 border-white" />
                                     </div>
                                     <div className="min-w-0">
-                                        <div className="font-semibold text-primary text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">{activeParticipant.firstName} {activeParticipant.lastName}</div>
-                                        <div className="text-[10px] sm:text-xs text-text-muted">{selectedConvId ? 'En ligne' : 'Prêt à discuter'}</div>
+                                        <div className="font-bold text-primary text-[11px] sm:text-sm truncate max-w-[100px] sm:max-w-none">{activeParticipant.firstName} {activeParticipant.lastName}</div>
+                                        <div className="text-[9px] sm:text-xs text-text-muted -mt-0.5">{selectedConvId ? 'En ligne' : 'Prêt à discuter'}</div>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-0.5">
@@ -298,16 +299,16 @@ export default function MessagesPage() {
                             </div>
 
                             {/* Messages */}
-                            <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 bg-bg-light/30">
+                            <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-3 bg-bg-light/30">
                                 {loadingMessages ? (
                                     <div className="flex justify-center p-8">
                                         <LoadingSpinner size="sm" />
                                     </div>
                                 ) : messages.length === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center p-8">
-                                        <BrandIcon icon={MessageCircle} size={64} className="mb-4 shadow-md ring-4 ring-accent/10" />
-                                        <h4 className="font-bold text-primary mb-1">Démarrer la discussion</h4>
-                                        <p className="text-xs text-text-secondary max-w-[200px]">Envoyez votre premier message pour lancer la conversation avec {activeParticipant.firstName}.</p>
+                                        <BrandIcon icon={MessageCircle} size={48} sm-size={64} className="mb-4 shadow-md ring-4 ring-accent/10" />
+                                        <h4 className="font-bold text-primary mb-1 text-sm sm:text-base">Démarrer la discussion</h4>
+                                        <p className="text-[10px] sm:text-xs text-text-secondary max-w-[200px]">Envoyez votre premier message pour lancer la conversation avec {activeParticipant.firstName}.</p>
                                     </div>
                                 ) : (
                                     messages.map((msg, index) => {
@@ -319,32 +320,32 @@ export default function MessagesPage() {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                                             >
-                                                <div className={`max-w-[88%] sm:max-w-[75%] ${isMe
-                                                    ? 'bg-primary text-white rounded-2xl rounded-br-none shadow-sm'
+                                                <div className={`max-w-[85%] sm:max-w-[75%] ${isMe
+                                                    ? 'bg-primary text-white rounded-2xl rounded-br-none shadow-md'
                                                     : 'bg-white text-text-primary rounded-2xl rounded-bl-none shadow-sm border border-border-light'
-                                                    } px-3.5 py-2.5 sm:px-4 sm:py-3`}
+                                                    } px-3 py-2 sm:px-4 sm:py-2.5`}
                                                 >
                                                     {msg.attachmentUrl && (
-                                                        <div className="mb-2">
+                                                        <div className="mb-1.5">
                                                             {msg.attachmentType === 'IMAGE' ? (
                                                                 <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer">
-                                                                    <img src={msg.attachmentUrl} alt="Pièce jointe" className="max-w-[200px] rounded-lg max-h-48 object-cover cursor-pointer hover:opacity-90 transition-opacity border border-white/20" />
+                                                                    <img src={msg.attachmentUrl} alt="Pièce jointe" className="max-w-[180px] sm:max-w-[200px] rounded-lg max-h-40 sm:max-h-48 object-cover cursor-pointer hover:opacity-90 transition-opacity border border-white/20" />
                                                                 </a>
                                                             ) : (
-                                                                <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 p-2 rounded-lg ${isMe ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-primary/5 hover:bg-primary/10 text-primary'} transition-colors inline-block`}>
-                                                                    <FileText className="w-3.5 h-3.5" />
-                                                                    <span className="text-[10px] sm:text-xs font-semibold underline underline-offset-2">Voir le document</span>
+                                                                <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 p-1.5 rounded-lg ${isMe ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-primary/5 hover:bg-primary/10 text-primary'} transition-colors inline-block`}>
+                                                                    <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                                                                    <span className="text-[9px] sm:text-[10px] font-bold underline underline-offset-2">Voir le document</span>
                                                                 </a>
                                                             )}
                                                         </div>
                                                     )}
-                                                    {msg.content && <p className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
-                                                    <div className={`flex items-center gap-1 mt-1.5 ${isMe ? 'justify-end' : 'justify-start'}`}>
-                                                        <span className={`text-[10px] uppercase font-semibold ${isMe ? 'text-white/50' : 'text-text-muted'}`}>
+                                                    {msg.content && <p className="text-[11px] sm:text-[13px] whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
+                                                    <div className={`flex items-center gap-1 mt-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                                                        <span className={`text-[8px] sm:text-[9px] uppercase font-bold ${isMe ? 'text-white/50' : 'text-text-muted'}`}>
                                                             {new Date(msg.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                                                         </span>
                                                         {isMe && (
-                                                            msg.isRead ? <CheckCheck className="w-3.5 h-3.5 text-accent-light ml-0.5" /> : <Check className="w-3 h-3 text-white/50 ml-0.5" />
+                                                            msg.isRead ? <CheckCheck className="w-3 h-3 text-accent-light ml-0.5" /> : <Check className="w-2.5 h-2.5 text-white/50 ml-0.5" />
                                                         )}
                                                     </div>
                                                 </div>
@@ -356,33 +357,33 @@ export default function MessagesPage() {
                             </div>
 
                             {/* Input */}
-                            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-border-light bg-white pb-safe">
+                            <div className="px-3 sm:px-6 py-2 sm:py-4 border-t border-border-light bg-white">
                                 {attachment && (
-                                    <div className="mb-3 flex items-center justify-between gap-2 bg-accent/10 border border-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-medium w-fit max-w-sm">
+                                    <div className="mb-2 flex items-center justify-between gap-2 bg-accent/10 border border-accent/20 text-accent px-2 py-1.5 rounded-lg text-[10px] sm:text-xs font-medium w-fit max-w-sm">
                                         <div className="flex items-center gap-2 truncate">
-                                            <Paperclip className="w-4 h-4 flex-shrink-0" />
+                                            <Paperclip className="w-3.5 h-3.5 flex-shrink-0" />
                                             <span className="truncate">{attachment.name}</span>
                                         </div>
                                         <button onClick={() => {
                                             setAttachment(null);
                                             if (fileInputRef.current) fileInputRef.current.value = '';
-                                        }} className="hover:bg-accent/20 p-1 rounded-lg transition-colors flex-shrink-0">
-                                            <X className="w-3.5 h-3.5" />
+                                        }} className="hover:bg-accent/20 p-1 rounded-md transition-colors flex-shrink-0">
+                                            <X className="w-3 h-3" />
                                         </button>
                                     </div>
                                 )}
-                                <div className="flex items-center gap-2 sm:gap-3 max-w-4xl mx-auto">
-                                    <button onClick={() => fileInputRef.current?.click()} className="p-2 sm:p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative flex-shrink-0">
-                                        <Paperclip className="w-5 h-5" />
+                                <div className="flex items-center gap-1.5 sm:gap-3 max-w-4xl mx-auto">
+                                    <button onClick={() => fileInputRef.current?.click()} className="p-1.5 sm:p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative flex-shrink-0">
+                                        <Paperclip className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
                                     </button>
                                     <input type="file" ref={fileInputRef} onChange={(e) => setAttachment(e.target.files?.[0] || null)} className="hidden" />
-                                    <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-2xl px-4 py-2 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
+                                    <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-lg sm:rounded-xl px-2.5 py-1.5 sm:px-4 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
                                         <input
                                             type="text"
                                             value={newMessage}
                                             onChange={(e) => setNewMessage(e.target.value)}
                                             placeholder="Message..."
-                                            className="flex-1 bg-transparent text-xs sm:text-sm outline-none text-text-primary"
+                                            className="flex-1 bg-transparent text-[11px] sm:text-sm outline-none text-text-primary"
                                             onKeyDown={(e) => e.key === 'Enter' && (newMessage.trim() || attachment) && handleSendMessage()}
                                         />
                                         <button className="text-text-muted hover:text-primary transition-colors hidden sm:block">
@@ -392,12 +393,12 @@ export default function MessagesPage() {
                                     <button
                                         onClick={handleSendMessage}
                                         disabled={!newMessage.trim() && !attachment}
-                                        className={`p-2 sm:p-3 rounded-xl transition-all flex-shrink-0 ${newMessage.trim() || attachment
+                                        className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all flex-shrink-0 ${newMessage.trim() || attachment
                                             ? 'bg-accent text-primary hover:bg-accent-dark shadow-lg shadow-accent/20'
                                             : 'bg-bg-light text-text-muted cursor-not-allowed'
                                             }`}
                                     >
-                                        <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                                        <Send className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                                     </button>
                                 </div>
                             </div>
