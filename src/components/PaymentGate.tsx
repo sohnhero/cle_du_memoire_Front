@@ -127,7 +127,7 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                                 </p>
                             </div>
 
-                            <div className="flex gap-3">
+                            <div className="flex flex-col sm:flex-row gap-3">
                                 <button
                                     onClick={() => window.location.reload()}
                                     className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors"
@@ -147,56 +147,56 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                         /* ── Payment Form ── */
                         <>
                             {/* Header */}
-                            <div className="px-8 pt-8 pb-5 border-b border-border/50 bg-gradient-to-b from-bg-light/50 to-white">
-                                <div className="flex items-center gap-2 mb-2">
+                            <div className="px-5 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5 border-b border-border/50 bg-gradient-to-b from-bg-light/50 to-white text-center sm:text-left">
+                                <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
                                     <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
                                         <Lock className="w-3.5 h-3.5 text-accent-dark" weight="fill" />
                                     </div>
-                                    <span className="text-[11px] font-bold text-accent-dark uppercase tracking-widest">Activation requise</span>
+                                    <span className="text-[10px] sm:text-[11px] font-bold text-accent-dark uppercase tracking-widest">Activation requise</span>
                                 </div>
-                                <h3 className="text-xl font-black text-primary mb-1">Activez votre espace</h3>
-                                <p className="text-xs text-text-secondary leading-relaxed">
-                                    Sélectionnez votre mode de paiement et saisissez la référence de transaction pour débloquer votre accès.
+                                <h3 className="text-lg sm:text-xl font-black text-primary mb-1">Activez votre espace</h3>
+                                <p className="text-[11px] sm:text-xs text-text-secondary leading-relaxed">
+                                    Sélectionnez votre mode de paiement et saisissez la référence de transaction.
                                 </p>
                             </div>
 
                             {/* Pack Info */}
                             {subscription && (
-                                <div className="mx-6 p-4 rounded-2xl bg-primary text-white mb-5">
-                                    <div className="flex items-center justify-between">
-                                        <div>
+                                <div className="mx-4 sm:mx-6 p-4 rounded-2xl bg-primary text-white mb-5 shadow-lg shadow-primary/20">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <div className="min-w-0">
                                             <div className="text-[10px] font-bold text-white/50 uppercase tracking-wider">Votre pack</div>
-                                            <div className="text-sm font-bold mt-0.5">{subscription.pack?.name}</div>
+                                            <div className="text-sm font-bold mt-0.5 truncate">{subscription.pack?.name}</div>
                                         </div>
-                                        <div className="text-right">
-                                            <div className="text-xl font-black">{subscription.pack?.price.toLocaleString()}</div>
+                                        <div className="text-right flex-shrink-0">
+                                            <div className="text-lg sm:text-xl font-black">{subscription.pack?.price.toLocaleString()}</div>
                                             <div className="text-[10px] font-bold text-white/50">FCFA</div>
                                         </div>
                                     </div>
                                     {subscription.pack?.installment1 && (
-                                        <div className="mt-3 pt-3 border-t border-white/10 text-[11px] text-white/70">
-                                            💡 Paiement en 2x possible — Minimum : <strong className="text-white">{subscription.pack.installment1.toLocaleString()} FCFA</strong>
+                                        <div className="mt-3 pt-3 border-t border-white/10 text-[10px] sm:text-[11px] text-white/70">
+                                            💡 Paiement en 2x : <strong className="text-white">{subscription.pack.installment1.toLocaleString()} FCFA</strong> min.
                                         </div>
                                     )}
                                 </div>
                             )}
 
-                            <form onSubmit={handleNotify} className="px-8 pb-8 pt-2 space-y-5">
+                            <form onSubmit={handleNotify} className="px-5 sm:px-8 pb-6 sm:pb-8 pt-2 space-y-4 sm:space-y-5">
                                 {/* Payment Method */}
                                 <div>
                                     <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2">
                                         Mode de paiement
                                     </label>
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <button
                                             type="button"
                                             onClick={() => setMethod('WAVE')}
-                                            className={`relative flex items-center justify-center gap-2.5 py-3.5 rounded-xl border-2 transition-all text-sm font-bold ${method === 'WAVE'
+                                            className={`relative flex items-center justify-center gap-2.5 py-3 sm:py-3.5 rounded-xl border-2 transition-all text-sm font-bold ${method === 'WAVE'
                                                 ? 'border-[#1cd4ff] bg-[#1cd4ff]/10 text-primary shadow-sm'
                                                 : 'border-border-light text-text-secondary hover:border-[#1cd4ff]/50 hover:bg-[#1cd4ff]/5'
                                                 }`}
                                         >
-                                            <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797036/wave-logo_hbzxvn.png" alt="Wave Logo" className="w-7 h-7 object-contain rounded-md shadow-sm" />
+                                            <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797036/wave-logo_hbzxvn.png" alt="Wave Logo" className="w-6 h-6 sm:w-7 sm:h-7 object-contain rounded-md" />
                                             Wave
                                             {method === 'WAVE' && (
                                                 <CheckCircle className="absolute top-2 right-2 w-4 h-4 text-[#1cd4ff]" weight="fill" />
@@ -205,56 +205,54 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                                         <button
                                             type="button"
                                             onClick={() => setMethod('OM')}
-                                            className={`relative flex items-center justify-center gap-2.5 py-3.5 rounded-xl border-2 transition-all text-sm font-bold ${method === 'OM'
+                                            className={`relative flex items-center justify-center gap-2.5 py-3 sm:py-3.5 rounded-xl border-2 transition-all text-sm font-bold ${method === 'OM'
                                                 ? 'border-[#ff7900] bg-[#ff7900]/10 text-primary shadow-sm'
                                                 : 'border-border-light text-text-secondary hover:border-[#ff7900]/50 hover:bg-[#ff7900]/5'
                                                 }`}
                                         >
-                                            <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797043/orange-logo_j6jc2f.png" alt="Orange Money Logo" className="w-7 h-7 object-contain rounded-md shadow-sm" />
-                                            Orange Money
+                                            <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797043/orange-logo_j6jc2f.png" alt="Orange Money Logo" className="w-6 h-6 sm:w-7 sm:h-7 object-contain rounded-md" />
+                                            OM
                                             {method === 'OM' && (
                                                 <CheckCircle className="absolute top-2 right-2 w-4 h-4 text-[#ff7900]" weight="fill" />
                                             )}
                                         </button>
-
-
-
                                     </div>
                                 </div>
 
                                 {/* Reference */}
-                                <div>
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">
-                                        Référence de transaction
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        placeholder="Ex: TXN-78451290"
-                                        value={reference}
-                                        onChange={e => setReference(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/30 focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm font-medium text-primary placeholder:text-text-muted/40"
-                                    />
-                                </div>
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">
+                                            Référence de transaction
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            placeholder="Ex: TXN-78451290"
+                                            value={reference}
+                                            onChange={e => setReference(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/30 focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm font-medium text-primary placeholder:text-text-muted/40"
+                                        />
+                                    </div>
 
-                                {/* Amount */}
-                                <div>
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">
-                                        Montant payé (FCFA)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        required
-                                        value={amount}
-                                        onChange={e => setAmount(Number(e.target.value))}
-                                        className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/30 focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm font-bold text-primary"
-                                    />
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-1.5">
+                                            Montant payé (FCFA)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={amount}
+                                            onChange={e => setAmount(Number(e.target.value))}
+                                            className="w-full px-4 py-3 rounded-xl border border-border bg-bg-light/30 focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-sm font-bold text-primary"
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Error */}
                                 {status === 'ERROR' && (
                                     <p className="text-xs text-error font-medium text-center">
-                                        Une erreur s'est produite. Veuillez réessayer.
+                                        Une erreur s'est produite.
                                     </p>
                                 )}
 
@@ -265,14 +263,14 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                                     className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-accent text-white font-bold text-sm hover:bg-accent/90 transition-all disabled:opacity-40 shadow-lg shadow-accent/20"
                                 >
                                     {status === 'SENDING' ? (
-                                        <><CircleNotch className="w-4 h-4 animate-spin" weight="bold" /> Envoi en cours...</>
+                                        <><CircleNotch className="w-4 h-4 animate-spin" weight="bold" /> Envoi...</>
                                     ) : (
                                         <>Débloquer mon accès <ArrowRight className="w-4 h-4" weight="bold" /></>
                                     )}
                                 </button>
 
                                 <p className="text-[10px] text-center text-text-muted leading-relaxed">
-                                    En cliquant, vous confirmez avoir effectué le paiement.
+                                    Paiement sécurisé via réseau mobile.
                                 </p>
                             </form>
                         </>

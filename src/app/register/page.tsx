@@ -132,13 +132,18 @@ export default function RegisterPage() {
 
                         {/* Step indicator */}
                         {!isRegistrationClosed && (
-                            <div className="flex items-center gap-2 sm:gap-3 mb-8 flex-wrap">
+                            <div className="flex items-center gap-1.5 sm:gap-3 mb-8 flex-wrap">
                                 {[1, 2, 3].map((s) => (
                                     <button key={s} onClick={() => s < step && setStep(s)}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${step === s ? 'bg-accent text-primary' : step > s ? 'bg-success/10 text-success' : 'bg-border-light text-text-muted'
+                                        className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-[11px] sm:text-sm font-medium transition-all ${step === s ? 'bg-accent text-primary' : step > s ? 'bg-success/10 text-success' : 'bg-border-light text-text-muted'
                                             }`}>
-                                        {step > s ? <CheckCircle className="w-4 h-4" /> : s}
-                                        {s === 1 ? ' - Infos' : s === 2 ? ' - Études' : ' - Pack'}
+                                        {step > s ? <CheckCircle className="w-3.5 h-3.5 sm:w-4 h-4" /> : s}
+                                        <span className="hidden xs:inline">
+                                            {s === 1 ? ' - Infos' : s === 2 ? ' - Études' : ' - Pack'}
+                                        </span>
+                                        <span className="xs:hidden">
+                                            {s === 1 ? ' Infos' : s === 2 ? ' Études' : ' Pack'}
+                                        </span>
                                     </button>
                                 ))}
                             </div>
@@ -178,7 +183,7 @@ export default function RegisterPage() {
                                 <form onSubmit={handleSubmit} className="space-y-5">
                                     {step === 1 && (
                                         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <div>
                                                     <label className="block text-sm font-medium text-primary mb-2">Prénom</label>
                                                     <div className="relative">
@@ -209,7 +214,7 @@ export default function RegisterPage() {
                                                         className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm" />
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <div>
                                                     <label className="block text-sm font-medium text-primary mb-2">Mot de passe</label>
                                                     <div className="relative">
@@ -270,7 +275,7 @@ export default function RegisterPage() {
                                             </div>
 
                                             {formData.role === 'STUDENT' && (
-                                                <div className="grid grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     <div>
                                                         <label className="block text-sm font-medium text-primary mb-2">Niveau d'étude</label>
                                                         <div className="relative">
@@ -286,7 +291,7 @@ export default function RegisterPage() {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <label className="block text-sm font-medium text-primary mb-2">Date de soutenance prévue</label>
+                                                        <label className="block text-sm font-medium text-primary mb-2">Soutenance prévue</label>
                                                         <input type="date" value={formData.targetDefenseDate} onChange={(e) => updateField('targetDefenseDate', e.target.value)} required
                                                             className="w-full px-4 py-3.5 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm" />
                                                     </div>
@@ -317,7 +322,7 @@ export default function RegisterPage() {
 
                                     {step === 3 && (
                                         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 w-full">
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                                                 {packsLoading ? (
                                                     <div className="col-span-full py-12 flex flex-col items-center justify-center bg-bg-light rounded-2xl border border-dashed border-border gap-4">
                                                         <div className="w-8 h-8 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />

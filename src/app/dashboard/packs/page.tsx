@@ -302,7 +302,7 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 30 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden"
+                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden mx-auto"
             >
                 {/* Header */}
                 <div className="bg-primary px-6 py-5 text-white relative">
@@ -321,7 +321,7 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                 </div>
 
                 {!submitted ? (
-                    <div className="p-6">
+                    <div className="p-5 sm:p-6">
                         {/* Pack recap */}
                         <div className="flex items-center justify-between mb-5 p-3 rounded-xl bg-bg-light">
                             <span className="text-xs text-text-secondary font-medium">Montant total</span>
@@ -332,7 +332,7 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                             {/* Payment Method */}
                             <div>
                                 <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">Mode de paiement</label>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     <button
                                         type="button"
                                         onClick={() => setMethod('WAVE')}
@@ -341,7 +341,7 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                                             : 'border-border-light text-text-muted hover:border-border'
                                             }`}
                                     >
-                                        <span className="text-blue-500">💙</span> Wave
+                                        <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797036/wave-logo_hbzxvn.png" alt="Wave" className="w-5 h-5 object-contain" /> Wave
                                     </button>
                                     <button
                                         type="button"
@@ -351,7 +351,7 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                                             : 'border-border-light text-text-muted hover:border-border'
                                             }`}
                                     >
-                                        <span className="text-orange-500">🧡</span> Orange Money
+                                        <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797043/orange-logo_j6jc2f.png" alt="OM" className="w-5 h-5 object-contain" /> OM
                                     </button>
                                 </div>
                             </div>
@@ -425,7 +425,7 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                             <p className="text-[11px] text-text-muted mt-1">Rechargez la page après confirmation pour voir votre pack activé.</p>
                         </div>
 
-                        <div className="flex gap-2">
+                        <div className="flex flex-col sm:flex-row gap-2">
                             <button
                                 onClick={() => window.location.reload()}
                                 className="flex-1 py-2.5 rounded-xl font-bold text-sm bg-bg-light text-primary hover:bg-border/30 transition-colors flex items-center justify-center gap-1.5"
