@@ -72,9 +72,9 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
     if (isAuthorized) return <>{children}</>;
 
     return (
-        <div className="fixed inset-0 z-[100] bg-primary flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-50 overflow-x-hidden overflow-y-auto bg-primary/95 flex items-start sm:items-center justify-center p-0 sm:p-4">
             {/* Subtle background glow */}
-            <div className="absolute inset-0 opacity-[0.07] pointer-events-none">
+            <div className="absolute inset-0 opacity-[0.07] pointer-events-none overflow-hidden">
                 <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-accent rounded-full blur-[140px]" />
                 <div className="absolute bottom-1/3 right-1/3 w-60 h-60 bg-info rounded-full blur-[120px]" />
             </div>
@@ -83,15 +83,15 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="relative w-full max-w-[92vw] sm:max-w-md mx-auto"
+                className="relative w-full h-full sm:h-auto sm:max-w-md mx-auto overflow-x-hidden"
             >
                 {/* Logo */}
-                <div className="flex justify-center mb-6 sm:mb-8">
+                <div className="flex justify-center py-6 sm:py-0 mb-4 sm:mb-8 px-4">
                     <Logo className="w-32 sm:w-48 h-auto" font-bold monochrome={true} />
                 </div>
 
                 {/* Main Card */}
-                <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
+                <div className="bg-white min-h-full sm:min-h-0 sm:rounded-[2.5rem] shadow-none sm:shadow-2xl overflow-y-auto overflow-x-hidden sm:overflow-hidden border-0 sm:border sm:border-white/10 flex flex-col">
 
                     {status === 'SUCCESS' ? (
                         /* ── Success State ── */
@@ -275,7 +275,7 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                 </div>
 
                 {/* Footer */}
-                <p className="text-center text-[10px] text-white/30 mt-4">
+                <p className="text-center text-[10px] text-white/30 my-4 sm:mt-4">
                     Besoin d'aide ? Contactez-nous via WhatsApp
                 </p>
             </motion.div>

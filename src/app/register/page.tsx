@@ -287,10 +287,10 @@ export default function RegisterPage() {
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-primary mb-2">Soutenance prévue</label>
+                                                    <div className="min-w-0">
+                                                        <label className="block text-sm font-medium text-primary mb-2">Soutenance</label>
                                                         <input type="date" value={formData.targetDefenseDate} onChange={(e) => updateField('targetDefenseDate', e.target.value)} required
-                                                            className="w-full px-4 py-3.5 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm" />
+                                                            className="w-full px-4 py-3.5 rounded-xl border border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none transition-all text-sm min-w-0" />
                                                     </div>
                                                 </div>
                                             )}
