@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X, Eye
+    Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X, Eye, Trash
 } from '@phosphor-icons/react';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -37,6 +37,7 @@ export default function AdminUsersPage() {
     const [editingUser, setEditingUser] = useState<any>(null);
     const [assigningCoachFor, setAssigningCoachFor] = useState<any>(null);
     const [isAddingUser, setIsAddingUser] = useState(false);
+    const [deletingUser, setDeletingUser] = useState<any>(null);
 
     const loadUsers = async () => {
         setLoading(true);
@@ -220,8 +221,16 @@ export default function AdminUsersPage() {
                         <button
                             onClick={() => setEditingUser(user)}
                             className="p-2 sm:p-2 rounded-lg hover:bg-bg-light text-text-secondary hover:text-primary transition-colors bg-white sm:bg-transparent shadow-sm sm:shadow-none"
+                            title="Modifier"
                         >
                             <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => setDeletingUser(user)}
+                            className="p-2 sm:p-2 rounded-lg hover:bg-error/10 text-text-secondary hover:text-error transition-colors bg-white sm:bg-transparent shadow-sm sm:shadow-none"
+                            title="Supprimer"
+                        >
+                            <Trash className="w-4 h-4" />
                         </button>
                         {!user.isActive && user.role === 'ACCOMPAGNATEUR' && (
                             <button
@@ -274,7 +283,68 @@ export default function AdminUsersPage() {
                         onSuccess={loadUsers}
                     />
                 )}
+                {deletingUser && (
+                    <DeleteUserModal
+                        user={deletingUser}
+                        onClose={() => setDeletingUser(null)}
+                        onSuccess={loadUsers}
+                    />
+                )}
             </AnimatePresence>
+        </div>
+    );
+}
+
+function DeleteUserModal({ user, onClose, onSuccess }: { user: any, onClose: () => void, onSuccess: () => void }) {
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = async () => {
+        setIsDeleting(true);
+        try {
+            await api.deleteUser(user.id);
+            toast.success("Utilisateur supprimé avec succès");
+            onSuccess();
+            onClose();
+        } catch (error: any) {
+            console.error(error);
+            toast.error(error.message || "Erreur lors de la suppression");
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold text-error flex items-center gap-2">
+                        <Trash className="w-6 h-6" />
+                        Supprimer l'utilisateur
+                    </h3>
+                    <button onClick={onClose} className="p-2 text-text-muted hover:bg-bg-light rounded-xl transition-colors">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <p className="text-text-primary mb-4">
+                    Êtes-vous sûr de vouloir supprimer l'utilisateur <strong>{user.firstName} {user.lastName}</strong> ({user.email}) ?
+                </p>
+                <div className="bg-error/10 text-error p-3 rounded-xl text-sm mb-6 flex items-start gap-2 border border-error/20">
+                    <Shield className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                    <p>Cette action est irréversible. Toutes les données associées à cet utilisateur seront également supprimées ou anonymisées.</p>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-border-light">
+                    <button onClick={onClose} className="px-5 py-2.5 rounded-xl font-medium text-text-secondary hover:bg-bg-light transition-colors">
+                        Annuler
+                    </button>
+                    <button onClick={handleDelete} disabled={isDeleting} className="btn-danger px-6 py-2.5 flex items-center gap-2">
+                        {isDeleting ? <LoadingSpinner size="sm" light /> : <Trash className="w-4 h-4" />}
+                        {isDeleting ? 'Suppression...' : 'Oui, supprimer'}
+                    </button>
+                </div>
+            </motion.div>
         </div>
     );
 }

@@ -85,6 +85,12 @@ class ApiClient {
         });
     }
 
+    async deleteUser(id: string) {
+        return this.request<{ message: string }>(`/users/${id}`, {
+            method: 'DELETE',
+        });
+    }
+
     async createUser(data: any) {
         return this.request<{ user: any }>('/users', {
             method: 'POST',
