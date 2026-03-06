@@ -316,9 +316,6 @@ function StudentDashboard() {
                         className="card-premium p-4 group"
                     >
                         <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
-                                <Activity className="w-5 h-5" weight="fill" />
-                            </div>
                             Actions Rapides
                         </h3>
                         <div className="space-y-3">
@@ -602,9 +599,6 @@ function AdminDashboard() {
                         >
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-base font-black text-primary flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
-                                        <Activity className="w-5 h-5" weight="fill" />
-                                    </div>
                                     Activité Récente
                                 </h3>
                                 <button onClick={() => router.push('/dashboard/logs')} className="text-xs font-black text-accent uppercase tracking-wider hover:underline">
@@ -659,9 +653,6 @@ function AdminDashboard() {
                             className="card-premium p-4 group"
                         >
                             <h3 className="text-base font-black text-primary mb-4 flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20 group-hover:scale-110 transition-transform">
-                                    <BarChart3 className="w-5 h-5" weight="fill" />
-                                </div>
                                 Accès Rapides
                             </h3>
                             <div className="space-y-2">
