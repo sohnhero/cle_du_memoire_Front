@@ -83,54 +83,51 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="relative w-full max-w-md"
+                className="relative w-full max-w-[92vw] sm:max-w-md mx-auto"
             >
                 {/* Logo */}
-                <div className="flex justify-center mb-8">
-                    <Logo className="w-48 h-auto" monochrome={true} />
+                <div className="flex justify-center mb-6 sm:mb-8">
+                    <Logo className="w-32 sm:w-48 h-auto" font-bold monochrome={true} />
                 </div>
 
                 {/* Main Card */}
-                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
 
                     {status === 'SUCCESS' ? (
                         /* ── Success State ── */
-                        <div className="p-8 text-center">
+                        <div className="p-6 sm:p-8 text-center">
                             <motion.div
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 transition={{ type: 'spring', damping: 12, stiffness: 200 }}
-                                className="w-16 h-16 mx-auto mb-5 rounded-full bg-success/10 flex items-center justify-center"
+                                className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-5 rounded-full bg-success/10 flex items-center justify-center"
                             >
-                                <CheckCircle className="w-8 h-8 text-success" weight="fill" />
+                                <CheckCircle className="w-7 h-7 sm:w-8 sm:h-8 text-success" weight="fill" />
                             </motion.div>
 
-                            <h3 className="text-lg font-bold text-primary mb-2">Paiement notifié avec succès !</h3>
-                            <p className="text-sm text-text-secondary leading-relaxed mb-6">
+                            <h3 className="text-base sm:text-lg font-black text-primary mb-2">Paiement notifié avec succès !</h3>
+                            <p className="text-[11px] sm:text-sm text-text-secondary leading-relaxed mb-6">
                                 Votre référence a bien été transmise à notre équipe.
-                                Un administrateur vérifiera et activera votre compte.
                             </p>
 
                             {/* Admin wait indicator */}
                             <div className="p-4 rounded-2xl bg-accent/5 border border-accent/10 mb-6">
-                                <div className="flex items-center gap-2.5 justify-center mb-1.5">
+                                <div className="flex items-center gap-2 justify-center mb-1.5">
                                     <div className="relative flex items-center justify-center">
                                         <span className="animate-ping absolute h-3 w-3 rounded-full bg-accent/40" />
                                         <Clock className="w-4 h-4 text-accent relative" weight="bold" />
                                     </div>
-                                    <span className="text-sm font-bold text-accent">En attente de confirmation</span>
+                                    <span className="text-xs sm:text-sm font-black text-accent">En attente de confirmation</span>
                                 </div>
-                                <p className="text-[11px] text-text-muted leading-relaxed">
+                                <p className="text-[10px] sm:text-[11px] text-text-muted leading-tight">
                                     Généralement validé en moins d'une heure.
-                                    <br />
-                                    <strong>Rechargez cette page après la confirmation de l'admin.</strong>
                                 </p>
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-3">
                                 <button
                                     onClick={() => window.location.reload()}
-                                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors"
+                                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
                                 >
                                     <ArrowsClockwise className="w-4 h-4" weight="bold" />
                                     Recharger la page
@@ -149,14 +146,14 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                             {/* Header */}
                             <div className="px-5 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5 border-b border-border/50 bg-gradient-to-b from-bg-light/50 to-white text-center sm:text-left">
                                 <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
-                                    <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
-                                        <Lock className="w-3.5 h-3.5 text-accent-dark" weight="fill" />
+                                    <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center">
+                                        <Lock className="w-3 h-3 text-accent-dark" weight="fill" />
                                     </div>
-                                    <span className="text-[10px] sm:text-[11px] font-bold text-accent-dark uppercase tracking-widest">Activation requise</span>
+                                    <span className="text-[9px] sm:text-[11px] font-bold text-accent-dark uppercase tracking-widest">Activation requise</span>
                                 </div>
                                 <h3 className="text-lg sm:text-xl font-black text-primary mb-1">Activez votre espace</h3>
-                                <p className="text-[11px] sm:text-xs text-text-secondary leading-relaxed">
-                                    Sélectionnez votre mode de paiement et saisissez la référence de transaction.
+                                <p className="text-[10px] sm:text-xs text-text-secondary leading-relaxed">
+                                    Sélectionnez votre mode de paiement et saisissez la référence.
                                 </p>
                             </div>
 

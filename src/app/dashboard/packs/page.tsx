@@ -302,20 +302,20 @@ function PaymentNotificationModal({ subscription, onClose, onSuccess }: { subscr
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 30 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden mx-auto"
+                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-[92vw] sm:max-w-sm overflow-hidden mx-auto"
             >
                 {/* Header */}
-                <div className="bg-primary px-6 py-5 text-white relative">
+                <div className="bg-primary px-5 sm:px-6 py-4 sm:py-5 text-white relative">
                     <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-white/10 transition-colors">
                         <X className="w-4 h-4" />
                     </button>
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                            <CreditCard className="w-5 h-5 text-accent" weight="duotone" />
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                            <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-accent" weight="duotone" />
                         </div>
-                        <div>
-                            <h3 className="text-base font-bold">Notifier mon paiement</h3>
-                            <p className="text-white/60 text-xs">{subscription.pack.name}</p>
+                        <div className="min-w-0">
+                            <h3 className="text-sm sm:text-base font-bold truncate">Notifier mon paiement</h3>
+                            <p className="text-white/60 text-[10px] sm:text-xs truncate">{subscription.pack.name}</p>
                         </div>
                     </div>
                 </div>

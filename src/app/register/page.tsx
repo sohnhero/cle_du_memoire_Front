@@ -110,39 +110,36 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Right Panel - Form */}
-                <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
+                <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 overflow-y-auto overflow-x-hidden">
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className={`w-full transition-all duration-500 ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}
+                        className={`w-full transition-all duration-500 mx-auto ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}
                     >
-                        <div className="lg:hidden flex justify-center mb-8">
-                            <Logo className="w-48 h-auto" monochrome={false} />
+                        <div className="lg:hidden flex justify-center mb-6">
+                            <Logo className="w-40 h-auto" monochrome={false} />
                         </div>
 
-                        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-primary transition-colors mb-6">
+                        <Link href="/" className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-text-muted hover:text-primary transition-colors mb-6">
                             <ArrowLeft className="w-4 h-4" />
                             Retour à l&apos;accueil
                         </Link>
 
-                        <div className="mb-8">
-                            <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2">Créer un compte</h1>
-                            <p className="text-text-secondary">Démarrez votre parcours vers la réussite</p>
+                        <div className="mb-6">
+                            <h1 className="text-xl sm:text-3xl font-bold text-primary mb-1">Créer un compte</h1>
+                            <p className="text-sm text-text-secondary">Démarrez votre parcours vers la réussite</p>
                         </div>
 
                         {/* Step indicator */}
                         {!isRegistrationClosed && (
-                            <div className="flex items-center gap-1.5 sm:gap-3 mb-8 flex-wrap">
+                            <div className="flex items-center justify-between sm:justify-start gap-1.5 sm:gap-3 mb-8">
                                 {[1, 2, 3].map((s) => (
                                     <button key={s} onClick={() => s < step && setStep(s)}
-                                        className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-[11px] sm:text-sm font-medium transition-all ${step === s ? 'bg-accent text-primary' : step > s ? 'bg-success/10 text-success' : 'bg-border-light text-text-muted'
+                                        className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-[10px] sm:text-sm font-black transition-all flex-1 sm:flex-none ${step === s ? 'bg-accent text-primary' : step > s ? 'bg-success/10 text-success' : 'bg-border-light text-text-muted'
                                             }`}>
                                         {step > s ? <CheckCircle className="w-3.5 h-3.5 sm:w-4 h-4" /> : s}
-                                        <span className="hidden xs:inline">
-                                            {s === 1 ? ' - Infos' : s === 2 ? ' - Études' : ' - Pack'}
-                                        </span>
-                                        <span className="xs:hidden">
-                                            {s === 1 ? ' Infos' : s === 2 ? ' Études' : ' Pack'}
+                                        <span className="xs:inline hidden">
+                                            {s === 1 ? 'Infos' : s === 2 ? 'Études' : 'Pack'}
                                         </span>
                                     </button>
                                 ))}
@@ -352,7 +349,7 @@ export default function RegisterPage() {
                                                                 {pack.description}
                                                             </div>
                                                             <div className="mt-auto pt-2 border-t border-border-light flex items-center justify-between">
-                                                                <span className="text-[9px] font-bold text-text-muted uppercase tracking-tighter">
+                                                                <span className="text-[9px] font-bold text-text-muted uppercase tracking-tighter truncate">
                                                                     {formData.packId === pack.id ? 'Sélectionné' : 'Choisir'}
                                                                 </span>
                                                                 {formData.packId === pack.id && <CheckCircle className="w-3.5 h-3.5 text-accent" />}
