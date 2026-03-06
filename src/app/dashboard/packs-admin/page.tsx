@@ -250,7 +250,6 @@ export default function AdminPacksPage() {
                                             { key: 'date', label: 'Date Souscription', breakpoint: 'md' },
                                             { key: 'amount', label: 'Montant Payé', breakpoint: 'sm' },
                                             { key: 'status', label: 'Statut' },
-                                            { key: 'actions', label: 'Actions', className: 'text-right' }
                                         ]}
                                         renderDesktopRow={(sub) => (
                                             <>
@@ -279,15 +278,6 @@ export default function AdminPacksPage() {
                                                     <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-lg ${statusBadge[sub.status] || 'bg-border text-text-secondary'}`}>
                                                         {statusLabel[sub.status] || sub.status}
                                                     </span>
-                                                </td>
-                                                <td className="px-6 py-4 text-right">
-                                                    {sub.status === 'PENDING' || sub.status === 'PARTIAL' ? (
-                                                        <button onClick={() => handleOpenPayment(sub)} className="px-3 py-1.5 bg-success/10 text-success hover:bg-success/20 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ml-auto">
-                                                            <CreditCard className="w-3.5 h-3.5" /> Encaisser
-                                                        </button>
-                                                    ) : (
-                                                        <span className="text-xs text-text-muted">—</span>
-                                                    )}
                                                 </td>
                                             </>
                                         )}
