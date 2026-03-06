@@ -7,7 +7,7 @@ import {
   BookOpen, GraduationCap, Users, ChatCircle as MessageCircle, CaretRight as ChevronRight,
   Star, List as Menu, X, ShieldCheck as Shield, Medal as Award, Target, TrendUp as TrendingUp, FileText,
   Heart, ChartBar as BarChart3, PaperPlaneRight as Send, Quotes as Quote, ArrowRight, CheckCircle, Clock, EnvelopeSimple as Mail, MapPin, Phone, Lightning as Zap, Check, Sparkle as Sparkles,
-  FacebookLogo, InstagramLogo, XLogo, TiktokLogo as TikTokLogo, LinkedinLogo, YoutubeLogo, ArrowUp
+  FacebookLogo, InstagramLogo, XLogo, TiktokLogo as TikTokLogo, LinkedinLogo, YoutubeLogo, ArrowUp, CaretDown
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { useGlobalSettings } from '@/hooks/useGlobalSettings';
@@ -77,6 +77,119 @@ const CustomLinkedinIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const SenegalFlag = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 900 600" className={`w-5 h-auto rounded-[2px] shadow-sm ${className || ''}`}>
+    <rect width="300" height="600" fill="#00853f" />
+    <rect width="300" height="600" x="300" fill="#fdef42" />
+    <rect width="300" height="600" x="600" fill="#e31b23" />
+    <polygon points="450,222 485,330 393,263 507,263 415,330" fill="#00853f" />
+  </svg>
+);
+
+
+// ==================== SOCIAL FAN ====================
+function SocialFanLink({ settings, isMobile = false }: { settings: any, isMobile?: boolean }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Auto-close on scroll
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleScroll = () => setIsOpen(false);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isOpen]);
+
+  const platforms = [
+    { id: 'facebook', Icon: CustomFacebookIcon, url: settings.facebookUrl, color: '#1877F2' },
+    { id: 'instagram', Icon: InstagramLogo, url: settings.instagramUrl, color: '#E4405F' },
+    { id: 'linkedin', Icon: CustomLinkedinIcon, url: settings.linkedinUrl, color: '#0A66C2' },
+    { id: 'twitter', Icon: XLogo, url: settings.twitterUrl, color: '#000000' },
+    { id: 'tiktok', Icon: TikTokLogo, url: settings.tiktokUrl, color: '#000000' },
+    { id: 'youtube', Icon: YoutubeLogo, url: settings.youtubeUrl, color: '#FF0000' },
+  ].filter(p => p.url && p.url !== '#');
+
+  if (platforms.length === 0) return null;
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-all duration-300 flex items-center gap-1.5 ${isOpen
+          ? 'text-accent bg-accent/10 ring-1 ring-accent/20'
+          : 'text-text-secondary hover:text-primary hover:bg-bg-light'
+          }`}
+      >
+        Réseaux
+        <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
+          <CaretDown className="w-3.5 h-3.5" weight="bold" />
+        </motion.span>
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-[-1] cursor-default bg-black/[0.02] backdrop-blur-[1px]"
+            />
+            <div className={`absolute top-full left-1/2 -translate-x-1/2 ${isMobile ? 'mt-10' : 'mt-4'} pt-4`}>
+              {platforms.map((p, idx) => {
+                const total = platforms.length;
+                const radius = isMobile ? 85 : 110;
+                const startAngle = 30; // More closed fan for tighter look
+                const endAngle = 150;
+                const angle = total === 1 ? 90 : startAngle + (idx * (endAngle - startAngle) / (total - 1));
+                const rad = (angle * Math.PI) / 180;
+                const x = Math.cos(rad) * radius;
+                const y = Math.sin(rad) * radius;
+
+                return (
+                  <motion.a
+                    key={p.id}
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ scale: 0, opacity: 0, x: 0, y: 0, rotate: -45 }}
+                    animate={{
+                      scale: 1,
+                      opacity: 1,
+                      x: x,
+                      y: y,
+                      rotate: 0
+                    }}
+                    exit={{ scale: 0, opacity: 0, x: 0, y: 0, rotate: 45 }}
+                    whileHover={{ scale: 1.1, y: y - 5 }}
+                    transition={{
+                      type: 'spring',
+                      damping: 15,
+                      stiffness: 250,
+                      delay: idx * 0.04
+                    }}
+                    className="absolute top-0 left-0 -ml-6 -mt-6 w-12 h-12 rounded-full bg-white backdrop-blur-md shadow-[0_15px_35px_-5px_rgba(0,0,0,0.15),0_10px_15px_-5px_rgba(0,0,0,0.05)] flex items-center justify-center text-primary group hover:bg-white border border-white/40 ring-1 ring-black/[0.03] transition-colors overflow-hidden"
+                    title={p.id}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/[0.02] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <p.Icon
+                      className="w-5 h-5 transition-all duration-300 group-hover:scale-110"
+                      style={{ color: 'inherit' }}
+                    />
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity"
+                      style={{ backgroundColor: p.color }}
+                    />
+                  </motion.a>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 // ==================== NAVBAR ====================
 function Navbar() {
@@ -161,6 +274,7 @@ function Navbar() {
                 </a>
               );
             })}
+            <SocialFanLink settings={settings} />
           </div>
 
           <div className="hidden md:flex items-center gap-2">
@@ -203,15 +317,18 @@ function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive
-                      ? 'bg-accent/10 text-accent'
-                      : 'text-text-primary hover:bg-primary/5'
+                    className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all ${isActive
+                      ? 'text-accent bg-accent/10'
+                      : 'text-text-secondary hover:text-primary hover:bg-bg-light'
                       }`}
                   >
                     {link.label}
                   </a>
                 );
               })}
+              <div className="pt-2 pb-2">
+                <SocialFanLink settings={settings} isMobile />
+              </div>
               <div className="pt-3 space-y-2 border-t border-border/50 mt-3">
                 <Link href="/login" className="block px-4 py-2.5 text-center rounded-lg text-primary text-sm font-medium">
                   Connexion
@@ -331,7 +448,7 @@ function Hero() {
             transition={{ delay: 0.2 }}
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/60 text-[13px] mb-8"
           >
-            <span className="text-base select-none">🇸🇳</span>
+            <SenegalFlag className="shrink-0" />
             Plateforme N°1 au Sénégal
           </motion.div>
 
@@ -1166,26 +1283,6 @@ function Footer() {
           <p className="text-white/20 text-xs text-center sm:text-left">
             © {new Date().getFullYear()} {settings.platformName}. Tous droits réservés.
           </p>
-          <div className="flex gap-4">
-            {[
-              { Icon: CustomFacebookIcon, href: settings.facebookUrl },
-              { Icon: InstagramLogo, href: settings.instagramUrl },
-              { Icon: XLogo, href: settings.twitterUrl },
-              { Icon: TikTokLogo, href: settings.tiktokUrl },
-              { Icon: CustomLinkedinIcon, href: settings.linkedinUrl },
-              { Icon: YoutubeLogo, href: settings.youtubeUrl },
-            ].map(({ Icon, href }, idx) => (
-              <a
-                key={idx}
-                href={href && href !== '#' ? href : undefined}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`text-white/20 hover:text-white transition-colors ${!href || href === '#' ? 'pointer-events-none opacity-50' : ''}`}
-              >
-                <Icon weight="fill" className="w-5 h-5" />
-              </a>
-            ))}
-          </div>
           <div className="flex gap-6 text-xs text-white/20">
             <a href="#" className="hover:text-white/50 transition-colors">Mentions légales</a>
             <a href="#" className="hover:text-white/50 transition-colors">Confidentialité</a>
