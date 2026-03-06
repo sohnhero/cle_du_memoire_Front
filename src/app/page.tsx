@@ -331,7 +331,7 @@ function Hero() {
             transition={{ delay: 0.2 }}
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/60 text-[13px] mb-8"
           >
-            <span className="w-1.5 h-1.5 bg-accent rounded-full" />
+            <span className="text-base select-none">🇸🇳</span>
             Plateforme N°1 au Sénégal
           </motion.div>
 
@@ -910,7 +910,6 @@ function CTASection() {
       >
         {/* Social Proof Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-accent text-xs font-bold mb-8 tracking-widest uppercase">
-          <Sparkles className="w-3 h-3" />
           VOTRE RÉUSSITE COMMENCE ICI
         </div>
 
