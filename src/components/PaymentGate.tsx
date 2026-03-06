@@ -86,8 +86,8 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                 className="relative w-full max-w-md"
             >
                 {/* Logo */}
-                <div className="text-center mb-6">
-                    <Logo className="w-16 h-auto mx-auto" monochrome />
+                <div className="flex justify-center mb-8">
+                    <Logo className="w-48 h-auto" monochrome={true} />
                 </div>
 
                 {/* Main Card */}
@@ -147,14 +147,16 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                         /* ── Payment Form ── */
                         <>
                             {/* Header */}
-                            <div className="px-6 pt-6 pb-4">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Lock className="w-4 h-4 text-accent" weight="fill" />
-                                    <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Activation requise</span>
+                            <div className="px-8 pt-8 pb-5 border-b border-border/50 bg-gradient-to-b from-bg-light/50 to-white">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
+                                        <Lock className="w-3.5 h-3.5 text-accent-dark" weight="fill" />
+                                    </div>
+                                    <span className="text-[11px] font-bold text-accent-dark uppercase tracking-widest">Activation requise</span>
                                 </div>
-                                <h3 className="text-lg font-bold text-primary">Activez votre espace</h3>
-                                <p className="text-xs text-text-secondary mt-0.5">
-                                    Payez via Wave ou Orange Money, puis saisissez la référence de transaction.
+                                <h3 className="text-xl font-black text-primary mb-1">Activez votre espace</h3>
+                                <p className="text-xs text-text-secondary leading-relaxed">
+                                    Sélectionnez votre mode de paiement et saisissez la référence de transaction pour débloquer votre accès.
                                 </p>
                             </div>
 
@@ -179,39 +181,44 @@ export default function PaymentGate({ children, user }: PaymentGateProps) {
                                 </div>
                             )}
 
-                            <form onSubmit={handleNotify} className="px-6 pb-6 space-y-4">
+                            <form onSubmit={handleNotify} className="px-8 pb-8 pt-2 space-y-5">
                                 {/* Payment Method */}
                                 <div>
                                     <label className="block text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2">
                                         Mode de paiement
                                     </label>
-                                    <div className="grid grid-cols-2 gap-2">
+                                    <div className="grid grid-cols-2 gap-3">
                                         <button
                                             type="button"
                                             onClick={() => setMethod('WAVE')}
-                                            className={`relative flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all text-sm font-bold ${method === 'WAVE'
-                                                    ? 'border-blue-400 bg-blue-50 text-blue-600'
-                                                    : 'border-border-light text-text-muted hover:border-blue-200'
+                                            className={`relative flex items-center justify-center gap-2.5 py-3.5 rounded-xl border-2 transition-all text-sm font-bold ${method === 'WAVE'
+                                                ? 'border-[#1cd4ff] bg-[#1cd4ff]/10 text-primary shadow-sm'
+                                                : 'border-border-light text-text-secondary hover:border-[#1cd4ff]/50 hover:bg-[#1cd4ff]/5'
                                                 }`}
                                         >
-                                            💙 Wave
+                                            <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797036/wave-logo_hbzxvn.png" alt="Wave Logo" className="w-7 h-7 object-contain rounded-md shadow-sm" />
+                                            Wave
                                             {method === 'WAVE' && (
-                                                <CheckCircle className="absolute top-1.5 right-1.5 w-3.5 h-3.5 text-blue-500" weight="fill" />
+                                                <CheckCircle className="absolute top-2 right-2 w-4 h-4 text-[#1cd4ff]" weight="fill" />
                                             )}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setMethod('OM')}
-                                            className={`relative flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all text-sm font-bold ${method === 'OM'
-                                                    ? 'border-orange-400 bg-orange-50 text-orange-600'
-                                                    : 'border-border-light text-text-muted hover:border-orange-200'
+                                            className={`relative flex items-center justify-center gap-2.5 py-3.5 rounded-xl border-2 transition-all text-sm font-bold ${method === 'OM'
+                                                ? 'border-[#ff7900] bg-[#ff7900]/10 text-primary shadow-sm'
+                                                : 'border-border-light text-text-secondary hover:border-[#ff7900]/50 hover:bg-[#ff7900]/5'
                                                 }`}
                                         >
-                                            🧡 Orange Money
+                                            <img src="https://res.cloudinary.com/drxouwbms/image/upload/v1772797043/orange-logo_j6jc2f.png" alt="Orange Money Logo" className="w-7 h-7 object-contain rounded-md shadow-sm" />
+                                            Orange Money
                                             {method === 'OM' && (
-                                                <CheckCircle className="absolute top-1.5 right-1.5 w-3.5 h-3.5 text-orange-500" weight="fill" />
+                                                <CheckCircle className="absolute top-2 right-2 w-4 h-4 text-[#ff7900]" weight="fill" />
                                             )}
                                         </button>
+
+
+
                                     </div>
                                 </div>
 

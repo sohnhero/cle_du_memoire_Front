@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Motion Design - Clé du Mémoire</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0f1729;
+            /* Primary color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo-container {
+            position: relative;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .logo {
+            width: 300px;
+            height: auto;
+            filter: drop-shadow(0 0 15px rgba(249, 183, 0, 0.4));
+        }
+
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(249, 183, 0, 0.4) 0%, rgba(15, 23, 41, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .tagline {
+            margin-top: 30px;
+            color: #FAFBFC;
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .accent-text {
+            color: #F9B700;
+            font-weight: 600;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: #F9B700;
+            border-radius: 50%;
+        }
+
+        /* Reveal lines */
+        .line {
+            position: absolute;
+            background: #F9B700;
+            z-index: 2;
+        }
+
+        .line-h {
+            top: 50%;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            transform: translateY(-50%);
+        }
+
+        .line-v {
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 0%;
+            transform: translateX(-50%);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="particles" id="particles"></div>
+    <div class="line line-h" id="lineH"></div>
+    <div class="line line-v" id="lineV"></div>
+
+    <div class="container">
+        <div class="logo-container" id="logoContainer">
+            <div class="glow" id="glow"></div>
+            <img src="./logo.png" alt="Clé du Mémoire Logo" class="logo" id="logo" onerror="this.src='./logo-new.png'">
+        </div>
+        <div class="tagline" id="tagline">
+            L'excellence académique au <span class="accent-text">Sénégal</span>
+        </div>
+    </div>
+
+    <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 4 + 1;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.top = Math.random() * 100 + 'vh';
+            p.style.opacity = Math.random() * 0.5 + 0.1;
+            particlesContainer.appendChild(p);
+
+            // Animate particles
+            gsap.to(p, {
+                y: -100 - Math.random() * 200,
+                x: (Math.random() - 0.5) * 100,
+                opacity: 0,
+                duration: 3 + Math.random() * 4,
+                repeat: -1,
+                ease: "none",
+                delay: Math.random() * 2
+            });
+        }
+
+        // Main Timeline
+        const tl = gsap.timeline({ delay: 0.5 });
+
+        // 1. Cross lines reveal
+        tl.to("#lineH", { width: "100%", duration: 1, ease: "power3.inOut" })
+            .to("#lineV", { height: "100%", duration: 1, ease: "power3.inOut" }, "-=0.8")
+            // Lines fade out
+            .to(".line", { opacity: 0, duration: 0.5 }, "-=0.2")
+
+            // 2. Logo emerges with a spring scale
+            .to("#logoContainer", { opacity: 1, scale: 1, duration: 1.2, ease: "elastic.out(1, 0.5)" }, "-=0.3")
+
+            // 3. Glow pulses
+            .to("#glow", { opacity: 1, scale: 2.5, duration: 1.5, ease: "power2.out" }, "-=1")
+            .to("#glow", { opacity: 0.8, scale: 2, duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut" }, "-=0.5")
+
+            // 4. Logo continuous subtle float
+            .to("#logo", { y: -10, duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut" }, "-=1")
+
+            // 5. Tagline fades up
+            .to("#tagline", { opacity: 1, y: 0, duration: 1, ease: "back.out(1.5)" }, "-=1.5");
+
+    </script>
+</body>
+
+</html>
