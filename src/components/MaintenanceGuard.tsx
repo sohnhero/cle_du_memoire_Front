@@ -6,14 +6,20 @@ import { usePathname } from 'next/navigation';
 import MaintenancePage from './MaintenancePage';
 
 export default function MaintenanceGuard({ children }: { children: React.ReactNode }) {
-    const { config, user } = useAuth();
+    const { config, user, settingsLoading } = useAuth();
     const pathname = usePathname();
 
     const isMaintenance = config.maintenanceMode === 'true';
     const isAdmin = user?.role === 'ADMIN';
     const isLoginPage = pathname === '/login';
 
-    // Allow access to login page even in maintenance
+    // Wait for settings to load to avoid "flashing" the app
+    if (settingsLoading) {
+        return null;
+    }
+
+    // Block non-admins if maintenance is active
+    // Allow access to login page for everyone (admins need it to log in)
     if (isMaintenance && !isAdmin && !isLoginPage) {
         return <MaintenancePage />;
     }

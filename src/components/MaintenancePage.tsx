@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Hammer, Envelope, Phone, Globe } from '@phosphor-icons/react';
+import { Hammer, Envelope, Phone, Globe, ArrowRight } from '@phosphor-icons/react';
+import Link from 'next/link';
 import Logo from './Logo';
 
 export default function MaintenancePage() {
@@ -45,6 +46,16 @@ export default function MaintenancePage() {
                         </div>
                         <span className="text-sm text-text-muted">+221 77 000 00 00</span>
                     </div>
+                </div>
+
+                <div className="mt-10 w-full">
+                    <Link
+                        href="/login"
+                        className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+                    >
+                        Accès Administration
+                        <ArrowRight className="w-4 h-4" weight="bold" />
+                    </Link>
                 </div>
 
                 <div className="mt-10 pt-6 border-t border-border w-full flex justify-center gap-8">
