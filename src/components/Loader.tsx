@@ -125,7 +125,7 @@ function LoaderContent() {
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         className="relative z-10"
                     >
-                        <img src="/logo.png" alt="Loading..." className="w-28 h-auto drop-shadow-2xl object-contain" />
+                        <img src="/logo.png" alt="Loading..." className="w-38 h-auto drop-shadow-2xl object-contain" />
                     </motion.div>
                 </div>
             </div>
