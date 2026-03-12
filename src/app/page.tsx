@@ -563,7 +563,7 @@ function Services() {
           viewport={{ once: true, amount: 0.1 }}
           className="max-w-3xl mx-auto text-center mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
-          <p className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
+          <p className="font-title text-accent text-xl font-semibold tracking-wide uppercase mb-4">Services</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
             Tout ce qu&apos;il faut pour réussir
           </h2>
@@ -581,16 +581,18 @@ function Services() {
               transition={{ delay: index * 0.05, duration: 0.4 }}
               className={`group relative opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform] ${service.span}`}
             >
-              <div className="h-full bg-white rounded-2xl p-8 border border-border/50 hover:border-border transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                <div className="flex items-start justify-between mb-8">
-                  <BrandIcon icon={service.icon} size={48} className="group-hover:scale-105 transition-transform duration-300" />
-                  <span className="text-xs text-text-muted font-mono">{service.num}</span>
+              <div className="relative h-full bg-white rounded-2xl p-8 border border-border/50 transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-5px_var(--color-accent)]/10 group-hover:border-accent/30 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none" />
+
+                <div className="relative z-10 flex items-start justify-between mb-8">
+                  <BrandIcon icon={service.icon} size={48} className="group-hover:scale-110 group-hover:drop-shadow-sm transition-all duration-500" />
+                  <span className="text-xs text-text-muted font-mono group-hover:text-accent transition-colors duration-500">{service.num}</span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-primary mb-2">
+                <h3 className="relative z-10 text-lg font-semibold text-primary mb-2 group-hover:text-accent transition-colors duration-500">
                   {service.title}
                 </h3>
-                <p className="text-text-secondary text-sm leading-relaxed">
+                <p className="relative z-10 text-text-secondary text-sm leading-relaxed">
                   {service.description}
                 </p>
               </div>
@@ -675,7 +677,7 @@ function PacksSection() {
           viewport={{ once: true, amount: 0.1 }}
           className="text-center max-w-3xl mx-auto mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
-          <p className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4">Tarifs</p>
+          <p className="font-title text-accent text-xl font-semibold tracking-wide uppercase mb-4">Tarifs</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
             Des formules claires, sans surprise
           </h2>
@@ -800,7 +802,7 @@ function HowItWorks() {
             <motion.p
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
-              className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+              className="font-title text-accent text-xl font-semibold tracking-wide uppercase mb-4 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               Processus
             </motion.p>
@@ -942,7 +944,7 @@ function Testimonials() {
           viewport={{ once: true, amount: 0.1 }}
           className="text-center max-w-3xl mx-auto opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
-          <p className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4">Témoignages</p>
+          <p className="font-title text-accent text-xl font-semibold tracking-wide uppercase mb-4">Témoignages</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
             Ils nous font confiance
           </h2>
