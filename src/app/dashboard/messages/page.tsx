@@ -30,18 +30,12 @@ export default function MessagesPage() {
 
     useEffect(() => {
         loadConversations();
-        // Poll conversations every 15 seconds for dynamic updates
-        const interval = setInterval(loadConversations, 15000);
-        return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
         if (selectedConvId) {
             setTentativePartner(null);
             loadMessages(selectedConvId);
-            // Poll messages every 10 seconds when a conversation is active
-            const msgInterval = setInterval(() => loadMessages(selectedConvId), 10000);
-            return () => clearInterval(msgInterval);
         }
     }, [selectedConvId]);
 
