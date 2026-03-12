@@ -265,12 +265,14 @@ function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${isActive
+                  className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 relative overflow-hidden group ${isActive
                     ? 'text-accent bg-accent/10'
-                    : 'text-text-secondary hover:text-primary hover:bg-bg-light'
+                    : 'text-text-secondary hover:text-accent hover:bg-accent/10'
                     }`}
                 >
-                  {link.label}
+                  <span className="relative z-10">{link.label}</span>
+                  {/* Subtle active/hover bottom indicator */}
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-accent transform origin-left transition-transform duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
                 </a>
               );
             })}
@@ -280,7 +282,7 @@ function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             <Link
               href="/login"
-              className="px-4 py-2 rounded-lg text-[13px] font-medium text-text-secondary hover:text-primary transition-colors"
+              className="px-4 py-2 rounded-lg text-[13px] font-medium text-text-secondary hover:text-accent hover:bg-accent/10 transition-all duration-200"
             >
               Connexion
             </Link>
@@ -317,9 +319,9 @@ function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all ${isActive
+                    className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${isActive
                       ? 'text-accent bg-accent/10'
-                      : 'text-text-secondary hover:text-primary hover:bg-bg-light'
+                      : 'text-text-secondary hover:text-accent hover:bg-accent/10'
                       }`}
                   >
                     {link.label}
