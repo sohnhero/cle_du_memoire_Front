@@ -268,8 +268,6 @@ summary {
     position: relative;
     overflow: hidden;
     background: transparent;
-    color: white;
-    /* White text for visibility on dark backgrounds */
     font-weight: 600;
     padding: 12px 28px;
     border-radius: 10px;

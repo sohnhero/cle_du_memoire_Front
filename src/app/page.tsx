@@ -288,9 +288,9 @@ function Navbar() {
             </Link>
             <Link
               href="/register"
-              className="bg-accent text-primary px-5 py-2 rounded-lg text-[13px] font-semibold hover:bg-accent-dark transition-all duration-200 shadow-sm"
+              className="btn-liquid text-primary hover:text-primary-dark py-2 px-6 text-[13px] font-semibold shadow-sm"
             >
-              Commencer
+              <span>Commencer</span>
             </Link>
           </div>
 
@@ -468,7 +468,7 @@ function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-12">
-            <Link href="/register" className="btn-liquid py-3 px-8 text-sm">
+            <Link href="/register" className="btn-liquid text-white hover:text-primary-dark py-3 px-8 text-sm">
               <span>Commencer gratuitement</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -624,20 +624,18 @@ function PacksSection() {
       dark: false,
     },
     {
-      name: 'Complet',
-      price: '150 000',
+      name: 'Soutenance',
+      price: '65 000',
       period: 'CFA',
-      installments: '100 000 + 50 000 CFA',
-      description: 'Pour un accompagnement de A à Z',
+      description: 'Pour une soutenance professionnelle',
       features: [
-        'Tout le Pack Démarrage inclus',
-        'Suivi complet de la rédaction',
-        'Lecture approfondie et corrections',
-        'PowerPoint professionnel',
+        'PowerPoint esthétique et structuré',
         '5 séances de simulation soutenance',
+        'Préparation aux questions du jury',
       ],
-      popular: true,
-      dark: true,
+      installments: null,
+      popular: false,
+      dark: false,
     },
     {
       name: 'Rédaction',
@@ -654,18 +652,20 @@ function PacksSection() {
       dark: false,
     },
     {
-      name: 'Soutenance',
-      price: '65 000',
+      name: 'Complet',
+      price: '150 000',
       period: 'CFA',
-      description: 'Pour une soutenance professionnelle',
+      installments: '100 000 + 50 000 CFA',
+      description: 'Pour un accompagnement de A à Z',
       features: [
-        'PowerPoint esthétique et structuré',
+        'Tout le Pack Démarrage inclus',
+        'Suivi complet de la rédaction',
+        'Lecture approfondie et corrections',
+        'PowerPoint professionnel',
         '5 séances de simulation soutenance',
-        'Préparation aux questions du jury',
       ],
-      installments: null,
-      popular: false,
-      dark: false,
+      popular: true,
+      dark: true,
     },
   ];
 
@@ -1046,7 +1046,7 @@ function CTASection() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/register" className="btn-liquid py-4 px-12 text-sm font-bold shadow-2xl shadow-accent/20 hover:scale-105 transition-transform">
+          <Link href="/register" className="btn-liquid text-white hover:text-primary-dark py-4 px-12 text-sm font-bold shadow-2xl shadow-accent/20 hover:scale-105 transition-transform">
             <span>S&apos;inscrire maintenant</span>
             <ArrowRight className="w-5 h-5 ml-1" />
           </Link>

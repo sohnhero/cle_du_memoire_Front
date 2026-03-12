@@ -188,7 +188,7 @@ export default function SettingsPage() {
         setPlatform({ ...platform, [key]: newVal });
 
         if (key === 'maintenanceMode') {
-            toast(newVal === 'true' ? '⚠️ Mode maintenance activé' : '✅ Plateforme accessible', {
+            toast(newVal === 'true' ? 'Mode maintenance activé' : 'Plateforme accessible', {
                 icon: newVal === 'true' ? '⚠️' : '✅',
             });
         }

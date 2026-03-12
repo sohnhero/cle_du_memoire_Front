@@ -239,18 +239,19 @@ export default function ResourcesPage() {
             />
 
             <AnimatePresence>
-                {isAddModalOpen && <AddResourceModal onClose={() => setIsAddModalOpen(false)} onAdd={loadResources} />}
-                {editingResource && <EditResourceModal resource={editingResource} onClose={() => setEditingResource(null)} onUpdate={loadResources} />}
-                <ConfirmModal
-                    isOpen={!!deleteConfirm}
-                    onClose={() => setDeleteConfirm(null)}
-                    onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)}
-                    title="Supprimer la ressource"
-                    message="Voulez-vous vraiment supprimer cette ressource ? Cette action est irréversible."
-                    confirmText="Supprimer"
-                    variant="danger"
-                />
+                {isAddModalOpen && <AddResourceModal key="add-modal" onClose={() => setIsAddModalOpen(false)} onAdd={loadResources} />}
+                {editingResource && <EditResourceModal key="edit-modal" resource={editingResource} onClose={() => setEditingResource(null)} onUpdate={loadResources} />}
             </AnimatePresence>
+
+            <ConfirmModal
+                isOpen={!!deleteConfirm}
+                onClose={() => setDeleteConfirm(null)}
+                onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)}
+                title="Supprimer la ressource"
+                message="Voulez-vous vraiment supprimer cette ressource ? Cette action est irréversible."
+                confirmText="Supprimer"
+                variant="danger"
+            />
         </div>
     );
 }
@@ -296,12 +297,12 @@ function EditResourceModal({ resource, onClose, onUpdate }: { resource: any, onC
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-semibold text-primary mb-1.5">Titre</label>
-                        <input type="text" value={title} onChange={e => setTitle(e.target.value)} required className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm" />
+                        <input type="text" value={title || ''} onChange={e => setTitle(e.target.value)} required className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm" />
                     </div>
 
                     <div>
                         <label className="block text-sm font-semibold text-primary mb-1.5">Catégorie</label>
-                        <select value={category} onChange={e => setCategory(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm appearance-none cursor-pointer">
+                        <select value={category || 'GENERAL'} onChange={e => setCategory(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm appearance-none cursor-pointer">
                             <option value="GENERAL">Général</option>
                             <option value="GUIDES">Guides méthodologiques</option>
                             <option value="TEMPLATES">Templates (Gabarits)</option>
@@ -311,13 +312,13 @@ function EditResourceModal({ resource, onClose, onUpdate }: { resource: any, onC
 
                     <div>
                         <label className="block text-sm font-semibold text-primary mb-1.5">Description</label>
-                        <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm resize-none" />
+                        <textarea value={description || ''} onChange={e => setDescription(e.target.value)} rows={3} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm resize-none" />
                     </div>
 
                     {resource.fileType === 'LINK' && (
                         <div>
                             <label className="block text-sm font-semibold text-primary mb-1.5">URL du lien</label>
-                            <input type="url" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} required className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm" />
+                            <input type="url" value={linkUrl || ''} onChange={e => setLinkUrl(e.target.value)} required className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm" />
                         </div>
                     )}
 
@@ -385,12 +386,12 @@ function AddResourceModal({ onClose, onAdd }: { onClose: () => void, onAdd: () =
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-semibold text-primary mb-1.5">Titre</label>
-                        <input type="text" value={title} onChange={e => setTitle(e.target.value)} required placeholder="Ex: Modèle de présentation" className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm" />
+                        <input type="text" value={title || ''} onChange={e => setTitle(e.target.value)} required placeholder="Ex: Modèle de présentation" className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm" />
                     </div>
 
                     <div>
                         <label className="block text-sm font-semibold text-primary mb-1.5">Catégorie</label>
-                        <select value={category} onChange={e => setCategory(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm appearance-none cursor-pointer">
+                        <select value={category || 'GENERAL'} onChange={e => setCategory(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm appearance-none cursor-pointer">
                             <option value="GENERAL">Général</option>
                             <option value="GUIDES">Guides méthodologiques</option>
                             <option value="TEMPLATES">Templates (Gabarits)</option>
@@ -400,7 +401,7 @@ function AddResourceModal({ onClose, onAdd }: { onClose: () => void, onAdd: () =
 
                     <div>
                         <label className="block text-sm font-semibold text-primary mb-1.5">Description (optionnel)</label>
-                        <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Brève description..." rows={3} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm resize-none" />
+                        <textarea value={description || ''} onChange={e => setDescription(e.target.value)} placeholder="Brève description..." rows={3} className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm resize-none" />
                     </div>
 
                     <div className="pt-2">
@@ -410,12 +411,12 @@ function AddResourceModal({ onClose, onAdd }: { onClose: () => void, onAdd: () =
                         </div>
 
                         {isLink ? (
-                            <div>
+                            <div key="link-input-group">
                                 <label className="block text-sm font-semibold text-primary mb-1.5">URL du lien</label>
-                                <input type="url" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} required placeholder="https://..." className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm" />
+                                <input type="url" value={linkUrl || ''} onChange={e => setLinkUrl(e.target.value)} required placeholder="https://..." className="w-full px-4 py-2.5 rounded-xl border border-border-light bg-bg-light focus:bg-white focus:border-accent outline-none transition-all text-sm" />
                             </div>
                         ) : (
-                            <div>
+                            <div key="file-input-group">
                                 <label className="block text-sm font-semibold text-primary mb-1.5">Fichier</label>
                                 <input type="file" ref={fileInputRef} onChange={e => setFile(e.target.files?.[0] || null)} required className="hidden" />
                                 <div onClick={() => fileInputRef.current?.click()} className="cursor-pointer border-2 border-dashed border-border-light bg-bg-light hover:bg-accent/5 hover:border-accent/30 transition-colors rounded-xl p-4 text-center">
