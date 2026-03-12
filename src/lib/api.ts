@@ -180,6 +180,29 @@ class ApiClient {
     }
 
     // Admin
+    async getStatsAdmin() {
+        return this.request<{ totalUsers: number, activeMemoires: number, completedMemoires: number, activePacks: number, users: any[] }>('/users/stats/admin');
+    }
+
+    // Export
+    async exportMemoireToPDF(payload: any): Promise<Blob> {
+        const token = this.getToken();
+        const response = await fetch(`${API_URL}/export`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` })
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur lors de l'exportation`);
+        }
+
+        return await response.blob();
+    }
+
     async getAdminStats() {
         return this.request<{ stats: any; recentUsers: any[]; recentActivity: any[] }>('/admin/stats');
     }
