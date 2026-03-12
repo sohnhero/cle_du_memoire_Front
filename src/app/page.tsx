@@ -466,8 +466,8 @@ function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-12">
-            <Link href="/register" className="btn-primary py-3 px-8 text-sm">
-              Commencer gratuitement
+            <Link href="/register" className="btn-liquid py-3 px-8 text-sm">
+              <span>Commencer gratuitement</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a href="#services" className="btn-outline py-3 px-8 text-sm">
@@ -1042,8 +1042,8 @@ function CTASection() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/register" className="btn-primary py-4 px-12 text-sm font-bold shadow-2xl shadow-accent/20 hover:scale-105 transition-transform">
-            S&apos;inscrire maintenant
+          <Link href="/register" className="btn-liquid py-4 px-12 text-sm font-bold shadow-2xl shadow-accent/20 hover:scale-105 transition-transform">
+            <span>S&apos;inscrire maintenant</span>
             <ArrowRight className="w-5 h-5 ml-1" />
           </Link>
           <a href="#contact" className="text-white/60 hover:text-white text-sm font-semibold transition-colors px-8 py-4">
