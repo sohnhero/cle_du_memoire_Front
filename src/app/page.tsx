@@ -248,7 +248,7 @@ function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white border-b border-border/10 shadow-sm"
     >
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           <a
             href="#"
@@ -434,12 +434,12 @@ function Hero() {
         ))}
       </motion.div>
 
-      <div className="relative max-w-6xl mx-auto px-6 py-20 lg:py-32 w-full z-10">
+      <div className="relative max-w-7xl mx-auto px-6 py-20 lg:py-32 w-full z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="max-w-xl"
+          className="max-w-3xl"
         >
           {/* Badge */}
           <motion.div
@@ -460,7 +460,7 @@ function Hero() {
             un expert dédié
           </h1>
 
-          <p className="text-base sm:text-lg text-white/40 max-w-lg mb-10 leading-relaxed font-light">
+          <p className="text-base sm:text-lg text-white/40 max-w-xl mb-10 leading-relaxed font-light">
             Accompagnement personnalisé du choix du sujet à la soutenance.
             Plus de 500 étudiants nous font déjà confiance.
           </p>
@@ -555,11 +555,11 @@ function Services() {
 
   return (
     <section id="services" className="py-20 lg:py-32 bg-bg-light isolate perspective-[1000px]">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
         <motion.div
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="max-w-2xl mx-auto text-center mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="max-w-3xl mx-auto text-center mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -667,11 +667,11 @@ function PacksSection() {
 
   return (
     <section id="packs" className="py-20 lg:py-32 bg-white relative overflow-hidden isolate perspective-[1000px]">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
         <motion.div
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="text-center max-w-2xl mx-auto mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="text-center max-w-3xl mx-auto mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Tarifs</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -682,7 +682,7 @@ function PacksSection() {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-7xl mx-auto">
           {packs.map((pack, index) => (
             <motion.div
               key={pack.name}
@@ -794,7 +794,7 @@ function HowItWorks() {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="mb-20 flex flex-col items-center justify-center gap-8 text-center">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-3xl mx-auto">
             <motion.p
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
@@ -934,11 +934,11 @@ function Testimonials() {
 
   return (
     <section id="testimonials" className="section bg-white relative overflow-hidden isolate perspective-[1000px]">
-      <div className="max-w-6xl mx-auto px-6 mb-16">
+      <div className="max-w-7xl mx-auto px-6 mb-16">
         <motion.div
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          className="text-center max-w-2xl mx-auto opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+          className="text-center max-w-3xl mx-auto opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
           <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Témoignages</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -1023,7 +1023,7 @@ function CTASection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.8 }}
-        className="relative max-w-4xl mx-auto px-6 text-center opacity-0 translate-y-6 lg:translate-y-8 transform-gpu backface-hidden will-change-[opacity,transform]"
+        className="relative max-w-5xl mx-auto px-6 text-center opacity-0 translate-y-6 lg:translate-y-8 transform-gpu backface-hidden will-change-[opacity,transform]"
       >
         {/* Social Proof Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-accent text-xs font-bold mb-8 tracking-widest uppercase">
@@ -1036,7 +1036,7 @@ function CTASection() {
           en diplôme d&apos;excellence.
         </h2>
 
-        <p className="text-white/50 text-lg sm:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+        <p className="text-white/50 text-lg sm:text-xl mb-12 max-w-3xl mx-auto leading-relaxed font-light">
           Ne laissez pas le stress de la rédaction freiner votre carrière.
           Profitez dès aujourd&apos;hui de l&apos;expertise premium de nos accompagnateurs dédiés.
         </p>
@@ -1081,7 +1081,7 @@ function Contact() {
   const { settings } = useGlobalSettings();
   return (
     <section id="contact" className="section relative bg-bg-light overflow-hidden text-primary border-t border-border-light isolate perspective-[1000px] py-16 sm:py-24 lg:py-32">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
         {/* Header */}
         <motion.div
@@ -1234,7 +1234,7 @@ function Footer() {
   const { settings } = useGlobalSettings();
   return (
     <footer className="bg-primary text-white pt-16 pb-8">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div>
             <Logo className="w-40 h-auto mb-5" variant="full" monochrome />
