@@ -446,7 +446,7 @@ function Hero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/60 text-[13px] mb-8"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/60 text-[13px] mb-8 font-title"
           >
             <SenegalFlag className="shrink-0" />
             Plateforme N°1 au Sénégal
@@ -561,7 +561,7 @@ function Services() {
           viewport={{ once: true, amount: 0.1 }}
           className="max-w-3xl mx-auto text-center mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
-          <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
+          <p className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4">Services</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
             Tout ce qu&apos;il faut pour réussir
           </h2>
@@ -673,7 +673,7 @@ function PacksSection() {
           viewport={{ once: true, amount: 0.1 }}
           className="text-center max-w-3xl mx-auto mb-16 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
-          <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Tarifs</p>
+          <p className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4">Tarifs</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
             Des formules claires, sans surprise
           </h2>
@@ -798,7 +798,7 @@ function HowItWorks() {
             <motion.p
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
-              className="text-accent text-sm font-semibold tracking-wide uppercase mb-4 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
+              className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4 opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
             >
               Processus
             </motion.p>
@@ -940,7 +940,7 @@ function Testimonials() {
           viewport={{ once: true, amount: 0.1 }}
           className="text-center max-w-3xl mx-auto opacity-0 translate-y-4 lg:translate-y-6 transform-gpu backface-hidden will-change-[opacity,transform]"
         >
-          <p className="text-accent text-sm font-semibold tracking-wide uppercase mb-4">Témoignages</p>
+          <p className="font-title text-accent text-sm font-semibold tracking-wide uppercase mb-4">Témoignages</p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6">
             Ils nous font confiance
           </h2>
@@ -1026,7 +1026,7 @@ function CTASection() {
         className="relative max-w-5xl mx-auto px-6 text-center opacity-0 translate-y-6 lg:translate-y-8 transform-gpu backface-hidden will-change-[opacity,transform]"
       >
         {/* Social Proof Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-accent text-xs font-bold mb-8 tracking-widest uppercase">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.1] text-accent text-xs font-bold mb-8 tracking-widest uppercase font-title">
           VOTRE RÉUSSITE COMMENCE ICI
         </div>
 

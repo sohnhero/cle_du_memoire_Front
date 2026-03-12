@@ -1,18 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Sora:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
-/* ── Typography ── */
-body {
-  font-family: var(--font-poppins, 'Poppins'), sans-serif;
+/* ── Typography Enforcement ── */
+@layer base {
+  body {
+    font-family: var(--font-sora, 'Sora'), system-ui, sans-serif;
+    @apply antialiased text-primary bg-bg-light;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-poppins, 'Poppins'), system-ui, sans-serif !important;
+    @apply tracking-tight;
+  }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-sora, 'Sora'), sans-serif;
+/* Utilities for explicit overrides */
+.font-title {
+  font-family: var(--font-poppins, 'Poppins'), system-ui, sans-serif !important;
+}
+
+.font-body {
+  font-family: var(--font-sora, 'Sora'), system-ui, sans-serif !important;
 }
 
 /* Global: pointer cursor on all interactive elements */
@@ -73,8 +86,9 @@ summary {
   --color-border-light: #f1f5f9;
 
   /* ── Typography ── */
-  --font-heading: 'Poppins', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-poppins: var(--font-poppins, 'Poppins'), system-ui, sans-serif;
+  --font-sora: var(--font-sora, 'Sora'), system-ui, sans-serif;
+  --font-sans: var(--font-sora, 'Sora'), system-ui, sans-serif;
 }
 
 /* ============================================================
@@ -107,7 +121,6 @@ summary {
   }
 
   body {
-    font-family: var(--font-body);
     color: var(--color-text-primary);
     background: var(--color-bg-light);
     -webkit-font-smoothing: antialiased;
@@ -123,8 +136,7 @@ summary {
   h4,
   h5,
   h6 {
-    font-family: var(--font-heading);
-    font-weight: 700;
+    @apply font-semibold;
     line-height: 1.1;
     letter-spacing: -0.02em;
   }

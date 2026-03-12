@@ -84,7 +84,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`scroll-smooth ${poppins.variable} ${sora.variable}`} suppressHydrationWarning>
-      <body className={poppins.className}>
+      <body className="font-body">
         <AuthProvider>
           <MaintenanceGuard>
             {children}
