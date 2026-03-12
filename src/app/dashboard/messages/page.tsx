@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import {
-    ChatCircle as MessageCircle, PaperPlaneRight as Send, MagnifyingGlass as Search, DotsThreeVertical as MoreVertical, Phone, Video, Paperclip, Smiley as Smile, Check, Checks as CheckCheck, CaretLeft as ChevronLeft, FileText, X, Plus, UserPlus, Info
+    ChatCircle as MessageCircle, PaperPlaneRight as Send, MagnifyingGlass as Search, DotsThreeVertical as MoreVertical, Phone, Video, Paperclip, Smiley as Smile, Check, Checks as CheckCheck, CaretLeft as ChevronLeft, FileText, X, Plus, UserPlus, Info, Lock, Warning
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -30,12 +30,18 @@ export default function MessagesPage() {
 
     useEffect(() => {
         loadConversations();
+        // Poll conversations every 15 seconds for dynamic updates
+        const interval = setInterval(loadConversations, 15000);
+        return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
         if (selectedConvId) {
             setTentativePartner(null);
             loadMessages(selectedConvId);
+            // Poll messages every 10 seconds when a conversation is active
+            const msgInterval = setInterval(() => loadMessages(selectedConvId), 10000);
+            return () => clearInterval(msgInterval);
         }
     }, [selectedConvId]);
 
@@ -160,6 +166,7 @@ export default function MessagesPage() {
     };
 
     const activeParticipant = tentativePartner || getOtherParticipant(currentConv);
+    const isActiveCoach = currentConv?.isActiveCoach !== false; // default true for non-coach convos
 
     return (
         <div className="h-[calc(100dvh-4rem)] sm:h-[calc(100vh-8rem)] -m-3 sm:m-0 overflow-hidden flex flex-col bg-white sm:bg-transparent">
@@ -264,6 +271,9 @@ export default function MessagesPage() {
                                                     {conv.unreadCount}
                                                 </span>
                                             )}
+                                            {!conv.isActiveCoach && (
+                                                <Lock className="w-3.5 h-3.5 text-text-muted flex-shrink-0 mt-1" weight="fill" />
+                                            )}
                                         </button>
                                     );
                                 })}
@@ -357,51 +367,62 @@ export default function MessagesPage() {
                             </div>
 
                             {/* Input */}
-                            <div className="px-3 sm:px-6 py-2 sm:py-4 border-t border-border-light bg-white">
-                                {attachment && (
-                                    <div className="mb-2 flex items-center justify-between gap-2 bg-accent/10 border border-accent/20 text-accent px-2 py-1.5 rounded-lg text-[10px] sm:text-xs font-medium w-fit max-w-sm">
-                                        <div className="flex items-center gap-2 truncate">
-                                            <Paperclip className="w-3.5 h-3.5 flex-shrink-0" />
-                                            <span className="truncate">{attachment.name}</span>
+                            {isActiveCoach ? (
+                                <div className="px-3 sm:px-6 py-2 sm:py-4 border-t border-border-light bg-white">
+                                    {attachment && (
+                                        <div className="mb-2 flex items-center justify-between gap-2 bg-accent/10 border border-accent/20 text-accent px-2 py-1.5 rounded-lg text-[10px] sm:text-xs font-medium w-fit max-w-sm">
+                                            <div className="flex items-center gap-2 truncate">
+                                                <Paperclip className="w-3.5 h-3.5 flex-shrink-0" />
+                                                <span className="truncate">{attachment.name}</span>
+                                            </div>
+                                            <button onClick={() => {
+                                                setAttachment(null);
+                                                if (fileInputRef.current) fileInputRef.current.value = '';
+                                            }} className="hover:bg-accent/20 p-1 rounded-md transition-colors flex-shrink-0">
+                                                <X className="w-3 h-3" />
+                                            </button>
                                         </div>
-                                        <button onClick={() => {
-                                            setAttachment(null);
-                                            if (fileInputRef.current) fileInputRef.current.value = '';
-                                        }} className="hover:bg-accent/20 p-1 rounded-md transition-colors flex-shrink-0">
-                                            <X className="w-3 h-3" />
+                                    )}
+                                    <div className="flex items-center gap-1.5 sm:gap-3 max-w-4xl mx-auto">
+                                        <button onClick={() => fileInputRef.current?.click()} className="p-1.5 sm:p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative flex-shrink-0">
+                                            <Paperclip className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+                                        </button>
+                                        <input type="file" ref={fileInputRef} onChange={(e) => setAttachment(e.target.files?.[0] || null)} className="hidden" />
+                                        <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-lg sm:rounded-xl px-2.5 py-1.5 sm:px-4 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
+                                            <input
+                                                type="text"
+                                                value={newMessage}
+                                                onChange={(e) => setNewMessage(e.target.value)}
+                                                placeholder="Message..."
+                                                className="flex-1 bg-transparent text-[11px] sm:text-sm outline-none text-text-primary"
+                                                onKeyDown={(e) => e.key === 'Enter' && (newMessage.trim() || attachment) && handleSendMessage()}
+                                            />
+                                            <button className="text-text-muted hover:text-primary transition-colors hidden sm:block">
+                                                <Smile className="w-5 h-5" />
+                                            </button>
+                                        </div>
+                                        <button
+                                            onClick={handleSendMessage}
+                                            disabled={!newMessage.trim() && !attachment}
+                                            className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all flex-shrink-0 ${newMessage.trim() || attachment
+                                                ? 'bg-accent text-primary hover:bg-accent-dark shadow-lg shadow-accent/20'
+                                                : 'bg-bg-light text-text-muted cursor-not-allowed'
+                                                }`}
+                                        >
+                                            <Send className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                                         </button>
                                     </div>
-                                )}
-                                <div className="flex items-center gap-1.5 sm:gap-3 max-w-4xl mx-auto">
-                                    <button onClick={() => fileInputRef.current?.click()} className="p-1.5 sm:p-2 rounded-xl hover:bg-bg-light text-text-muted transition-colors relative flex-shrink-0">
-                                        <Paperclip className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-                                    </button>
-                                    <input type="file" ref={fileInputRef} onChange={(e) => setAttachment(e.target.files?.[0] || null)} className="hidden" />
-                                    <div className="flex-1 flex items-center gap-2 bg-bg-light rounded-lg sm:rounded-xl px-2.5 py-1.5 sm:px-4 sm:py-3 border border-border-light focus-within:border-accent/50 focus-within:ring-2 focus-within:ring-accent/10 transition-all">
-                                        <input
-                                            type="text"
-                                            value={newMessage}
-                                            onChange={(e) => setNewMessage(e.target.value)}
-                                            placeholder="Message..."
-                                            className="flex-1 bg-transparent text-[11px] sm:text-sm outline-none text-text-primary"
-                                            onKeyDown={(e) => e.key === 'Enter' && (newMessage.trim() || attachment) && handleSendMessage()}
-                                        />
-                                        <button className="text-text-muted hover:text-primary transition-colors hidden sm:block">
-                                            <Smile className="w-5 h-5" />
-                                        </button>
-                                    </div>
-                                    <button
-                                        onClick={handleSendMessage}
-                                        disabled={!newMessage.trim() && !attachment}
-                                        className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all flex-shrink-0 ${newMessage.trim() || attachment
-                                            ? 'bg-accent text-primary hover:bg-accent-dark shadow-lg shadow-accent/20'
-                                            : 'bg-bg-light text-text-muted cursor-not-allowed'
-                                            }`}
-                                    >
-                                        <Send className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
-                                    </button>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="px-3 sm:px-6 py-3 sm:py-4 border-t border-border-light bg-warning/5">
+                                    <div className="flex items-center gap-3 justify-center max-w-lg mx-auto">
+                                        <Warning className="w-5 h-5 text-warning flex-shrink-0" weight="fill" />
+                                        <p className="text-xs sm:text-sm text-text-secondary font-medium">
+                                            Cet accompagnateur ne vous est plus assigné. Vous pouvez consulter l'historique, mais l'envoi de messages est désactivé.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </>
                     ) : (
                         <div className="flex-1 flex items-center justify-center text-center bg-bg-light/30">

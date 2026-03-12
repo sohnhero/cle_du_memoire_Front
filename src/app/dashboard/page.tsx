@@ -58,6 +58,16 @@ function StudentDashboard() {
             }
         }
         loadDashboardData();
+
+        // Poll memoire every 30s for dynamic coach assignment updates
+        const coachPoll = setInterval(async () => {
+            try {
+                const res = await api.getMyMemoire();
+                if (res?.memoire) setMemoire(res.memoire);
+            } catch { }
+        }, 30000);
+
+        return () => clearInterval(coachPoll);
     }, [user?.id]);
 
     const phasesList = [
