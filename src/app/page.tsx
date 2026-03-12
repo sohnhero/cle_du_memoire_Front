@@ -460,9 +460,9 @@ function Hero() {
             un expert dédié
           </h1>
 
-          <p className="text-base sm:text-lg text-white/40 max-w-xl mb-10 leading-relaxed font-light">
+          <p className="text-base sm:text-lg text-white/60 max-w-xl mb-10 leading-relaxed font-light">
             Accompagnement personnalisé du choix du sujet à la soutenance.
-            Plus de 500 étudiants nous font déjà confiance.
+            Plus de 50 étudiants nous font déjà confiance.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-12">
@@ -489,7 +489,7 @@ function Hero() {
                 transition={{ delay: 0.5 + i * 0.1 }}
               >
                 <div className="text-2xl font-bold text-white">{stat.value}</div>
-                <div className="text-xs text-white/30 mt-0.5 uppercase tracking-wider">{stat.label}</div>
+                <div className="text-xs text-white/60 mt-0.5 uppercase tracking-wider">{stat.label}</div>
               </motion.div>
             ))}
           </div>
