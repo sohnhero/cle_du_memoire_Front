@@ -189,12 +189,12 @@ function StudentDashboard() {
                                     </div>
 
                                     {/* Mini Stepper Dots */}
-                                    <div className="flex justify-between items-center px-1">
+                                    <div className="flex justify-between items-center px-1 relative h-6">
                                         {phasesList.map((item, index) => {
                                             const isPast = index < currentPhaseIndex;
                                             const isCurrent = index === currentPhaseIndex;
                                             return (
-                                                <div key={item.id} className="relative group cursor-help">
+                                                <div key={item.id} className="relative group/dot cursor-help w-3 h-3 flex items-center justify-center">
                                                     <motion.div
                                                         initial={{ scale: 0 }}
                                                         animate={{ scale: isCurrent ? 1.3 : 1 }}
@@ -204,9 +204,11 @@ function StudentDashboard() {
                                                                 'bg-border'
                                                             }`}
                                                     />
-                                                    {/* Tooltip on hover */}
-                                                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-text-primary text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-20">
+                                                    {/* Tooltip on hover - isolated using named group to avoid parent card conflict */}
+                                                    <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[11px] font-medium py-1.5 px-3 rounded-md opacity-0 group-hover/dot:opacity-100 pointer-events-none transition-all duration-200 whitespace-nowrap z-50 shadow-lg translate-y-2 group-hover/dot:translate-y-0">
                                                         {item.label}
+                                                        {/* Tooltip Arrow */}
+                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-primary" />
                                                     </div>
                                                 </div>
                                             )
