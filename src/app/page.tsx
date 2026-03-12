@@ -1167,8 +1167,8 @@ function Contact() {
               </div>
 
               <div className="flex justify-end">
-                <button type="submit" className="bg-primary hover:bg-primary-dark text-white rounded-xl py-3 sm:py-4 px-8 sm:px-10 font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto">
-                  Envoyer
+                <button type="submit" className="btn-liquid btn-liquid-blue py-3 sm:py-4 px-8 sm:px-10 font-bold text-sm shadow-lg w-full sm:w-auto">
+                  <span>Envoyer</span>
                 </button>
               </div>
             </form>

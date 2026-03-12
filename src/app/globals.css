@@ -326,6 +326,22 @@ summary {
     transform: translateY(0);
   }
 
+  /* Blue Variant */
+  .btn-liquid-blue {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .btn-liquid-blue::before {
+    background: var(--color-primary);
+  }
+
+  .btn-liquid-blue:hover {
+    color: white;
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 6px 20px rgba(26, 54, 93, 0.3);
+  }
+
   .btn-outline {
     background: transparent;
     color: white;
