@@ -47,10 +47,10 @@ class ApiClient {
     }
 
     // Auth
-    async login(email: string, password: string) {
+    async login(email: string, password: string, rememberMe = false) {
         return this.request<{ user: any; token: string; refreshToken: string }>('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password, rememberMe }),
         });
     }
 
@@ -316,6 +316,20 @@ class ApiClient {
         return this.request<{ message: string }>('/auth/change-password', {
             method: 'POST',
             body: JSON.stringify({ currentPassword, newPassword }),
+        });
+    }
+
+    async forgotPassword(email: string) {
+        return this.request<{ message: string }>('/auth/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+        });
+    }
+
+    async resetPassword(data: { token: string; newPassword: any }) {
+        return this.request<{ message: string }>('/auth/reset-password', {
+            method: 'POST',
+            body: JSON.stringify(data),
         });
     }
 

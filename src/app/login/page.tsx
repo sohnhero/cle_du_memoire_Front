@@ -15,6 +15,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const { login } = useAuth();
@@ -25,7 +26,7 @@ export default function LoginPage() {
         setLoading(true);
         setError('');
         try {
-            await login(email, password);
+            await login(email, password, rememberMe);
             router.push('/dashboard');
         } catch (err: any) {
             setError(err.message || 'Identifiants incorrects');
@@ -154,10 +155,15 @@ export default function LoginPage() {
 
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                                 <label className="flex items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" className="rounded border-border text-accent focus:ring-accent/30" />
+                                    <input
+                                        type="checkbox"
+                                        checked={rememberMe}
+                                        onChange={(e) => setRememberMe(e.target.checked)}
+                                        className="rounded border-border text-accent focus:ring-accent/30"
+                                    />
                                     <span className="text-sm text-text-secondary">Se souvenir de moi</span>
                                 </label>
-                                <a href="#" className="text-sm text-accent hover:text-accent-dark font-medium">Mot de passe oublié ?</a>
+                                <Link href="/forgot-password" title="Mot de passe oublié ?" className="text-sm text-accent hover:text-accent-dark font-medium">Mot de passe oublié ?</Link>
                             </div>
 
                             <button

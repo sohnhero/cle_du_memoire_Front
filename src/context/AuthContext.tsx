@@ -7,7 +7,7 @@ import { User } from '@/types';
 interface AuthContextType {
     user: User | null;
     loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
     register: (data: any) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
@@ -43,8 +43,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     }, []);
 
-    const login = async (email: string, password: string) => {
-        const response = await api.login(email, password);
+    const login = async (email: string, password: string, rememberMe = false) => {
+        const response = await api.login(email, password, rememberMe);
         api.setToken(response.token);
         localStorage.setItem('cdm_refresh', response.refreshToken);
         setUser(response.user);
