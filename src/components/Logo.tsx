@@ -19,7 +19,6 @@ export default function Logo({ className = "h-12", variant = 'full', showGlow = 
             <motion.img
                 src={monochrome ? "/logo-monochrome.png" : "/logo.png"}
                 alt="Clé du Mémoire Logo"
-                whileHover={{ scale: 1.05 }}
                 className="relative z-10 w-full h-full object-contain drop-shadow-xl p-1.5 md:p-2"
             />
         </div>
