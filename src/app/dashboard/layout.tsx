@@ -129,7 +129,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className={`hidden lg:flex flex-col fixed top-0 left-0 h-full bg-primary z-40 overflow-hidden`}
             >
                 {/* Logo */}
-                <div className={`flex items-center justify-center h-20 border-b border-white/10 shrink-0`}>
+                <div className={`flex items-center justify-center h-24 border-b border-white/10 shrink-0`}>
                     <Link href="/dashboard" className="flex items-center justify-center w-full overflow-hidden px-4">
                         <Logo className={`h-auto transition-all duration-300 ${sidebarOpen ? 'w-20' : 'w-12'}`} variant="icon" monochrome />
                     </Link>
@@ -323,7 +323,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             >
                 {/* Top Header - Fixed */}
                 <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-black/[0.04] flex-shrink-0">
-                    <div className="flex items-center justify-between px-4 sm:px-8 h-16 sm:h-20">
+                    <div className="flex items-center justify-between px-4 sm:px-8 h-20 sm:h-24">
                         <div className="flex items-center gap-4">
                             <button onClick={() => setMobileSidebarOpen(true)} className="lg:hidden text-primary p-2">
                                 <Menu className="w-6 h-6" />
