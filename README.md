@@ -1,38 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 Clé du Mémoire - Frontend
 
-## Getting Started
+Bienvenue sur le dépôt du frontend de **Clé du Mémoire**, la plateforme premium d'accompagnement académique au Sénégal.
 
-First, run the development server:
+## ✨ Fonctionnalités
+- **Tableau de Bord Étudiant** : Suivi de la progression, messagerie avec le coach, gestion des documents.
+- **Système de Paiement** : Intégration des méthodes locales (Wave, Orange Money, Free Money) avec validation admin.
+- **Rédaction Assistée** : Espace dédié aux chapitres du mémoire avec retours en temps réel.
+- **Optimisation SEO** : Visibilité maximale sur les moteurs de recherche.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Commencer
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Pré-requis
+- Node.js (version 20+)
+- NPM ou Yarn
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
+1. Clonez le projet
+2. Installez les dépendances :
+   ```bash
+   npm install
+   ```
+3. Copiez le fichier `.env.example` en `.env` et remplissez les variables nécessaires.
+4. Lancez le serveur de développement :
+   ```bash
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔍 SEO & Visibilité
+La plateforme est optimisée de bout en bout pour le référencement naturel. 
 
-## Learn More
+> [!IMPORTANT]
+> Pour une explication complète de la gestion du SEO (Meta tags, JSON-LD, Sitemap, Robots), consultez notre guide dédié :
+> **👉 [Documentation SEO détaillée](./DOCS_SEO.md)**
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠 Technologies
+- **Framework** : [Next.js 15+](https://nextjs.org) (App Router)
+- **Styling** : Tailwind CSS & Framer Motion
+- **Icônes** : Phosphor Icons
+- **Fonts** : Google Fonts (Poppins & Sora)
+- **Email** : Resend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# cle_du_memoire_Front
-# cle_du_memoire_Front
+---
+© 2026 Clé du Mémoire - Tous droits réservés.
