@@ -453,6 +453,32 @@ summary {
     border-radius: 8px;
   }
 
+  /* ── Premium Input ── */
+  .input-premium {
+    @apply w-full p-3 rounded-xl border border-border bg-bg-light text-primary transition-all duration-200 outline-none;
+  }
+
+  .input-premium:focus {
+    @apply border-accent ring-4 ring-accent/10 bg-white;
+  }
+
+  .input-premium::placeholder {
+    @apply text-text-muted;
+  }
+
+  /* ── Secondary Button ── */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold bg-white border border-border text-text-secondary transition-all duration-200;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    @apply bg-bg-light border-border-light text-primary -translate-y-0.5 shadow-sm;
+  }
+
+  .btn-secondary:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
   /* ── Section spacing ── */
   .section {
     padding: 96px 0;

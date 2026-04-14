@@ -185,7 +185,7 @@ class ApiClient {
     }
 
     // Export
-    async exportMemoireToPDF(payload: any): Promise<Blob> {
+    async exportMemoire(payload: any): Promise<Blob> {
         const token = this.getToken();
         const response = await fetch(`${API_URL}/export`, {
             method: 'POST',
