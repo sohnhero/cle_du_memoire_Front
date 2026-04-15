@@ -76,44 +76,43 @@ export default function MessagesPage() {
     const handleSendMessage = async () => {
         if ((!newMessage.trim() && !attachment) || (!selectedConvId && !tentativePartner) || !user) return;
 
-        let receiverId: string;
-        if (selectedConvId) {
-            const currentConv = conversations.find(c => c.id === selectedConvId);
-            if (!currentConv) return;
-            receiverId = currentConv.participant1Id === user.id
-                ? currentConv.participant2Id
-                : currentConv.participant1Id;
-        } else {
-            receiverId = tentativePartner.id;
-        }
+        const receiverId = selectedConvId 
+            ? (conversations.find(c => c.id === selectedConvId)?.participant1Id === user.id 
+                ? conversations.find(c => c.id === selectedConvId)?.participant2Id 
+                : conversations.find(c => c.id === selectedConvId)?.participant1Id)
+            : tentativePartner?.id;
+
+        if (!receiverId) return;
 
         try {
             const res = await api.sendMessage(receiverId, newMessage, attachment) as any;
+            const sentMessage = res.message;
 
-            // If it was a new conversation, we need to refresh list and select it
             if (!selectedConvId) {
-                await loadConversations();
-                // Find the new conversation id
-                const newRes = await api.getConversations() as any;
-                const newConv = newRes.conversations.find((c: any) =>
-                    (c.participant1Id === user.id && c.participant2Id === receiverId) ||
-                    (c.participant1Id === receiverId && c.participant2Id === user.id)
-                );
+                // 1. Update messages immediately so it's visual
+                setMessages([sentMessage]);
+
+                // 2. Fetch conversations and find the new one
+                const convsRes = await api.getConversations() as any;
+                const updatedConvs = convsRes.conversations || [];
+                setConversations(updatedConvs);
+
+                const newConv = updatedConvs.find((c: any) => c.id === sentMessage.conversationId);
+                
                 if (newConv) {
                     setSelectedConvId(newConv.id);
                     setTentativePartner(null);
                 }
             } else {
-                // Just add message locally for existing conv
-                setMessages([...messages, res.message]);
+                // Existing conversation: update messages locally
+                setMessages(prev => [...prev, sentMessage]);
+                // Refresh list for sorting/last message in background
+                loadConversations();
             }
 
             setNewMessage('');
             setAttachment(null);
             if (fileInputRef.current) fileInputRef.current.value = '';
-
-            // Reload to update sidebar sorting and last message
-            loadConversations();
         } catch (error) {
             console.error("Failed to send message:", error);
             toast.error("Erreur lors de l'envoi du message");
