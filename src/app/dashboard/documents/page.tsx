@@ -168,21 +168,24 @@ export default function DocumentsPage() {
         }
     };
 
-    // Group documents by category
-    const groupedDocs = CATEGORIES.reduce((acc: any, cat) => {
-        const docsInCat = documents.filter(d => d.category === cat.id);
-        if (docsInCat.length > 0) {
-            // Sort by version descending
-            acc[cat.id] = docsInCat.sort((a, b) => b.version - a.version);
-        }
-        return acc;
-    }, {});
+    // Group documents by category, maintaining the most recent activity first globally
+    const groupedDocs: Record<string, any[]> = {};
+    const categoryOrder: string[] = [];
 
-    // Also collect any that don't match our categories if they exist
-    const otherDocs = documents.filter(d => !CATEGORIES.find(c => c.id === d.category));
-    if (otherDocs.length > 0) {
-        groupedDocs['OTHER'] = otherDocs.sort((a, b) => b.version - a.version);
-    }
+    // documents is already sorted by date descending from backend (api.getDocuments)
+    documents.forEach(doc => {
+        const catId = doc.category || 'OTHER';
+        if (!groupedDocs[catId]) {
+            groupedDocs[catId] = [];
+            categoryOrder.push(catId); // First encounter = newest doc in this category
+        }
+        groupedDocs[catId].push(doc);
+    });
+
+    // Sort versions within each category just in case (though backend already handles date desc)
+    Object.keys(groupedDocs).forEach(catId => {
+        groupedDocs[catId].sort((a, b) => b.version - a.version);
+    });
 
     const getFileUrl = (path: string) => {
         if (!path) return '#';
@@ -274,7 +277,8 @@ export default function DocumentsPage() {
                 </div>
             ) : (
                 <div className="space-y-8 pb-20">
-                    {Object.entries(groupedDocs).map(([catId, docs]: [string, any], groupIndex) => {
+                    {categoryOrder.map((catId, groupIndex) => {
+                        const docs = groupedDocs[catId];
                         const category = CATEGORIES.find(c => c.id === catId) || { label: 'Autres Documents', icon: FileText };
                         const latestDoc = docs[0];
                         const history = docs.slice(1);
