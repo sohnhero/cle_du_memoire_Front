@@ -44,9 +44,9 @@ export default function ForgotPasswordPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl relative z-10 border border-border"
                 >
-                    <div className="flex justify-center mb-8">
+                    <Link href="/" className="flex justify-center mb-8 hover:opacity-80 transition-opacity">
                         <Logo className="w-48 h-auto" monochrome={false} />
-                    </div>
+                    </Link>
 
                     <Link href="/login" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-primary transition-colors mb-6">
                         <ArrowLeft className="w-4 h-4" />

@@ -57,9 +57,9 @@ export default function LoginPage() {
                             transition={{ delay: 0.2 }}
                             className="text-center"
                         >
-                            <div className="mx-auto mb-8 flex justify-center">
+                            <Link href="/" className="mx-auto mb-8 flex justify-center hover:opacity-80 transition-opacity">
                                 <Logo className="w-48 h-auto" monochrome />
-                            </div>
+                            </Link>
                             <h2 className="text-3xl font-bold text-white mb-4">Bon retour parmi nous !</h2>
                             <p className="text-white/60 max-w-md leading-relaxed">
                                 Accédez à votre espace personnel pour suivre votre progression et communiquer avec votre accompagnateur.
@@ -89,9 +89,9 @@ export default function LoginPage() {
                         className="w-full max-w-md"
                     >
                         {/* Mobile Logo */}
-                        <div className="lg:hidden flex justify-center mb-8">
+                        <Link href="/" className="lg:hidden flex justify-center mb-8 hover:opacity-80 transition-opacity">
                             <Logo className="w-48 h-auto" monochrome={false} />
-                        </div>
+                        </Link>
 
                         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-primary transition-colors mb-6">
                             <ArrowLeft className="w-4 h-4" />

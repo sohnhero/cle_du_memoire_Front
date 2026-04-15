@@ -82,9 +82,9 @@ export default function RegisterPage() {
 
                     <div className="relative flex flex-col justify-center items-center w-full p-16">
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-center">
-                            <div className="mx-auto mb-8 flex justify-center">
+                            <Link href="/" className="mx-auto mb-8 flex justify-center hover:opacity-80 transition-opacity">
                                 <Logo className="w-48 h-auto" monochrome />
-                            </div>
+                            </Link>
                             <h2 className="text-3xl font-bold text-white mb-4">Rejoignez la communauté</h2>
                             <p className="text-white/60 max-w-md leading-relaxed">
                                 Plus de 500 étudiants nous font confiance pour les accompagner vers la réussite de leur mémoire.
@@ -116,9 +116,9 @@ export default function RegisterPage() {
                         animate={{ opacity: 1, x: 0 }}
                         className={`w-full transition-all duration-500 mx-auto ${step === 3 ? 'max-w-5xl' : 'max-w-lg'}`}
                     >
-                        <div className="lg:hidden flex justify-center mb-6">
+                        <Link href="/" className="lg:hidden flex justify-center mb-6 hover:opacity-80 transition-opacity">
                             <Logo className="w-40 h-auto" monochrome={false} />
-                        </div>
+                        </Link>
 
                         <Link href="/" className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-text-muted hover:text-primary transition-colors mb-6">
                             <ArrowLeft className="w-4 h-4" />
