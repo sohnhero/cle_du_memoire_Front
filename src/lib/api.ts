@@ -319,6 +319,20 @@ class ApiClient {
         });
     }
 
+    async updateEmail(currentPassword: string, newEmail: string) {
+        return this.request<{ message: string; email: string }>('/users/me/email', {
+            method: 'PATCH',
+            body: JSON.stringify({ currentPassword, newEmail }),
+        });
+    }
+
+    async adminUpdateUser(id: string, data: any) {
+        return this.request<{ user: any }>(`/users/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+        });
+    }
+
     async forgotPassword(email: string) {
         return this.request<{ message: string }>('/auth/forgot-password', {
             method: 'POST',

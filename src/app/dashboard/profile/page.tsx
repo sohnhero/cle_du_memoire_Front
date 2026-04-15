@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
 import {
-    User, EnvelopeSimple as Mail, Phone, Buildings as Building, BookOpen, ShieldCheck as Shield, Camera, FloppyDisk as Save, Lock, CircleNotch as Loader2, CheckCircle
+    User, EnvelopeSimple as Mail, Phone, Buildings as Building, BookOpen, ShieldCheck as Shield, Camera, FloppyDisk as Save, Lock, CircleNotch as Loader2, CheckCircle, X
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -32,6 +32,12 @@ export default function ProfilePage() {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [changingPw, setChangingPw] = useState(false);
+
+    // Email change
+    const [showEmailForm, setShowEmailForm] = useState(false);
+    const [newEmail, setNewEmail] = useState('');
+    const [emailPassword, setEmailPassword] = useState('');
+    const [changingEmail, setChangingEmail] = useState(false);
 
     if (!user) return null;
 
@@ -83,6 +89,26 @@ export default function ProfilePage() {
         }
     }
 
+    async function handleChangeEmail() {
+        if (!newEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            showToast('Email invalide', 'error');
+            return;
+        }
+        setChangingEmail(true);
+        try {
+            await api.updateEmail(emailPassword, newEmail);
+            showToast('Email mis à jour avec succès. Veuillez vous reconnecter si nécessaire.', 'success');
+            setShowEmailForm(false);
+            setEmailPassword('');
+            // Optional: logout or refresh
+            window.location.reload();
+        } catch (err: any) {
+            showToast(err.message || 'Erreur lors du changement d\'email', 'error');
+        } finally {
+            setChangingEmail(false);
+        }
+    }
+
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     async function handleAvatarUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -113,6 +139,81 @@ export default function ProfilePage() {
                 <h1 className="text-2xl font-bold text-primary">Mon Profil</h1>
                 <p className="text-text-secondary mt-1">Gérez vos informations personnelles et votre sécurité</p>
             </div>
+
+            {/* Email Form Modal (Mock or Inline) */}
+            <AnimatePresence>
+                {showEmailForm && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full space-y-6"
+                        >
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-xl font-bold text-primary">Changer l'adresse email</h3>
+                                <button onClick={() => setShowEmailForm(false)} className="text-text-muted hover:text-primary transition-colors">
+                                    <X className="w-6 h-6" />
+                                </button>
+                            </div>
+
+                            <p className="text-sm text-text-secondary">
+                                Pour des raisons de sécurité, veuillez confirmer votre mot de passe pour changer votre adresse email professionnelle.
+                            </p>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-text-secondary mb-2">Nouvel Email</label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                        <input
+                                            type="email"
+                                            value={newEmail}
+                                            onChange={(e) => setNewEmail(e.target.value)}
+                                            placeholder="nouvel.email@exemple.com"
+                                            className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-bg-light focus:bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-secondary mb-2">Mot de passe actuel</label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                        <input
+                                            type="password"
+                                            value={emailPassword}
+                                            onChange={(e) => setEmailPassword(e.target.value)}
+                                            placeholder="••••••••"
+                                            className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-bg-light focus:bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent outline-none text-sm"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 pt-2">
+                                <button
+                                    onClick={() => setShowEmailForm(false)}
+                                    className="flex-1 px-4 py-3 rounded-xl border border-border font-bold text-sm text-text-secondary hover:bg-bg-light transition-colors"
+                                >
+                                    Annuler
+                                </button>
+                                <button
+                                    onClick={handleChangeEmail}
+                                    disabled={changingEmail || !newEmail || !emailPassword}
+                                    className="flex-1 btn-primary py-3 rounded-xl text-sm"
+                                >
+                                    {changingEmail ? <LoadingSpinner size="sm" light /> : 'Mettre à jour'}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Toast */}
             <AnimatePresence>
@@ -202,17 +303,29 @@ export default function ProfilePage() {
                                         {f.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                     </select>
                                 ) : (
-                                    <input
-                                        type={f.type || 'text'}
-                                        value={f.value || ''}
-                                        onChange={(e) => f.setter?.(e.target.value)}
-                                        disabled={!editing || !f.setter}
-                                        placeholder={`Votre ${f.label.toLowerCase()}`}
-                                        className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm transition-all ${editing && f.setter
-                                            ? 'border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent'
-                                            : 'border-border-light bg-bg-light text-text-primary cursor-default'
-                                            } outline-none`}
-                                    />
+                                    <div className="relative flex items-center">
+                                        <input
+                                            type={f.type || 'text'}
+                                            value={f.value || ''}
+                                            onChange={(e) => f.setter?.(e.target.value)}
+                                            disabled={!editing || !f.setter}
+                                            placeholder={`Votre ${f.label.toLowerCase()}`}
+                                            className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm transition-all ${editing && f.setter
+                                                ? 'border-border bg-white focus:ring-2 focus:ring-accent/30 focus:border-accent'
+                                                : f.label === 'Email' 
+                                                  ? 'border-border-light bg-bg-light text-text-secondary pr-20' // Extra space for "Changer" button
+                                                  : 'border-border-light bg-bg-light text-text-primary cursor-default'
+                                                } outline-none`}
+                                        />
+                                        {f.label === 'Email' && (
+                                            <button 
+                                                onClick={() => setShowEmailForm(true)}
+                                                className="absolute right-3 text-xs font-bold text-accent hover:text-accent-dark px-2 py-1 rounded-lg hover:bg-accent/5 transition-all"
+                                            >
+                                                Changer
+                                            </button>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         </div>

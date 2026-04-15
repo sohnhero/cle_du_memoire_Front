@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X, Eye, Trash
+    Users, MagnifyingGlass as Search, Faders as Filter, Pencil as Edit, ShieldCheck as Shield, UserCheck, UserMinus as UserX, Plus, ArrowsClockwise as RefreshCw, X, Eye, Trash, Lock, EnvelopeSimple as Mail
 } from '@phosphor-icons/react';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -353,24 +353,32 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
     const [formData, setFormData] = useState({
         firstName: user.firstName,
         lastName: user.lastName,
+        email: user.email,
         phone: user.phone || '',
         university: user.university || '',
         field: user.field || '',
         role: user.role,
-        isActive: user.isActive
+        isActive: user.isActive,
+        password: '' // Optional password reset
     });
     const [isSaving, setIsSaving] = useState(false);
+    const [showPasswordReset, setShowPasswordReset] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
         try {
-            await api.updateUser(user.id, formData);
+            // Only send password if it's not empty
+            const payload: any = { ...formData };
+            if (!payload.password) delete payload.password;
+            
+            await api.adminUpdateUser(user.id, payload);
+            toast.success("Utilisateur mis à jour avec succès");
             onSuccess();
             onClose();
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            toast.error("Erreur lors de la modification");
+            toast.error(error.error || "Erreur lors de la modification");
         } finally {
             setIsSaving(false);
         }
@@ -388,7 +396,55 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5 uppercase tracking-wider text-[10px]">Identifiants</label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="relative">
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                <input 
+                                    type="email" 
+                                    value={formData.email} 
+                                    onChange={e => setFormData({ ...formData, email: e.target.value })} 
+                                    className="w-full bg-white border border-border rounded-xl pl-11 pr-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" 
+                                    placeholder="Email"
+                                    required 
+                                />
+                            </div>
+                            <div className="relative">
+                                {!showPasswordReset ? (
+                                    <button 
+                                        type="button"
+                                        onClick={() => setShowPasswordReset(true)}
+                                        className="w-full h-full border border-border border-dashed rounded-xl text-xs font-bold text-accent hover:bg-accent/5 transition-all py-2.5"
+                                    >
+                                        Réinitialiser le mot de passe
+                                    </button>
+                                ) : (
+                                    <div className="relative">
+                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                                        <input 
+                                            type="text" 
+                                            value={formData.password} 
+                                            onChange={e => setFormData({ ...formData, password: e.target.value })} 
+                                            className="w-full bg-white border border-accent/50 rounded-xl pl-11 pr-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" 
+                                            placeholder="Nouveau MDP"
+                                        />
+                                        <button 
+                                            type="button" 
+                                            onClick={() => { setShowPasswordReset(false); setFormData({...formData, password: ''}) }}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-error"
+                                        >
+                                            <X className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-2">
+                        <label className="block text-sm font-semibold text-text-primary mb-1.5 uppercase tracking-wider text-[10px]">Identité</label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-text-primary mb-1.5">Prénom</label>
                             <input type="text" value={formData.firstName} onChange={e => setFormData({ ...formData, firstName: e.target.value })} className="w-full bg-white border border-border rounded-xl px-4 py-2.5 text-sm text-primary focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all" required />
@@ -432,8 +488,9 @@ function EditUserModal({ user, onClose, onSuccess }: { user: any, onClose: () =>
                             <span className="ml-3 text-sm font-semibold text-text-primary">Compte actif</span>
                         </label>
                     </div>
+                </div>
 
-                    <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-border-light">
+                <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-border-light">
                         <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl font-medium text-text-secondary hover:bg-bg-light transition-colors">
                             Annuler
                         </button>
