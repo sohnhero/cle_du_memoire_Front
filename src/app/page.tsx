@@ -249,7 +249,7 @@ function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white border-b border-border/10 shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-24">
+        <div className="flex items-center justify-between h-20 md:h-24">
           <a
             href="#"
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -351,7 +351,7 @@ function Navbar() {
 function Hero() {
   const { settings } = useGlobalSettings();
   return (
-    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-start lg:items-center overflow-hidden">
       {/* Dark background */}
       <div className="absolute inset-0 bg-primary" />
 
@@ -436,7 +436,7 @@ function Hero() {
         ))}
       </motion.div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-20 lg:py-32 w-full z-10">
+      <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-20 lg:py-32 w-full z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -448,7 +448,7 @@ function Hero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/60 text-[13px] mb-8 font-title"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/60 text-[11px] sm:text-[13px] mb-8 font-title whitespace-nowrap"
           >
             <SenegalFlag className="shrink-0" />
             Plateforme N°1 au Sénégal
