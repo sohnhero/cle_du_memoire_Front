@@ -11,6 +11,7 @@ import {
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import { useGlobalSettings } from '@/hooks/useGlobalSettings';
+import { useAuth } from '@/context/AuthContext';
 
 // ==================== SEO STRUCTURED DATA ====================
 const structuredData = {
@@ -194,6 +195,7 @@ function SocialFanLink({ settings, isMobile = false }: { settings: any, isMobile
 // ==================== NAVBAR ====================
 function Navbar() {
   const { settings } = useGlobalSettings();
+  const { isAuthenticated } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -280,18 +282,29 @@ function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-2">
-            <Link
-              href="/login"
-              className="px-4 py-2 rounded-lg text-[13px] font-medium text-text-secondary hover:text-accent hover:bg-accent/10 transition-all duration-200"
-            >
-              Connexion
-            </Link>
-            <Link
-              href="/register"
-              className="btn-liquid text-primary hover:text-primary-dark py-2 px-6 text-[13px] font-semibold shadow-sm"
-            >
-              <span>Commencer</span>
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                className="btn-liquid text-primary hover:text-primary-dark py-2 px-6 text-[13px] font-semibold shadow-sm"
+              >
+                <span>Retourner dans l&apos;app</span>
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 rounded-lg text-[13px] font-medium text-text-secondary hover:text-accent hover:bg-accent/10 transition-all duration-200"
+                >
+                  Connexion
+                </Link>
+                <Link
+                  href="/register"
+                  className="btn-liquid text-primary hover:text-primary-dark py-2 px-6 text-[13px] font-semibold shadow-sm"
+                >
+                  <span>Commencer</span>
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -332,12 +345,20 @@ function Navbar() {
                 <SocialFanLink settings={settings} isMobile />
               </div>
               <div className="pt-3 space-y-2 border-t border-border/50 mt-3">
-                <Link href="/login" className="block px-4 py-2.5 text-center rounded-lg text-primary text-sm font-medium">
-                  Connexion
-                </Link>
-                <Link href="/register" className="block px-4 py-2.5 text-center rounded-lg bg-accent text-primary text-sm font-semibold">
-                  Commencer
-                </Link>
+                {isAuthenticated ? (
+                  <Link href="/dashboard" className="block px-4 py-2.5 text-center rounded-lg bg-accent text-primary text-sm font-semibold">
+                    Retourner dans l&apos;app
+                  </Link>
+                ) : (
+                  <>
+                    <Link href="/login" className="block px-4 py-2.5 text-center rounded-lg text-primary text-sm font-medium">
+                      Connexion
+                    </Link>
+                    <Link href="/register" className="block px-4 py-2.5 text-center rounded-lg bg-accent text-primary text-sm font-semibold">
+                      Commencer
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
@@ -350,6 +371,7 @@ function Navbar() {
 // ==================== HERO ====================
 function Hero() {
   const { settings } = useGlobalSettings();
+  const { isAuthenticated } = useAuth();
   return (
     <section id="hero" className="relative min-h-screen flex items-start lg:items-center overflow-hidden">
       {/* Dark background */}
@@ -468,8 +490,8 @@ function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-12">
-            <Link href="/register" className="btn-liquid text-white hover:text-primary-dark py-3 px-8 text-sm">
-              <span>Commencer gratuitement</span>
+            <Link href={isAuthenticated ? "/dashboard" : "/register"} className="btn-liquid text-white hover:text-primary-dark py-3 px-8 text-sm">
+              <span>{isAuthenticated ? "Retourner dans l'app" : "Commencer gratuitement"}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a href="#services" className="btn-outline py-3 px-8 text-sm">

@@ -8,7 +8,8 @@ import { useAuth } from '@/context/AuthContext';
 import {
     SquaresFour as LayoutDashboard, BookOpen, FileText, ChatCircle as MessageCircle, User, Gear as Settings,
     Users, ChartBar as BarChart3, ShieldCheck as Shield, SignOut as LogOut, CaretLeft as ChevronLeft, Bell, MagnifyingGlass as Search,
-    List as Menu, X, GraduationCap, Package, Pulse as Activity, CaretDown as ChevronDown, CalendarBlank as CalendarDays
+    List as Menu, X, GraduationCap, Package, Pulse as Activity, CaretDown as ChevronDown, CalendarBlank as CalendarDays,
+    ArrowLeft
 } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/BrandIcon';
 import Logo from '@/components/Logo';
@@ -129,11 +130,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className={`hidden lg:flex flex-col fixed top-0 left-0 h-full bg-primary z-40 overflow-hidden`}
             >
                 {/* Logo */}
-                <div className={`flex items-center justify-center h-24 border-b border-white/10 shrink-0`}>
+                <div className={`flex items-center justify-center h-28 border-b border-white/10 shrink-0`}>
                     <Link href="/dashboard" className="flex items-center justify-center w-full overflow-hidden px-4">
-                        <Logo className={`h-auto transition-all duration-300 ${sidebarOpen ? 'w-20' : 'w-12'}`} variant="icon" monochrome />
+                        <Logo className={`h-auto transition-all duration-300 ${sidebarOpen ? 'w-36' : 'w-14'}`} variant="full" monochrome />
                     </Link>
                 </div>
+
+                {/* Back to Landing Button */}
+                <AnimatePresence>
+                    {sidebarOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="px-4 pt-6 pb-2"
+                        >
+                            <Link
+                                href="/"
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-bold bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all group border border-white/5"
+                            >
+                                <ArrowLeft weight="bold" className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                                <span className="uppercase tracking-wider">Retour au site</span>
+                            </Link>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Role Badge */}
                 <div className="h-16 flex items-center justify-center shrink-0">
@@ -263,11 +284,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         >
                             <div className="flex items-center justify-between px-6 h-20 border-b border-white/10">
                                 <div className="flex items-center justify-center w-full">
-                                    <Logo className="w-20 h-auto" variant="icon" monochrome />
+                                    <Logo className="w-32 h-auto" variant="full" monochrome />
                                 </div>
                                 <button onClick={() => setMobileSidebarOpen(false)} className="text-white/50 hover:text-white">
                                     <X className="w-6 h-6" />
                                 </button>
+                            </div>
+
+                            <div className="px-6 pt-6 pb-2">
+                                <Link
+                                    href="/"
+                                    onClick={() => setMobileSidebarOpen(false)}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-bold bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all group border border-white/5"
+                                >
+                                    <ArrowLeft weight="bold" className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                                    <span className="uppercase tracking-wider">Retour au site</span>
+                                </Link>
                             </div>
 
                             <div className="px-6 py-4">
